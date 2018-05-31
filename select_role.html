@@ -6,62 +6,86 @@
     <title>ログイン</title>
     <style type="text/css">
         canvas {
-            background-color: rgb(255, 255, 255);
+            /* background: rgb(255, 255, 255); */
+            background: url(image.jpeg);
+            background-size: cover;
             border: 1px solid #999;
+            position: absolute;
+            top: 32px;
+            left: 8px;
+
         }
     </style>
     <script>
+        var x1 = 100, y1 = 100;
+
         function init() {
             setInterval(draw, 100);
-        }
-        // var x = 10;
-        function draw() {
-            // x += 50;
             var canvas = document.getElementById("canvas");
             var ctx = canvas.getContext("2d");
+            ctx.fillRect(20, 20, x1, y1);
+
+        }
+        var move_flag = false;
+        var mousex = 0, mousey = 0;
+
+        function handleMouseMove(event) {
+            event = event; // IE対応
+            mousex = event.clientX;
+            mousey = event.clientY;
+        }
+
+        function draw() {
+            // x += 50;
 
             // ctx.fillStyle = "green";
             // ctx.fillRect(x, 10, 100, 100);
+            var canvas = document.getElementById("canvas");
+            var ctx = canvas.getContext("2d");
             window.onmousemove = handleMouseMove;
-            function handleMouseMove(event) {
-                event = event; // IE対応
-                // if (f == 1) {
-                var x1 = 100, y1 = 100;
-                ctx.fillStyle = "white";
-                ctx.fillRect(0, 0, 400, 400);
+
+            if (move_flag == true) {
+
+                ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
                 ctx.fillStyle = "green";
+                ctx.globalAlpha = 0.6;
+                var x = mousex - canvas.getBoundingClientRect().left - x1 / 2;
+                var y = mousey - canvas.getBoundingClientRect().top - y1 / 2;
+                ctx.fillRect(x, y, x1, y1);
+            }
+        }
+
+        document.onmousedown = function (e) {
+            if (!e) e = window.event; // レガシー
+
+
+            var canvas = document.getElementById("canvas");
+            var ctx = canvas.getContext("2d");
+
+            // if (ctx.canvas.getBoundingClientRect().left < mousex && ctx.canvas.getBoundingClientRect().left + x1 > mousex) {
+                move_flag = true;
+                ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+                ctx.fillStyle = "green";
+                ctx.globalAlpha = 0.6;
                 var x = event.clientX - canvas.getBoundingClientRect().left - x1 / 2;
                 var y = event.clientY - canvas.getBoundingClientRect().top - y1 / 2;
                 ctx.fillRect(x, y, x1, y1);
-                // }
-            }
+            // }
+        }
+
+        window.onmouseup = function (e) {
+            move_flag = false;
         }
     </script>
 </head>
 
 <body onload="init();">
     <div id="output_client"></div>
-    役割選択画面
     <br>
     <canvas id="canvas" width="400" height="400"></canvas>
-    <img src="image.jpeg">
+    <!-- <img src="image.jpeg"> -->
     <script>
-        // draw();
-        // var f = 0;
-        // document.onmousedown = function (e) {
-        //     if (!e) e = window.event; // レガシー
 
-        //     f = 1;
-        //     console.log("マウスのボタンが押された");
-        //     // draw();
-        // };
-        // document.onmouseup = function (e) {
-        //     if (!e) e = window.event; // レガシー
-
-        //     f = 0;
-        //     // 出力テスト
-        //     console.log("マウスのボタンが離された");
-        // };
     </script>
 
 </body>
