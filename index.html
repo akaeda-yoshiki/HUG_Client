@@ -1,6 +1,6 @@
-
 <!DOCTYPE html>
 <html>
+
 <head>
     <meta charset="UTF-8" />
     <title>ログイン</title>
@@ -14,7 +14,6 @@
             margin: 40px auto;
             font-size: 20px;
         }
-
     </style>
 </head>
 
@@ -36,17 +35,25 @@
             </div>
         </center>
     </form>
+    <a href="select_role.html"></a>
     <script>
         //サーバーにIDとパスワードを送信
         function login() {
-                // var get = document.forms[0];
-                // document.
-
-                // if( != ){
-
-                // }
+            // var get = document.forms[0];
+            // document.
+            // var form = document.createElement("form");
+            // var text = document.forms.user.mail.value;
+            // document.write(text);
+            if(document.forms.user.mail.value != "" && document.forms.user.user_name.value != ""){
+                // document.write("入力されています。");
+                // window.location.href =　"select_role.html";
+            }
+            else{
+                alert("全ての項目を入力してください。")
+            }
+            window.location.href =　"select_role.html";
         }
-    </script> 
+    </script>
 </body>
 
 </html>
