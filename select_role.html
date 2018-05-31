@@ -4,13 +4,66 @@
 <head>
     <meta charset="UTF-8" />
     <title>ログイン</title>
+    <style type="text/css">
+        canvas {
+            background-color: rgb(255, 255, 255);
+            border: 1px solid #999;
+        }
+    </style>
+    <script>
+        function init() {
+            setInterval(draw, 100);
+        }
+        // var x = 10;
+        function draw() {
+            // x += 50;
+            var canvas = document.getElementById("canvas");
+            var ctx = canvas.getContext("2d");
+
+            // ctx.fillStyle = "green";
+            // ctx.fillRect(x, 10, 100, 100);
+            window.onmousemove = handleMouseMove;
+            function handleMouseMove(event) {
+                event = event; // IE対応
+                // if (f == 1) {
+                var x1 = 100, y1 = 100;
+                ctx.fillStyle = "white";
+                ctx.fillRect(0, 0, 400, 400);
+                ctx.fillStyle = "green";
+                var x = event.clientX - canvas.getBoundingClientRect().left - x1 / 2;
+                var y = event.clientY - canvas.getBoundingClientRect().top - y1 / 2;
+                ctx.fillRect(x, y, x1, y1);
+                // }
+            }
+        }
+    </script>
 </head>
 
-<body>
-
+<body onload="init();">
+    <div id="output_client"></div>
     役割選択画面
+    <br>
+    <canvas id="canvas" width="400" height="400"></canvas>
+    <img src="image.jpeg">
     <script>
+        // draw();
+        // var f = 0;
+        // document.onmousedown = function (e) {
+        //     if (!e) e = window.event; // レガシー
+
+        //     f = 1;
+        //     console.log("マウスのボタンが押された");
+        //     // draw();
+        // };
+        // document.onmouseup = function (e) {
+        //     if (!e) e = window.event; // レガシー
+
+        //     f = 0;
+        //     // 出力テスト
+        //     console.log("マウスのボタンが離された");
+        // };
     </script>
+
 </body>
 
 </html>
