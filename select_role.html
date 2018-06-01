@@ -4,6 +4,8 @@
 <head>
     <meta charset="UTF-8" />
     <title>ログイン</title>
+    <script src="https://code.jquery.com/jquery-1.9.0.min.js"></script>
+
     <style type="text/css">
         canvas {
             /* background: rgb(255, 255, 255); */
@@ -20,14 +22,15 @@
 </head>
 
 <body onload="init();">
-    <div id="output_client"></div>
+    <input type="button" value="送信" onclick="send()">
+
     <br>
     <canvas id="canvas" width="400" height="400"></canvas>
     <!-- <img src="image.jpeg"> -->
+    <br>
+
     <script>
 
-    </script>
-    <script>
         var x1 = 100, y1 = 100;
         var x = 20, y = 20;
         var ev;
@@ -88,7 +91,7 @@
                 recty = imag_mousey - y;
                 x = mousex - canvas.getBoundingClientRect().left - rectx;
                 y = mousey - canvas.getBoundingClientRect().top - recty;
-               
+
                 move_flag = true;
 
                 ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
@@ -98,9 +101,33 @@
             }
         }
 
+
         window.onmouseup = function (e) {
             move_flag = false;
         }
+
+        function send() {
+            $.ajax({ //ajaxによる非同期通信発生
+                type: "POST", //POST送信でデータを受け渡す
+                url: "http://192.168.0.159/2018grade4/HUG/HUG_Server/share_insert.php", 
+                data: {
+                    id: 1,
+                    data1: x,
+                    data2: y,
+                    data3: x1,
+                    data4: y1,
+                    data5: 10
+                },         
+                success: function (hoge) { //接続が成功
+                    alert(hoge);
+                },
+                error: function (XMLHttpRequest, textStatus, errorThrown) { //接続が失敗
+                    alert(errorThrown); //エラーを表示
+                }
+            });
+            return false;
+        }
+
     </script>
 </body>
 
