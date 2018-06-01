@@ -16,15 +16,29 @@
 
         }
     </style>
+
+</head>
+
+<body onload="init();">
+    <div id="output_client"></div>
+    <br>
+    <canvas id="canvas" width="400" height="400"></canvas>
+    <!-- <img src="image.jpeg"> -->
+    <script>
+
+    </script>
     <script>
         var x1 = 100, y1 = 100;
         var x = 20, y = 20;
         var ev;
+        var canvas = document.getElementById("canvas");
+        var ctx = canvas.getContext("2d");
+        var rectx = 0, recty = 0;
 
         function init() {
             setInterval(draw, 100);
-            var canvas = document.getElementById("canvas");
-            var ctx = canvas.getContext("2d");
+            // var canvas = document.getElementById("canvas");
+            // var ctx = canvas.getContext("2d");
             ctx.fillRect(x, y, x1, y1);
 
         }
@@ -38,16 +52,18 @@
             mousey = event.clientY;
 
 
+
         }
 
+
         function draw() {
-            console.log(x + "::" + y);
+            // console.log(mousex + "::" + mousey);
             // x += 50;
+            console.log(mousex + "::" + mousey + "::::::" + x + "~" + (x + x1) + "::" + y + "~" + (y + y1));
 
             // ctx.fillStyle = "green";
             // ctx.fillRect(x, 10, 100, 100);
-            var canvas = document.getElementById("canvas");
-            var ctx = canvas.getContext("2d");
+
             window.onmousemove = handleMouseMove;
 
             if (move_flag == true) {
@@ -56,8 +72,8 @@
                 ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
                 ctx.fillStyle = "green";
                 ctx.globalAlpha = 0.6;
-                x = mousex - canvas.getBoundingClientRect().left - x1 / 2;
-                y = mousey - canvas.getBoundingClientRect().top - y1 / 2;
+                x = mousex - canvas.getBoundingClientRect().left - rectx;
+                y = mousey - canvas.getBoundingClientRect().top - recty;
                 ctx.fillRect(x, y, x1, y1);
             }
         }
@@ -65,14 +81,17 @@
         document.onmousedown = function (e) {
             if (!e) e = window.event; // レガシー
 
-
-            var canvas = document.getElementById("canvas");
-            var ctx = canvas.getContext("2d");
-
-            if (x < mousex && x + x1 > mousex && y < mousey && y + y1 > mousey) {
-                x = mousex - canvas.getBoundingClientRect().left - x1 / 2;
-                y = mousey - canvas.getBoundingClientRect().top - y1 / 2;
+            var imag_mousex = mousex - canvas.getBoundingClientRect().left;
+            var imag_mousey = mousey - canvas.getBoundingClientRect().top;
+            if (x < imag_mousex && x + x1 > imag_mousex && y < imag_mousey && y + y1 > imag_mousey) {
+                rectx = imag_mousex - x;
+                recty = imag_mousey - y;
+                x = mousex - canvas.getBoundingClientRect().left - rectx;
+                y = mousey - canvas.getBoundingClientRect().top - recty;
+               
                 move_flag = true;
+                ctx1.clearRect(0, 0, ctx1.canvas.width, ctx1.canvas.height);
+
                 ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
                 ctx.fillStyle = "green";
                 ctx.globalAlpha = 0.6;
@@ -84,17 +103,6 @@
             move_flag = false;
         }
     </script>
-</head>
-
-<body onload="init();">
-    <div id="output_client"></div>
-    <br>
-    <canvas id="canvas" width="400" height="400"></canvas>
-    <!-- <img src="image.jpeg"> -->
-    <script>
-
-    </script>
-
 </body>
 
 </html>
