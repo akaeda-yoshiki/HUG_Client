@@ -4,6 +4,7 @@
 <head>
     <meta charset="UTF-8" />
     <title>ログイン</title>
+    <script src="https://code.jquery.com/jquery-1.9.0.min.js"></script>
     <style>
         div {
             background: #e6f1fa;
@@ -44,14 +45,32 @@
             // var form = document.createElement("form");
             // var text = document.forms.user.mail.value;
             // document.write(text);
-            if(document.forms.user.mail.value != "" && document.forms.user.user_name.value != ""){
+            if (document.forms.user.mail.value != "" && document.forms.user.user_name.value != "") {
                 // document.write("入力されています。");
                 // window.location.href =　"select_role.html";
+                send();
+                // window.location.href = "select_role.html";
             }
-            else{
-                alert("全ての項目を入力してください。")
+            else {
+                alert("全ての項目を入力してください。");
             }
-            window.location.href =　"select_role.html";
+            
+        }
+
+        function send() {
+            $.ajax({ //ajaxによる非同期通信発生
+                type: "POST", //POST送信でデータを受け渡す
+                url: "http://192.168.0.159/2018grade4/HUG/HUG_Server/login.php", //send.phpにデータを送る
+                data: { mail: document.forms.user.mail.value,
+                        name: document.forms.user.user_name.value }, //id:seirekiに入力された文字列         
+                success: function (hoge){ //接続が成功
+                    alert(hoge);
+                },
+                error: function (XMLHttpRequest, textStatus, errorThrown){ //接続が失敗
+                    alert('エラーです！'); //エラーを表示
+                }
+            });
+            return false;
         }
     </script>
 </body>
