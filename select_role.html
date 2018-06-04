@@ -23,27 +23,56 @@
 
 <body onload="init();">
     <input type="button" value="送信" onclick="send()">
+    <input type="button" value="受信" onclick="recieve()">
 
     <br>
     <canvas id="canvas" width="400" height="400"></canvas>
     <!-- <img src="image.jpeg"> -->
     <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    
+    <br>
+    <br>ID
 
     <script>
-
+        var mynumber = sessionStorage.getItem('mynumber') - 1;
+        document.write(mynumber);
         var x1 = 100, y1 = 100;
         var x = 20, y = 20;
         var ev;
+        var zukei = [
+            [x, y, x1, y1],
+            [x + 150, y, x1, y1]
+        ];
         var canvas = document.getElementById("canvas");
-        var ctx = canvas.getContext("2d");
+        var ctx = [2];
+        ctx[0] = canvas.getContext("2d");
+        ctx[1] = canvas.getContext("2d");
+
+        // var ctx1 = canvas.getContext("2d");
         var rectx = 0, recty = 0;
 
         function init() {
             setInterval(draw, 100);
-            // var canvas = document.getElementById("canvas");
-            // var ctx = canvas.getContext("2d");
-            ctx.fillRect(x, y, x1, y1);
-
+            ctx[0].globalAlpha = 0.6;
+            ctx[1].globalAlpha = 0.6;
+            draw_zukei();
         }
         var move_flag = false;
         var mousex = 0, mousey = 0;
@@ -58,27 +87,39 @@
 
         }
 
+        function draw_zukei() {
+
+            for (var i = 0; i < 2; i++) {
+                // ctx[i].clearRect(0, 0, ctx1.canvas.width, ctx1.canvas.height);
+
+                if (i == mynumber)
+                    ctx[i].fillStyle = "green";
+                else
+                    ctx[i].fillStyle = "blue";
+                ctx[i].fillRect(zukei[i][0], zukei[i][1], zukei[i][2], zukei[i][3]);
+
+            }
+        }
+        function clear_zukei() {
+            for (var i = 0; i < 2; i++) {
+                ctx[i].clearRect(0, 0, canvas.width, canvas.height);
+            }
+        }
 
         function draw() {
-            // console.log(mousex + "::" + mousey);
-            // x += 50;
-            console.log(mousex + "::" + mousey + "::::::" + x + "~" + (x + x1) + "::" + y + "~" + (y + y1));
-
-            // ctx.fillStyle = "green";
-            // ctx.fillRect(x, 10, 100, 100);
+            console.log(mousex + "::" + mousey + "::::::" + zukei[mynumber][0] + "~" + (zukei[mynumber][0] + x1) + "::" + zukei[mynumber][1] + "~" + (zukei[mynumber][1] + y1));
 
             window.onmousemove = handleMouseMove;
-
+            clear_zukei();
             if (move_flag == true) {
                 // x = ev.clientX - canvas.getBoundingClientRect().left - x1 / 2;
                 // y = ev.clientY - canvas.getBoundingClientRect().top - y1 / 2;
-                ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
-                ctx.fillStyle = "green";
-                ctx.globalAlpha = 0.6;
-                x = mousex - canvas.getBoundingClientRect().left - rectx;
-                y = mousey - canvas.getBoundingClientRect().top - recty;
-                ctx.fillRect(x, y, x1, y1);
+                
+                zukei[mynumber][0] = mousex - canvas.getBoundingClientRect().left - rectx;
+                zukei[mynumber][1] = mousey - canvas.getBoundingClientRect().top - recty;
+                
             }
+            draw_zukei();
         }
 
         document.onmousedown = function (e) {
@@ -86,18 +127,16 @@
 
             var imag_mousex = mousex - canvas.getBoundingClientRect().left;
             var imag_mousey = mousey - canvas.getBoundingClientRect().top;
-            if (x < imag_mousex && x + x1 > imag_mousex && y < imag_mousey && y + y1 > imag_mousey) {
-                rectx = imag_mousex - x;
-                recty = imag_mousey - y;
-                x = mousex - canvas.getBoundingClientRect().left - rectx;
-                y = mousey - canvas.getBoundingClientRect().top - recty;
+            if (zukei[mynumber][0] < imag_mousex && zukei[mynumber][0] + x1 > imag_mousex && zukei[mynumber][1] < imag_mousey && zukei[mynumber][1] + y1 > imag_mousey) {
+                rectx = imag_mousex - zukei[mynumber][0];
+                recty = imag_mousey - zukei[mynumber][1];
+                clear_zukei();
+                zukei[mynumber][0] = mousex - canvas.getBoundingClientRect().left - rectx;
+                zukei[mynumber][1] = mousey - canvas.getBoundingClientRect().top - recty;
 
                 move_flag = true;
 
-                ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
-                ctx.fillStyle = "green";
-                ctx.globalAlpha = 0.6;
-                ctx.fillRect(x, y, x1, y1);
+                draw_zukei();
             }
         }
 
@@ -106,23 +145,50 @@
             move_flag = false;
         }
 
+        function recieve() {
+            $.ajax({
+                type: "POST",
+                url: "http://192.168.0.159/2018grade4/HUG/HUG_Server/read_share.php",
+                dataType: "json",
+            }).done(function (data, dataType) {
+                // successのブロック内は、Ajax通信が成功した場合に呼び出される
+
+                // 結果が0件の場合
+                // if (userdata == null) alert('データが0件でした');
+
+                for (var i = 0; i < data.length; i++) {
+                    if(data[i].number - 1 != mynumber){
+                        zukei[data[i].number - 1][0] = data[i].data1;
+                        zukei[data[i].number - 1][1] = data[i].data2;
+                        zukei[data[i].number - 1][2] = data[i].data3;
+                        zukei[data[i].number - 1][3] = data[i].data4;
+
+                    }
+                }
+            }).fail(function (XMLHttpRequest, textStatus, errorThrown) {
+                alert('Error : ' + errorThrown);
+            });
+            clear_zukei();
+            draw_zukei();
+        }
+
         function send() {
             $.ajax({ //ajaxによる非同期通信発生
                 type: "POST", //POST送信でデータを受け渡す
-                url: "http://192.168.0.159/2018grade4/HUG/HUG_Server/share_insert.php", 
+                url: "http://192.168.0.159/2018grade4/HUG/HUG_Server/share_insert.php",
                 data: {
-                    id: 1,
-                    data1: x,
-                    data2: y,
-                    data3: x1,
-                    data4: y1,
-                    data5: 10
-                },         
+                    info_id: 1,
+                    number: sessionStorage.getItem('mynumber'),
+                    data1: zukei[mynumber][0],
+                    data2: zukei[mynumber][1],
+                    data3: zukei[mynumber][2],
+                    data4: zukei[mynumber][3]
+                },
                 success: function (hoge) { //接続が成功
-                    alert(hoge);
+                    // alert(hoge);
                 },
                 error: function (XMLHttpRequest, textStatus, errorThrown) { //接続が失敗
-                    alert(errorThrown); //エラーを表示
+                    // alert(errorThrown); //エラーを表示
                 }
             });
             return false;
