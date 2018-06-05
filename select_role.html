@@ -45,8 +45,11 @@
     <br>
     <br>
     <br>
+     <br>
     <br>
-    <br>
+    <user_info></user_info>
+
+   
     <br>ID
 
     <script>
@@ -70,6 +73,7 @@
 
         function init() {
             setInterval(draw, 100);
+            get_user_info();
             ctx[0].globalAlpha = 0.6;
             ctx[1].globalAlpha = 0.6;
             draw_zukei();
@@ -177,6 +181,24 @@
             zukei_flag = ZUKEI.NULL;
             change_flag = 0;
 
+        }
+        function get_user_info() {
+            $.ajax({
+                type: "POST",
+                url: "http://192.168.0.159/2018grade4/HUG/HUG_Server/read_user.php",
+                dataType: "json",
+            }).done(function (data, dataType) {
+                // successのブロック内は、Ajax通信が成功した場合に呼び出される
+
+                // 結果が0件の場合
+                // if (userdata == null) alert('データが0件でした');
+
+                for (var i = 0; i < data.length; i++) {
+                    $("user_info").append("name : " + data[i].name + "&nbsp;" + data[i].role + "<br>");
+                }
+            }).fail(function (XMLHttpRequest, textStatus, errorThrown) {
+                // alert('Error : ' + errorThrown);
+            });
         }
 
         function recieve() {
