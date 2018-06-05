@@ -15,6 +15,10 @@
             margin: 40px auto;
             font-size: 20px;
         }
+
+        not_draw {
+            display: none;
+        }
     </style>
 </head>
 
@@ -37,6 +41,7 @@
         </center>
     </form>
     <script>
+        var mail, user_name;
         //サーバーにIDとパスワードを送信
         function login() {
             // var get = document.forms[0];
@@ -47,28 +52,40 @@
             if (document.forms.user.mail.value != "" && document.forms.user.user_name.value != "") {
                 // document.write("入力されています。");
                 // window.location.href =　"select_role.html";
-                send();
+                mail = document.forms.user.mail.value;
+                user_name = document.forms.user.user_name.value
+                document.getElementById("user").style.display = "none";
+                // document.getElementById("role").style.display = "block";
+                document.write('<input type="button" value="PM" onclick="send(0)" display="none">');
+                document.write('<input type="button" value="PS" onclick="send(1)" display="none">');
+                document.write('<input type="button" value="J" onclick="send(2)" display="none">');
+
+                // send();
                 // window.location.href = "select_role.html";
             }
             else {
                 alert("全ての項目を入力してください。");
             }
-            
-        }
 
-        function send() {
+        }
+var word = ["PM", "PS", "J"];
+        function send(select) {
+            // document.write(mail + "::" + user_name);
             $.ajax({ //ajaxによる非同期通信発生
                 type: "POST", //POST送信でデータを受け渡す
                 url: "http://192.168.0.159/2018grade4/HUG/HUG_Server/login.php",
-                data: { mail: document.forms.user.mail.value,
-                        name: document.forms.user.user_name.value }, 
-                success: function (recieve){ //接続が成功
+                data: {
+                    mail: mail,
+                    name: user_name,
+                    role: word[select]
+                },
+                success: function (recieve) { //接続が成功
                     alert(recieve);
                     sessionStorage.setItem('mynumber', recieve);
                     sessionStorage.setItem('user_num', 2);
-                    window.location.href =　"select_role.html";
+                    window.location.href = "select_role.html";
                 },
-                error: function (XMLHttpRequest, textStatus, errorThrown){ //接続が失敗
+                error: function (XMLHttpRequest, textStatus, errorThrown) { //接続が失敗
                     // alert('エラーです！'); //エラーを表示
                 }
             });
