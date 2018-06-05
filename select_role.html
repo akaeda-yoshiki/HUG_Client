@@ -60,25 +60,21 @@
         else
             mynumber = 1;
         document.write(mynumber);
-        var x1 = 100, y1 = 100;
-        var x = 20, y = 20;
         var ev;
-        var zukei = [
-            [x, y, x1, y1],
-            [x + 150, y, x1, y1],
-            [0, 0, 8, 8]
-        ];
         var zukei_info = [];
         var canvas = document.getElementById("canvas");
-        var ctx = [2];
-        ctx[0] = canvas.getContext("2d");
-        ctx[1] = canvas.getContext("2d");
-        var ctx_size_change = canvas.getContext("2d");
-        var marker_color = "blue";
+        var size_change_marker = {
+            place: {
+                x: -1,
+                y: -1,
+                width: 8,
+                height: 8
+            },
+            color: "blue",
+            ctx: canvas.getContext("2d")
+        };
         var rectx = 0, recty = 0;
-
         var myedit = 0;
-        var zukei_flag = false;
         var mousex = 0, mousey = 0;
         var imag_mousex;
         var imag_mousey;
@@ -86,10 +82,7 @@
             NULL: 0,
             MOVE: 1,
             CHANGE: 2,
-            // CHANGE_X: 2,
-            // CHANGE_Y: 3,
-            // CHANGE_XY: 4
-        }
+        };
         var TYPE = {
             RECT: 0
         };
@@ -110,16 +103,17 @@
         function init() {
             setInterval(draw, 100);
             // get_user_info();
-            ctx[0].globalAlpha = 0.6;
-            ctx[1].globalAlpha = 0.6;
             create_rect();
             draw_zukei();
-            console.log(zukei_info[0]);
+            // console.log(zukei_info[0]);
         }
 
         function create_rect() {
             var place = [20, 20, 100, 100];
-            zukei_info.push(new rect(0, TYPE.RECT, place, ZUKEI.NULL, "green", "red", "ラベル", canvas.getContext("2d")));
+            var ctx = canvas.getContext("2d");
+            ctx.globalAlpha = 0.6;
+
+            zukei_info.push(new rect(0, TYPE.RECT, place, ZUKEI.NULL, "green", "red", "ラベル", ctx));
         }
 
 
@@ -131,15 +125,14 @@
             imag_mousex = mousex - canvas.getBoundingClientRect().left;
             imag_mousey = mousey - canvas.getBoundingClientRect().top;
 
-            size_change_marker();
+            if (myedit != -1)
+                size_change_marker_move();
 
         }
 
         function draw_zukei() {
 
             for (var i = 0; i < zukei_info.length; i++) {
-                // ctx[i].clearRect(0, 0, ctx1.canvas.width, ctx1.canvas.height);
-
                 // if (i == mynumber)
                 zukei_info[i].ctx.fillStyle = zukei_info[i].color;
                 // else
@@ -148,8 +141,8 @@
                 zukei_info[i].ctx.fillRect(place[0], place[1], place[2], place[3]);
 
             }
-            ctx_size_change.fillStyle = marker_color;
-            ctx_size_change.fillRect(zukei[2][0], zukei[2][1], zukei[2][2], zukei[2][3]);
+            size_change_marker.ctx.fillStyle = size_change_marker.color;
+            size_change_marker.ctx.fillRect(size_change_marker.place.x, size_change_marker.place.y, size_change_marker.place.width, size_change_marker.place.height);
 
         }
         function clear_zukei() {
@@ -158,12 +151,13 @@
             // }
 
             //***********************************************************
-            ctx[0].clearRect(0, 0, canvas.width, canvas.height);
+
+            size_change_marker.ctx.clearRect(0, 0, canvas.width, canvas.height);
         }
 
         function draw() {
             // console.log(mousex + "::" + mousey + "::::::" + zukei[mynumber][0] + "~" + (zukei[mynumber][0] + x1) + "::" + zukei[mynumber][1] + "~" + (zukei[mynumber][1] + y1));
-            // console.log(change_flag);
+            // console.log(size_change_marker);
             window.onmousemove = handleMouseMove;
             if (debug == 0)
                 recieve();
@@ -221,8 +215,10 @@
             // console.log("離された");
             if (myedit != -1)
                 zukei_info[myedit].stats = ZUKEI.NULL;
+            myedit = -1;
             change_flag = 0;
         }
+
         function get_user_info() {
             $.ajax({
                 type: "POST",
@@ -305,54 +301,54 @@
             return false;
         }
 
-        function size_change_marker() {
+        function size_change_marker_move() {
             var range = 4;
-            zukei[2][0] = -10;
-            zukei[2][1] = -10;
+            size_change_marker.place.x = -10;
+            size_change_marker.place.y = -10;
             var cnt = 0;
 
             if (place_judge(zukei_info[myedit].place[0] - range, range * 2, zukei_info[myedit].place[1] - range, zukei_info[myedit].place[3] + range * 2, imag_mousex, imag_mousey)) {
-                zukei[2][0] = zukei_info[myedit].place[0] - range;
-                zukei[2][1] = imag_mousey;
+                size_change_marker.place.x = zukei_info[myedit].place[0] - range;
+                size_change_marker.place.y = imag_mousey;
                 cnt++;
             }
             if (place_judge(zukei_info[myedit].place[0] + zukei_info[myedit].place[2] - range, range * 2, zukei_info[myedit].place[1] - range, zukei_info[myedit].place[3] + range * 2, imag_mousex, imag_mousey)) {
-                zukei[2][0] = zukei_info[myedit].place[0] + zukei_info[myedit].place[2] - range;
-                zukei[2][1] = imag_mousey;
+                size_change_marker.place.x = zukei_info[myedit].place[0] + zukei_info[myedit].place[2] - range;
+                size_change_marker.place.y = imag_mousey;
                 cnt++;
             }
             if (place_judge(zukei_info[myedit].place[0] - range, zukei_info[myedit].place[2] + range, zukei_info[myedit].place[1] - range, range * 2, imag_mousex, imag_mousey)) {
-                zukei[2][0] = imag_mousex;
-                zukei[2][1] = zukei_info[myedit].place[1] - range;
+                size_change_marker.place.x = imag_mousex;
+                size_change_marker.place.y = zukei_info[myedit].place[1] - range;
                 cnt++;
             }
             if (place_judge(zukei_info[myedit].place[0] - range, zukei_info[myedit].place[2] + range, zukei_info[myedit].place[1] + zukei_info[myedit].place[3] - range, range * 2, imag_mousex, imag_mousey)) {
-                zukei[2][0] = imag_mousex;
-                zukei[2][1] = zukei_info[myedit].place[1] + zukei_info[myedit].place[3] - range;
+                size_change_marker.place.x = imag_mousex;
+                size_change_marker.place.y = zukei_info[myedit].place[1] + zukei_info[myedit].place[3] - range;
                 cnt++;
             }
             if (cnt > 1)
-                marker_color = "red";
+                size_change_marker.color = "red";
             else
-                marker_color = "blue";
+                size_change_marker.color = "blue";
         }
         function size_change_flag() {
             var range = 4;
 
             if (place_judge(zukei_info[myedit].place[0] - range, range * 2, zukei_info[myedit].place[1] - range, zukei_info[myedit].place[3] + range * 2, imag_mousex, imag_mousey)) {
-                zukei_flag = ZUKEI.CHANGE;
+                zukei_info[myedit].stats = ZUKEI.CHANGE;
                 change_flag += 1;
             }
             if (place_judge(zukei_info[myedit].place[0] + zukei_info[myedit].place[2] - range, range * 2, zukei_info[myedit].place[1] - range, zukei_info[myedit].place[3] + range * 2, imag_mousex, imag_mousey)) {
-                zukei_flag = ZUKEI.CHANGE;
+                zukei_info[myedit].stats = ZUKEI.CHANGE;
                 change_flag += 2;
             }
             if (place_judge(zukei_info[myedit].place[0] - range, zukei_info[myedit].place[2] + range, zukei_info[myedit].place[1] - range, range * 2, imag_mousex, imag_mousey)) {
-                zukei_flag = ZUKEI.CHANGE;
+                zukei_info[myedit].stats = ZUKEI.CHANGE;
                 change_flag += 10;
             }
             if (place_judge(zukei_info[myedit].place[0] - range, zukei_info[myedit].place[2] + range, zukei_info[myedit].place[1] + zukei_info[myedit].place[3] - range, range * 2, imag_mousex, imag_mousey)) {
-                zukei_flag = ZUKEI.CHANGE;
+                zukei_info[myedit].stats = ZUKEI.CHANGE;
                 change_flag += 20;
             }
 
