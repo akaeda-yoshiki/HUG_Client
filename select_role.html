@@ -45,11 +45,11 @@
     <br>
     <br>
     <br>
-     <br>
+    <br>
     <br>
     <user_info></user_info>
 
-   
+
     <br>ID
 
     <script>
@@ -71,13 +71,7 @@
         var marker_color = "blue";
         var rectx = 0, recty = 0;
 
-        function init() {
-            setInterval(draw, 100);
-            get_user_info();
-            ctx[0].globalAlpha = 0.6;
-            ctx[1].globalAlpha = 0.6;
-            draw_zukei();
-        }
+
         var zukei_flag = false;
         var mousex = 0, mousey = 0;
         var imag_mousex;
@@ -91,6 +85,26 @@
             // CHANGE_XY: 4
         }
         var change_flag = 0;
+
+        //四角形クラス
+        function rect(id, type, place, stats, color, label_color, label_text){
+            this.id = id;
+            this.type = type;
+            this.place = place
+            this.stats = stats;
+            this.color = color;
+            this.label_color = label_color;
+            this.label_text = label_text;
+        }
+
+        function init() {
+            setInterval(draw, 100);
+            get_user_info();
+            ctx[0].globalAlpha = 0.6;
+            ctx[1].globalAlpha = 0.6;
+            draw_zukei();
+        }
+
 
         function handleMouseMove(e) {
             event = e; // IE対応
