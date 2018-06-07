@@ -66,7 +66,7 @@
             図形の色
             <input type="color" name="figure_color" list="color_list" value="#00ff00">
             <br> ラベル名
-            <input type="text" name="label_name" id="label_name" required>
+            <input type="text" name="label_text" list="label_text_list" required>
             <br>ラベルの色
             <input type="color" name="label_color" list="color_list" value="#ff0000">
 
@@ -79,6 +79,11 @@
         <option value="#ff0000">#ff0000</option>
         <option value="#00ff00">#00ff00</option>
         <option value="#0000ff">#0000ff</option>
+    </datalist>
+    <datalist id="label_text_list">
+        <option value="A">A</option>
+        <option value="B">B</option>
+        <option value="C">C</option>
     </datalist>
 
     <user_info></user_info>
@@ -163,7 +168,7 @@
             g = parseInt(get_color.substr(3, 2), 16).toString(10);
             b = parseInt(get_color.substr(5, 2), 16).toString(10);
             var label_color = "rgb(" + r + "," + g + "," + b + ")";
-            figure_info.push(new rect(0, TYPE.RECT, place, FIGURE.NULL, color, label_color, get.label_name.value, ctx, ctx_label));
+            figure_info.push(new rect(0, TYPE.RECT, place, FIGURE.NULL, color, label_color, get.label_text.value, ctx, ctx_label));
         }
 
 
@@ -189,10 +194,13 @@
                 figure_info[i].ctx_label.fillStyle = figure_info[i].label_color;
                 var label_place = [place[0] + place[2] * 0.1, place[1] + place[2] * 0.1, place[2] * 0.8, place[3] * 0.3];
                 figure_info[i].ctx_label.fillRect(label_place[0], label_place[1], label_place[2], label_place[3]);
+
                 figure_info[i].ctx_label.textBaseline = "top";
                 figure_info[i].ctx_label.font = "15px 'ＭＳ ゴシック'";
                 figure_info[i].ctx_label.fillStyle = "black";
-                figure_info[i].ctx_label.fillText(figure_info[i].label_name, label_place[0], label_place[1]);
+                figure_info[i].ctx_label.textAlign = 'center';
+                figure_info[i].ctx_label.textBaseline = 'middle';
+                figure_info[i].ctx_label.fillText(figure_info[i].label_text, label_place[0] + label_place[2] / 2, label_place[1] + label_place[3] / 2, label_place[2]);
             }
             size_change_marker.ctx.fillStyle = size_change_marker.color;
             size_change_marker.ctx.fillRect(size_change_marker.place.x, size_change_marker.place.y, size_change_marker.place.width, size_change_marker.place.height);
