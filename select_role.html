@@ -61,26 +61,26 @@
     <br>
 
     <!-- <center> -->
-        <div>
-            <form id="create_figure">
-                図形の色
-                <input type="color" name="figure_color" list="color_list" value="#00ff00"> 
-                <br> ラベル名
-                <input type="text" name="label_name" id="label_name" required>
-                <br>ラベルの色
-                <input type="color" name="label_color" list="color_list" value="#ff0000"> 
+    <div>
+        <form id="create_figure">
+            図形の色
+            <input type="color" name="figure_color" list="color_list" value="#00ff00">
+            <br> ラベル名
+            <input type="text" name="label_name" id="label_name" required>
+            <br>ラベルの色
+            <input type="color" name="label_color" list="color_list" value="#ff0000">
 
 
-                <input type="button" value="決定" onclick="create_rect()">
-            </form>
-        </div>
+            <input type="button" value="決定" onclick="create_rect()">
+        </form>
+    </div>
     <!-- </center> -->
     <datalist id="color_list">
         <option value="#ff0000">#ff0000</option>
         <option value="#00ff00">#00ff00</option>
         <option value="#0000ff">#0000ff</option>
     </datalist>
-    
+
     <user_info></user_info>
 
 
@@ -122,7 +122,7 @@
         var change_flag = 0;
 
         //四角形クラス
-        function rect(id, type, place, stats, color, label_color, label_text, ctx) {
+        function rect(id, type, place, stats, color, label_color, label_text, ctx, ctx_label) {
             this.id = id;
             this.type = type;
             this.place = place
@@ -131,6 +131,7 @@
             this.label_color = label_color;
             this.label_text = label_text;
             this.ctx = ctx;
+            this.ctx_label = ctx_label
         }
 
         function init() {
@@ -145,8 +146,10 @@
             var place = [20, 20, 100, 100];
             var ctx = canvas.getContext("2d");
             ctx.globalAlpha = 0.6;
+            var ctx_label = canvas.getContext("2d");
+            // ctx_label.globalAlpha = 0.6;
             var get = document.forms[0];
-            
+
             var get_color = get.figure_color.value;
             var r = parseInt(get_color.substr(1, 2), 16).toString(10);
             var g = parseInt(get_color.substr(3, 2), 16).toString(10);
@@ -154,7 +157,13 @@
 
             // console.log(get_color + "::" + r + "," + g + "," + b);
             var color = "rgb(" + r + "," + g + "," + b + ")";
-            figure_info.push(new rect(0, TYPE.RECT, place, FIGURE.NULL, color, "red", "ラベル", ctx));
+
+            get_color = get.label_color.value;
+            r = parseInt(get_color.substr(1, 2), 16).toString(10);
+            g = parseInt(get_color.substr(3, 2), 16).toString(10);
+            b = parseInt(get_color.substr(5, 2), 16).toString(10);
+            var label_color = "rgb(" + r + "," + g + "," + b + ")";
+            figure_info.push(new rect(0, TYPE.RECT, place, FIGURE.NULL, color, label_color, get.label_name.value, ctx, ctx_label));
         }
 
 
@@ -174,24 +183,23 @@
         function draw_figure() {
 
             for (var i = 0; i < figure_info.length; i++) {
-                // if (i == mynumber)
-                figure_info[i].ctx.fillStyle = figure_info[i].color;
-                // else
-                //     ctx[i].fillStyle = "blue";
                 var place = figure_info[i].place;
+                figure_info[i].ctx.fillStyle = figure_info[i].color;
                 figure_info[i].ctx.fillRect(place[0], place[1], place[2], place[3]);
-
+                figure_info[i].ctx_label.fillStyle = figure_info[i].label_color;
+                var label_place = [place[0] + place[2] * 0.1, place[1] + place[2] * 0.1, place[2] * 0.8, place[3] * 0.3];
+                figure_info[i].ctx_label.fillRect(label_place[0], label_place[1], label_place[2], label_place[3]);
+                figure_info[i].ctx_label.textBaseline = "top";
+                figure_info[i].ctx_label.font = "15px 'ＭＳ ゴシック'";
+                figure_info[i].ctx_label.fillStyle = "black";
+                figure_info[i].ctx_label.fillText(figure_info[i].label_name, label_place[0], label_place[1]);
             }
             size_change_marker.ctx.fillStyle = size_change_marker.color;
             size_change_marker.ctx.fillRect(size_change_marker.place.x, size_change_marker.place.y, size_change_marker.place.width, size_change_marker.place.height);
 
         }
-        function clear_figure() {
-            // for (var i = 0; i < 2; i++) {
-            //     ctx[i].clearRect(0, 0, canvas.width, canvas.height);
-            // }
 
-            //***********************************************************
+        function clear_figure() {
 
             size_change_marker.ctx.clearRect(0, 0, canvas.width, canvas.height);
         }
