@@ -22,10 +22,11 @@
             background: #e6f1fa;
             width: 300px;
             padding: 10px;
-            text-align: center;
+            /* text-align: center; */
             border: 1px solid #cccccc;
             margin: 30px auto;
             font-size: 20px;
+
         }
     </style>
 
@@ -59,26 +60,27 @@
     <br>
     <br>
 
-    <center>
+    <!-- <center> -->
         <div>
             <form id="create_figure">
-                メールアドレス
-                <input type="text" name="mail" id="mail" required>
-                <br> ユーザー名
-                <input type="text" name="user_name" id="user_name" required>
-                <br>
-                <input type="color" name="figure_color" list="color1" value="#ff0000">
+                図形の色
+                <input type="color" name="figure_color" list="color_list" value="#00ff00"> 
+                <br> ラベル名
+                <input type="text" name="label_name" id="label_name" required>
+                <br>ラベルの色
+                <input type="color" name="label_color" list="color_list" value="#ff0000"> 
 
-                <datalist id="color1">
-                        <option value="#ff0000"></option>
-                        <option value="#00ff00"></option>
-                        <option value="#0000ff"></option>
-                </datalist>
+
                 <input type="button" value="決定" onclick="create_rect()">
             </form>
         </div>
-    </center>
-
+    <!-- </center> -->
+    <datalist id="color_list">
+        <option value="#ff0000">#ff0000</option>
+        <option value="#00ff00">#00ff00</option>
+        <option value="#0000ff">#0000ff</option>
+    </datalist>
+    
     <user_info></user_info>
 
 
@@ -143,8 +145,16 @@
             var place = [20, 20, 100, 100];
             var ctx = canvas.getContext("2d");
             ctx.globalAlpha = 0.6;
+            var get = document.forms[0];
+            
+            var get_color = get.figure_color.value;
+            var r = parseInt(get_color.substr(1, 2), 16).toString(10);
+            var g = parseInt(get_color.substr(3, 2), 16).toString(10);
+            var b = parseInt(get_color.substr(5, 2), 16).toString(10);
 
-            figure_info.push(new rect(0, TYPE.RECT, place, FIGURE.NULL, "green", "red", "ラベル", ctx));
+            // console.log(get_color + "::" + r + "," + g + "," + b);
+            var color = "rgb(" + r + "," + g + "," + b + ")";
+            figure_info.push(new rect(0, TYPE.RECT, place, FIGURE.NULL, color, "red", "ラベル", ctx));
         }
 
 
@@ -246,7 +256,7 @@
             // console.log("離された");
             if (myedit != -1)
                 figure_info[myedit].stats = FIGURE.NULL;
-            myedit = -1;
+            // myedit = -1;
             change_flag = 0;
         }
 
