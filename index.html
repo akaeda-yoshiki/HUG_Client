@@ -27,9 +27,10 @@
     <br>
     <br>
     <br>
-    <form id="user">
-        <center>
-            <div>
+
+    <center>
+        <div>
+            <form id="user">
                 <label for="mail">メールアドレス</label>
                 <input type="text" name="mail" id="mail" required>
                 <br>
@@ -37,9 +38,10 @@
                 <input type="text" name="user_name" id="user_name" required>
                 <br>
                 <input type="button" value="ログイン" onclick="login()">
-            </div>
-        </center>
-    </form>
+            </form>
+        </div>
+    </center>
+
     <script>
         var mail, user_name;
         //サーバーにIDとパスワードを送信
@@ -68,7 +70,7 @@
             }
 
         }
-var word = ["PM", "PS", "J"];
+        var word = ["PM", "PS", "J"];
         function send(select) {
             // document.write(mail + "::" + user_name);
             $.ajax({ //ajaxによる非同期通信発生
