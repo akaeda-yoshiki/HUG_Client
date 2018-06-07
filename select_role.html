@@ -112,7 +112,7 @@
             ctx: canvas.getContext("2d")
         };
         var rectx = 0, recty = 0;
-        var myedit = 0;
+        var myedit = -1;
         var mousex = 0, mousey = 0;
         var imag_mousex;
         var imag_mousey;
@@ -127,7 +127,7 @@
         var change_flag = 0;
 
         //四角形クラス
-        function rect(id, type, place, stats, color, label_color, label_text, ctx, ctx_label) {
+        function rect(id, type, place, stats, color, label_color, label_text, ctx) {
             this.id = id;
             this.type = type;
             this.place = place
@@ -136,7 +136,6 @@
             this.label_color = label_color;
             this.label_text = label_text;
             this.ctx = ctx;
-            this.ctx_label = ctx_label
         }
 
         function init() {
@@ -151,8 +150,6 @@
             var place = [20, 20, 100, 100];
             var ctx = canvas.getContext("2d");
             ctx.globalAlpha = 0.6;
-            var ctx_label = canvas.getContext("2d");
-            // ctx_label.globalAlpha = 0.6;
             var get = document.forms[0];
 
             var get_color = get.figure_color.value;
@@ -168,7 +165,7 @@
             g = parseInt(get_color.substr(3, 2), 16).toString(10);
             b = parseInt(get_color.substr(5, 2), 16).toString(10);
             var label_color = "rgb(" + r + "," + g + "," + b + ")";
-            figure_info.push(new rect(0, TYPE.RECT, place, FIGURE.NULL, color, label_color, get.label_text.value, ctx, ctx_label));
+            figure_info.push(new rect(0, TYPE.RECT, place, FIGURE.NULL, color, label_color, get.label_text.value, ctx));
         }
 
 
@@ -191,16 +188,20 @@
                 var place = figure_info[i].place;
                 figure_info[i].ctx.fillStyle = figure_info[i].color;
                 figure_info[i].ctx.fillRect(place[0], place[1], place[2], place[3]);
-                figure_info[i].ctx_label.fillStyle = figure_info[i].label_color;
-                var label_place = [place[0] + place[2] * 0.1, place[1] + place[2] * 0.1, place[2] * 0.8, place[3] * 0.3];
-                figure_info[i].ctx_label.fillRect(label_place[0], label_place[1], label_place[2], label_place[3]);
+                if (i == myedit) {
+                    figure_info[i].ctx.strokeRect(place[0], place[1], place[2], place[3]);
 
-                figure_info[i].ctx_label.textBaseline = "top";
-                figure_info[i].ctx_label.font = "15px 'ＭＳ ゴシック'";
-                figure_info[i].ctx_label.fillStyle = "black";
-                figure_info[i].ctx_label.textAlign = 'center';
-                figure_info[i].ctx_label.textBaseline = 'middle';
-                figure_info[i].ctx_label.fillText(figure_info[i].label_text, label_place[0] + label_place[2] / 2, label_place[1] + label_place[3] / 2, label_place[2]);
+                }
+                figure_info[i].ctx.fillStyle = figure_info[i].label_color;
+                var label_place = [place[0] + place[2] * 0.1, place[1] + place[2] * 0.1, place[2] * 0.8, place[3] * 0.3];
+                figure_info[i].ctx.fillRect(label_place[0], label_place[1], label_place[2], label_place[3]);
+
+                figure_info[i].ctx.textBaseline = "top";
+                figure_info[i].ctx.font = "15px 'ＭＳ ゴシック'";
+                figure_info[i].ctx.fillStyle = "black";
+                figure_info[i].ctx.textAlign = 'center';
+                figure_info[i].ctx.textBaseline = 'middle';
+                figure_info[i].ctx.fillText(figure_info[i].label_text, label_place[0] + label_place[2] / 2, label_place[1] + label_place[3] / 2, label_place[2]);
             }
             size_change_marker.ctx.fillStyle = size_change_marker.color;
             size_change_marker.ctx.fillRect(size_change_marker.place.x, size_change_marker.place.y, size_change_marker.place.width, size_change_marker.place.height);
@@ -249,9 +250,14 @@
             if (!e) e = window.event; // レガシー
 
             //myeditに値格納
-            for (var i = 0; i < figure_info.length; i++)
-                if (place_judge(figure_info[i].place[0], figure_info[i].place[2], figure_info[i].place[1], figure_info[i].place[3], imag_mousex, imag_mousey))
+            for (var i = 0; i < figure_info.length; i++) 
+                if (place_judge(figure_info[i].place[0], figure_info[i].place[2], figure_info[i].place[1], figure_info[i].place[3], imag_mousex, imag_mousey)) {
                     myedit = i;
+                    break;;
+                }
+                else
+                    myedit = -1;
+
             if (myedit != -1)
                 if (size_change_flag() == 1)
                     figure_info[myedit].stats = FIGURE.CHANGE;
@@ -359,33 +365,41 @@
         }
 
         function size_change_marker_move() {
-            var range = 4;
+            var range = 8;
             size_change_marker.place.x = -10;
             size_change_marker.place.y = -10;
             var cnt = 0;
 
-            if (place_judge(figure_info[myedit].place[0] - range, range * 2, figure_info[myedit].place[1] - range, figure_info[myedit].place[3] + range * 2, imag_mousex, imag_mousey)) {
-                size_change_marker.place.x = figure_info[myedit].place[0] - range;
+            if (place_judge(figure_info[myedit].place[0], range, figure_info[myedit].place[1], figure_info[myedit].place[3], imag_mousex, imag_mousey)) {
+                size_change_marker.place.x = figure_info[myedit].place[0] - range / 2;
                 size_change_marker.place.y = imag_mousey;
                 cnt++;
             }
-            if (place_judge(figure_info[myedit].place[0] + figure_info[myedit].place[2] - range, range * 2, figure_info[myedit].place[1] - range, figure_info[myedit].place[3] + range * 2, imag_mousex, imag_mousey)) {
-                size_change_marker.place.x = figure_info[myedit].place[0] + figure_info[myedit].place[2] - range;
+            if (place_judge(figure_info[myedit].place[0] + figure_info[myedit].place[2] - range, range, figure_info[myedit].place[1], figure_info[myedit].place[3], imag_mousex, imag_mousey)) {
+                size_change_marker.place.x = figure_info[myedit].place[0] + figure_info[myedit].place[2] - range / 2;
                 size_change_marker.place.y = imag_mousey;
-                cnt++;
+                cnt += 2;
             }
-            if (place_judge(figure_info[myedit].place[0] - range, figure_info[myedit].place[2] + range, figure_info[myedit].place[1] - range, range * 2, imag_mousex, imag_mousey)) {
+            if (place_judge(figure_info[myedit].place[0], figure_info[myedit].place[2], figure_info[myedit].place[1], range, imag_mousex, imag_mousey)) {
                 size_change_marker.place.x = imag_mousex;
-                size_change_marker.place.y = figure_info[myedit].place[1] - range;
-                cnt++;
+                size_change_marker.place.y = figure_info[myedit].place[1] - range / 2;
+                cnt += 10;
             }
-            if (place_judge(figure_info[myedit].place[0] - range, figure_info[myedit].place[2] + range, figure_info[myedit].place[1] + figure_info[myedit].place[3] - range, range * 2, imag_mousex, imag_mousey)) {
+            if (place_judge(figure_info[myedit].place[0], figure_info[myedit].place[2], figure_info[myedit].place[1] + figure_info[myedit].place[3] - range, range, imag_mousex, imag_mousey)) {
                 size_change_marker.place.x = imag_mousex;
-                size_change_marker.place.y = figure_info[myedit].place[1] + figure_info[myedit].place[3] - range;
-                cnt++;
+                size_change_marker.place.y = figure_info[myedit].place[1] + figure_info[myedit].place[3] - range / 2;
+                cnt += 20;
             }
-            if (cnt > 1)
+            if (cnt % 10 > 0 && Math.floor(cnt / 10) > 0) {
                 size_change_marker.color = "red";
+                if (cnt % 10 == 1)
+                    size_change_marker.place.x = figure_info[myedit].place[0] - range / 2;
+                else
+                    size_change_marker.place.x = figure_info[myedit].place[0] + figure_info[myedit].place[2] - range / 2;
+
+                // size_change_marker.place.y = -10;
+
+            }
             else
                 size_change_marker.color = "blue";
         }
@@ -418,7 +432,7 @@
 
 
 
-            console.log(Math.floor(change_flag % 10));
+            // console.log(Math.floor(change_flag % 10));
             if (change_flag % 10 == 1) {
                 figure_info[myedit].place[2] += figure_info[myedit].place[0] - imag_mousex;
                 figure_info[myedit].place[0] = imag_mousex;
