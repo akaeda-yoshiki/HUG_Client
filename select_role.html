@@ -165,7 +165,14 @@
             g = parseInt(get_color.substr(3, 2), 16).toString(10);
             b = parseInt(get_color.substr(5, 2), 16).toString(10);
             var label_color = "rgb(" + r + "," + g + "," + b + ")";
-            figure_info.push(new rect(0, TYPE.RECT, place, FIGURE.NULL, color, label_color, get.label_text.value, ctx));
+
+            if (myedit != -1) {
+                figure_info[myedit].color = color;
+                figure_info[myedit].label_color = label_color;
+                figure_info[myedit].label_text = get.label_text.value;
+            }
+            else
+                figure_info.push(new rect(0, TYPE.RECT, place, FIGURE.NULL, color, label_color, get.label_text.value, ctx));
         }
 
 
@@ -248,15 +255,45 @@
 
         document.onmousedown = function (e) {
             if (!e) e = window.event; // レガシー
-
+            console.log(canvas.getBoundingClientRect().left + ":" + canvas.getBoundingClientRect().top + ":" + canvas.getBoundingClientRect().width + ":" + canvas.getBoundingClientRect().height + "::::" + mousex + ":" + mousey);
             //myeditに値格納
-            for (var i = 0; i < figure_info.length; i++) 
-                if (place_judge(figure_info[i].place[0], figure_info[i].place[2], figure_info[i].place[1], figure_info[i].place[3], imag_mousex, imag_mousey)) {
-                    myedit = i;
-                    break;;
-                }
-                else
-                    myedit = -1;
+            for (var i = 0; i < figure_info.length; i++)
+                if (place_judge(canvas.getBoundingClientRect().left, canvas.getBoundingClientRect().width, canvas.getBoundingClientRect().top, canvas.getBoundingClientRect().height, mousex, mousey))
+                    if (place_judge(figure_info[i].place[0], figure_info[i].place[2], figure_info[i].place[1], figure_info[i].place[3], imag_mousex, imag_mousey)) {
+                        myedit = i;
+                        var get = document.forms[0];
+                        var result = (figure_info[i].color).split(",");
+                        var r = parseInt(result[0].substr(4), 10).toString(16);
+                        if (r.length == 1)
+                            r = "0" + r;
+                        var g = parseInt(result[1], 10).toString(16);
+                        if (g.length == 1)
+                            g = "0" + g;
+                        var b = parseInt(result[2].substr(0, result[2].length - 1), 10).toString(16);
+                        if (b.length == 1)
+                            b = "0" + b;
+                        result = "#" + r + g + b;
+                        console.log(result);
+                        get.figure_color.value = result;
+                        result = (figure_info[i].label_color).split(",");
+                        // console.log(result);
+                        r = parseInt(result[0].substr(4), 10).toString(16);
+                        if (r.length == 1)
+                            r = "0" + r;
+                        g = parseInt(result[1], 10).toString(16);
+                        if (g.length == 1)
+                            g = "0" + g;
+                        b = parseInt(result[2].substr(0, result[2].length - 1), 10).toString(16);
+                        if (b.length == 1)
+                            b = "0" + b;
+                        result = "#" + r + g + b;
+                        // console.log(result);
+                        get.label_text.value = figure_info[i].label_text;
+                        get.label_color.value = result;
+                        break;;
+                    }
+                    else
+                        myedit = -1;
 
             if (myedit != -1)
                 if (size_change_flag() == 1)
