@@ -72,6 +72,8 @@
 
 
             <input type="button" value="決定" onclick="create_rect()">
+            <input type="button" value="削除" onclick="figure_delete()">
+
         </form>
     </div>
     <!-- </center> -->
@@ -175,6 +177,10 @@
                 figure_info.push(new rect(0, TYPE.RECT, place, FIGURE.NULL, color, label_color, get.label_text.value, ctx));
         }
 
+        function figure_delete() {
+            // if (myedit != -1)
+            //     figure_info.pop;
+        }
 
         function handleMouseMove(e) {
             event = e; // IE対応
