@@ -143,7 +143,7 @@
         function init() {
             setInterval(draw, 100);
             // get_user_info();
-            create_rect();
+            // create_rect();
             draw_figure();
             // console.log(figure_info[0]);
         }
@@ -175,11 +175,19 @@
             }
             else
                 figure_info.push(new rect(0, TYPE.RECT, place, FIGURE.NULL, color, label_color, get.label_text.value, ctx));
+
+            var get = document.forms[0];
+            get.figure_color.value = "#00ff00";
+            get.label_text.value = "";
+            get.label_color.value = "#ff0000";
+
         }
 
         function figure_delete() {
-            // if (myedit != -1)
-            //     figure_info.pop;
+            if (myedit != -1) {
+                figure_info.splice(myedit, 1);
+                myedit = -1;
+            }
         }
 
         function handleMouseMove(e) {
@@ -228,7 +236,7 @@
 
         function draw() {
             // console.log(mousex + "::" + mousey + "::::::" + figure[mynumber][0] + "~" + (figure[mynumber][0] + x1) + "::" + figure[mynumber][1] + "~" + (figure[mynumber][1] + y1));
-            // console.log(size_change_marker);
+            // console.log(myedit);
             window.onmousemove = handleMouseMove;
             if (debug == 0)
                 recieve();
@@ -261,7 +269,7 @@
 
         document.onmousedown = function (e) {
             if (!e) e = window.event; // レガシー
-            console.log(canvas.getBoundingClientRect().left + ":" + canvas.getBoundingClientRect().top + ":" + canvas.getBoundingClientRect().width + ":" + canvas.getBoundingClientRect().height + "::::" + mousex + ":" + mousey);
+            // console.log(canvas.getBoundingClientRect().left + ":" + canvas.getBoundingClientRect().top + ":" + canvas.getBoundingClientRect().width + ":" + canvas.getBoundingClientRect().height + "::::" + mousex + ":" + mousey);
             //myeditに値格納
             for (var i = 0; i < figure_info.length; i++)
                 if (place_judge(canvas.getBoundingClientRect().left, canvas.getBoundingClientRect().width, canvas.getBoundingClientRect().top, canvas.getBoundingClientRect().height, mousex, mousey))
@@ -279,7 +287,7 @@
                         if (b.length == 1)
                             b = "0" + b;
                         result = "#" + r + g + b;
-                        console.log(result);
+                        // console.log(result);
                         get.figure_color.value = result;
                         result = (figure_info[i].label_color).split(",");
                         // console.log(result);
@@ -298,9 +306,14 @@
                         get.label_color.value = result;
                         break;;
                     }
-                    else
+                    else {
                         myedit = -1;
+                        var get = document.forms[0];
+                        get.figure_color.value = "#00ff00";
+                        get.label_text.value = "";
+                        get.label_color.value = "#ff0000";
 
+                    }
             if (myedit != -1)
                 if (size_change_flag() == 1)
                     figure_info[myedit].stats = FIGURE.CHANGE;
