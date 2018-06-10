@@ -192,11 +192,15 @@
             }
         }
 
+        //マウスが動いた時
         function handleMouseMove(e) {
             event = e; // IE対応
             ev = event;
+            //画面上のマウスの座標
             mousex = event.clientX;
             mousey = event.clientY;
+
+            //画像上のマウスの座標
             imag_mousex = mousex - canvas.getBoundingClientRect().left;
             imag_mousey = mousey - canvas.getBoundingClientRect().top;
 
@@ -205,13 +209,14 @@
 
         }
 
+        //図形の描画
         function draw_figure() {
 
             for (var i = 0; i < figure_info.length; i++) {
                 var place = figure_info[i].place;
                 figure_info[i].ctx.fillStyle = figure_info[i].color;
                 figure_info[i].ctx.fillRect(place[0], place[1], place[2], place[3]);
-                if (i == myedit) {
+                if (i == myedit) {//選択図形の輪郭を変化
                     figure_info[i].ctx.strokeRect(place[0], place[1], place[2], place[3]);
 
                 }
@@ -226,16 +231,19 @@
                 figure_info[i].ctx.textBaseline = 'middle';
                 figure_info[i].ctx.fillText(figure_info[i].label_text, label_place[0] + label_place[2] / 2, label_place[1] + label_place[3] / 2, label_place[2]);
             }
+            //図形の拡大縮小可能時のマーカー
             size_change_marker.ctx.fillStyle = size_change_marker.color;
             size_change_marker.ctx.fillRect(size_change_marker.place.x, size_change_marker.place.y, size_change_marker.place.width, size_change_marker.place.height);
 
         }
 
+        //画像上をクリア
         function clear_figure() {
 
             size_change_marker.ctx.clearRect(0, 0, canvas.width, canvas.height);
         }
 
+        //更新処理
         function draw() {
             // console.log(mousex + "::" + mousey + "::::::" + figure[mynumber][0] + "~" + (figure[mynumber][0] + x1) + "::" + figure[mynumber][1] + "~" + (figure[mynumber][1] + y1));
             // console.log(myedit);
@@ -245,7 +253,7 @@
             clear_figure();
             if (myedit != -1)
                 switch (figure_info[myedit].stats) {
-                    case FIGURE.MOVE:
+                    case FIGURE.MOVE://座標の更新
                         figure_info[myedit].place[0] = mousex - canvas.getBoundingClientRect().left - rectx;
                         figure_info[myedit].place[1] = mousey - canvas.getBoundingClientRect().top - recty;
                         break;
@@ -264,48 +272,28 @@
 
                 }
 
-            draw_figure();
+            draw_figure();//図形の描画
             // size_change_flag();
 
         }
 
+        //マウスが押された時
         document.onmousedown = function (e) {
             if (!e) e = window.event; // レガシー
             // console.log(canvas.getBoundingClientRect().left + ":" + canvas.getBoundingClientRect().top + ":" + canvas.getBoundingClientRect().width + ":" + canvas.getBoundingClientRect().height + "::::" + mousex + ":" + mousey);
-            //myeditに値格納
-            for (var i = 0; i < figure_info.length; i++)
-                if (place_judge(canvas.getBoundingClientRect().left, canvas.getBoundingClientRect().width, canvas.getBoundingClientRect().top, canvas.getBoundingClientRect().height, mousex, mousey))
+            //画像上にマウスがあるか判定
+            if (place_judge(canvas.getBoundingClientRect().left, canvas.getBoundingClientRect().width, canvas.getBoundingClientRect().top, canvas.getBoundingClientRect().height, mousex, mousey))
+                for (var i = 0; i < figure_info.length; i++)
+                    //図形の上にマウスがあるか判定
                     if (place_judge(figure_info[i].place[0], figure_info[i].place[2], figure_info[i].place[1], figure_info[i].place[3], imag_mousex, imag_mousey)) {
                         myedit = i;
                         var get = document.forms[0];
                         var result = (figure_info[i].color).split(",");
-                        var r = parseInt(result[0].substr(4), 10).toString(16);
-                        if (r.length == 1)
-                            r = "0" + r;
-                        var g = parseInt(result[1], 10).toString(16);
-                        if (g.length == 1)
-                            g = "0" + g;
-                        var b = parseInt(result[2].substr(0, result[2].length - 1), 10).toString(16);
-                        if (b.length == 1)
-                            b = "0" + b;
-                        result = "#" + r + g + b;
-                        // console.log(result);
-                        get.figure_color.value = result;
+                        get.figure_color.value = rgb_to_16(result);
+
                         result = (figure_info[i].label_color).split(",");
-                        // console.log(result);
-                        r = parseInt(result[0].substr(4), 10).toString(16);
-                        if (r.length == 1)
-                            r = "0" + r;
-                        g = parseInt(result[1], 10).toString(16);
-                        if (g.length == 1)
-                            g = "0" + g;
-                        b = parseInt(result[2].substr(0, result[2].length - 1), 10).toString(16);
-                        if (b.length == 1)
-                            b = "0" + b;
-                        result = "#" + r + g + b;
-                        // console.log(result);
+                        get.label_color.value = rgb_to_16(result);
                         get.label_text.value = figure_info[i].label_text;
-                        get.label_color.value = result;
                         break;;
                     }
                     else {
@@ -331,7 +319,21 @@
                 }
         }
 
+        //rgb( , , )から16進数に変換
+        function rgb_to_16(rgb) {
+            var r = parseInt(rgb[0].substr(4), 10).toString(16);
+            if (r.length == 1)
+                r = "0" + r;
+            var g = parseInt(rgb[1], 10).toString(16);
+            if (g.length == 1)
+                g = "0" + g;
+            var b = parseInt(rgb[2].substr(0, rgb[2].length - 1), 10).toString(16);
+            if (b.length == 1)
+                b = "0" + b;
+            return "#" + r + g + b;
+        }
 
+        //マウスが離された時
         window.onmouseup = function (e) {
             // console.log("離された");
             if (myedit != -1)
@@ -340,17 +342,13 @@
             change_flag = 0;
         }
 
+        //他のユーザー情報の取得
         function get_user_info() {
             $.ajax({
                 type: "POST",
                 url: "http://192.168.0.159/2018grade4/HUG/HUG_Server/read_user.php",
                 dataType: "json",
             }).done(function (data, dataType) {
-                // successのブロック内は、Ajax通信が成功した場合に呼び出される
-
-                // 結果が0件の場合
-                // if (userdata == null) alert('データが0件でした');
-
                 for (var i = 0; i < data.length; i++) {
                     $("user_info").append("name : " + data[i].name + "&nbsp;" + data[i].role + "<br>");
                 }
@@ -359,17 +357,13 @@
             });
         }
 
+        //図形情報の取得
         function recieve() {
             $.ajax({
                 type: "POST",
                 url: "http://192.168.0.159/2018grade4/HUG/HUG_Server/read_share.php",
                 dataType: "json",
             }).done(function (data, dataType) {
-                // successのブロック内は、Ajax通信が成功した場合に呼び出される
-
-                // 結果が0件の場合
-                // if (userdata == null) alert('データが0件でした');
-
                 for (var i = 0; i < data.length; i++) {
                     // if (data[i].number - 1 != mynumber) {
                     //     figure[data[i].number - 1][0] = data[i].data1;
@@ -391,6 +385,7 @@
             draw_figure();
         }
 
+        //図形情報の送信
         function send() {
             $.ajax({ //ajaxによる非同期通信発生
                 type: "POST", //POST送信でデータを受け渡す
@@ -414,7 +409,7 @@
             return false;
         }
 
-
+        //引数の範囲に座標が含まれているかを判定
         function place_judge(x, x_range, y, y_range, plascex, placey) {
             if (x < plascex && x + x_range > plascex && y < placey && y + y_range > placey) {
                 return true;
@@ -422,6 +417,7 @@
             return false;
         }
 
+        //マウス共に拡大縮小マーカーを移動
         function size_change_marker_move() {
             var range = 8;
             size_change_marker.place.x = -10;
@@ -461,6 +457,8 @@
             else
                 size_change_marker.color = "blue";
         }
+
+        //四角形のどの方向に拡大縮小するかの判定
         function size_change_flag() {
             var range = 4;
 
@@ -486,6 +484,8 @@
             return 0;
         }
 
+
+        //四角形の拡大縮小
         function size_change() {
 
 
