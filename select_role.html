@@ -35,7 +35,7 @@
 <body onload="init();">
     <input type="button" value="送信" onclick="send()">
     <!-- <input type="button" value="受信" onclick="recieve()"> -->
-    <input type="button" value="四角" onclick="create_rect()">
+    <!-- <input type="button" value="四角" onclick="create_rect()"> -->
 
     <br>
     <canvas id="canvas" width="400" height="400"></canvas>
@@ -94,16 +94,16 @@
     <br>ID
 
     <script>
-        var debug = 1;
+        var debug = 1;//通信のオンオフ（１：オフ）
         if (debug == 0)
-            var mynumber = sessionStorage.getItem('mynumber') - 1;
+            var mynumber = sessionStorage.getItem('mynumber') - 1;//自分のユーザーIDを取得
         else
             mynumber = 1;
         document.write(mynumber);
         var ev;
-        var figure_info = [];
+        var figure_info = [];//図形の情報
         var canvas = document.getElementById("canvas");
-        var size_change_marker = {
+        var size_change_marker = {//図形を拡大縮小可能時に表示されるマーカー
             place: {
                 x: -1,
                 y: -1,
@@ -114,16 +114,15 @@
             ctx: canvas.getContext("2d")
         };
         var rectx = 0, recty = 0;
-        var myedit = -1;
-        var mousex = 0, mousey = 0;
-        var imag_mousex;
-        var imag_mousey;
-        var FIGURE = {
+        var myedit = -1;//現在選択している図形のID
+        var mousex = 0, mousey = 0;//画面上のマウスの座標
+        var imag_mousex, imag_mousey;//図形範囲内でのマウスの座標
+        var FIGURE = {//図形の状態
             NULL: 0,
             MOVE: 1,
             CHANGE: 2,
         };
-        var TYPE = {
+        var TYPE = {//図形の型
             RECT: 0
         };
         var change_flag = 0;
@@ -140,40 +139,42 @@
             this.ctx = ctx;
         }
 
+        //初期化処理
         function init() {
             setInterval(draw, 100);
-            // get_user_info();
+            if (debug == 0)
+                get_user_info();//他のユーザー情報の取得
             // create_rect();
-            draw_figure();
+            draw_figure();//図形の描画
             // console.log(figure_info[0]);
         }
 
+        //四角形の新規作成、更新
         function create_rect() {
             var place = [20, 20, 100, 100];
             var ctx = canvas.getContext("2d");
             ctx.globalAlpha = 0.6;
             var get = document.forms[0];
 
+            //図形の色　　16進数から変換
             var get_color = get.figure_color.value;
             var r = parseInt(get_color.substr(1, 2), 16).toString(10);
             var g = parseInt(get_color.substr(3, 2), 16).toString(10);
             var b = parseInt(get_color.substr(5, 2), 16).toString(10);
-
-            // console.log(get_color + "::" + r + "," + g + "," + b);
             var color = "rgb(" + r + "," + g + "," + b + ")";
-
+            //ラベルの色　　16進数から変換
             get_color = get.label_color.value;
             r = parseInt(get_color.substr(1, 2), 16).toString(10);
             g = parseInt(get_color.substr(3, 2), 16).toString(10);
             b = parseInt(get_color.substr(5, 2), 16).toString(10);
             var label_color = "rgb(" + r + "," + g + "," + b + ")";
 
-            if (myedit != -1) {
+            if (myedit != -1) {//編集中なら更新
                 figure_info[myedit].color = color;
                 figure_info[myedit].label_color = label_color;
                 figure_info[myedit].label_text = get.label_text.value;
             }
-            else
+            else//新規作成
                 figure_info.push(new rect(0, TYPE.RECT, place, FIGURE.NULL, color, label_color, get.label_text.value, ctx));
 
             var get = document.forms[0];
@@ -183,6 +184,7 @@
 
         }
 
+        //選択している図形の削除
         function figure_delete() {
             if (myedit != -1) {
                 figure_info.splice(myedit, 1);
