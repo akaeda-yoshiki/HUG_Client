@@ -1,5 +1,5 @@
 //四角形クラス
-function rect(id, type, place, stats, color, label_color, label_text, ctx) {
+function figure(id, type, place, stats, color, label_color, label_text, ctx) {
     this.id = id;
     this.type = type;
     this.place = place
@@ -10,14 +10,14 @@ function rect(id, type, place, stats, color, label_color, label_text, ctx) {
     this.ctx = ctx;
 }
 
-//画像関係の初期化処理
-function figure_init(){
-    draw_figure();//図形の描画
-}
-function figure_mousedown(){
-    
-}
 
+
+//画像関係の初期化処理
+function figure_init() {
+    create_circle();
+    draw_figure();//図形の描画
+
+}
 
 //四角形の新規作成、更新
 function create_rect() {
@@ -45,7 +45,42 @@ function create_rect() {
         figure_info[myedit].label_text = get.label_text.value;
     }
     else//新規作成
-        figure_info.push(new rect(0, TYPE.RECT, place, FIGURE.NULL, color, label_color, get.label_text.value, ctx));
+        figure_info.push(new figure(0, TYPE.RECT, place, FIGURE.NULL, color, label_color, get.label_text.value, ctx));
+
+    var get = document.forms[0];
+    get.figure_color.value = "#00ff00";
+    get.label_text.value = "";
+    get.label_color.value = "#ff0000";
+
+}
+
+//円を新規作成、編集
+function create_circle() {
+    var place = [50, 50, 50];
+    var ctx = canvas.getContext("2d");
+    ctx.globalAlpha = 0.6;
+    var get = document.forms[0];
+
+    //図形の色　　16進数から変換
+    var get_color = get.figure_color.value;
+    var r = parseInt(get_color.substr(1, 2), 16).toString(10);
+    var g = parseInt(get_color.substr(3, 2), 16).toString(10);
+    var b = parseInt(get_color.substr(5, 2), 16).toString(10);
+    var color = "rgb(" + r + "," + g + "," + b + ")";
+    //ラベルの色　　16進数から変換
+    get_color = get.label_color.value;
+    r = parseInt(get_color.substr(1, 2), 16).toString(10);
+    g = parseInt(get_color.substr(3, 2), 16).toString(10);
+    b = parseInt(get_color.substr(5, 2), 16).toString(10);
+    var label_color = "rgb(" + r + "," + g + "," + b + ")";
+
+    if (myedit != -1) {//編集中なら更新
+        figure_info[myedit].color = color;
+        figure_info[myedit].label_color = label_color;
+        figure_info[myedit].label_text = get.label_text.value;
+    }
+    else//新規作成
+        figure_info.push(new figure(0, TYPE.CIRCLE, place, FIGURE.NULL, color, label_color, get.label_text.value, ctx));
 
     var get = document.forms[0];
     get.figure_color.value = "#00ff00";
@@ -69,33 +104,72 @@ function draw_figure() {
 
     for (var i = 0; i < figure_info.length; i++) {
         var place = figure_info[i].place;
-        figure_info[i].ctx.fillStyle = figure_info[i].color;
-        figure_info[i].ctx.fillRect(place[0], place[1], place[2], place[3]);
-        if (i == myedit) {//選択図形の輪郭を変化
-            figure_info[i].ctx.strokeRect(place[0], place[1], place[2], place[3]);
+        var label_place = place.slice();
+        console.log(label_place + "::" + place);
+        figure_ctx.fillStyle = figure_info[i].color;
 
+        switch (figure_info[i].type) {
+            case TYPE.RECT:
+                figure_ctx.fillRect(place[0], place[1], place[2], place[3]);
+                if (i == myedit) {//選択図形の輪郭を変化
+                    figure_ctx.strokeRect(place[0], place[1], place[2], place[3]);
+                }
+
+                break;
+
+            case TYPE.CIRCLE:
+                figure_ctx.beginPath();
+                figure_ctx.arc(place[0], place[1], place[2], 0, Math.PI * 2, false);
+                figure_ctx.fill();
+                if (i == myedit) {//選択図形の輪郭を変化
+                    figure_ctx.stroke();
+                }
+                label_place.push(place[2] * 2);
+                label_place[0] = place[0] - place[2] * 0.8;
+                label_place[1] = place[1] - place[2] * 0.7;
+
+                break;
         }
-        figure_info[i].ctx.fillStyle = figure_info[i].label_color;
-        var label_place = [place[0] + place[2] * 0.1, place[1] + place[2] * 0.1, place[2] * 0.8, place[3] * 0.3];
-        figure_info[i].ctx.fillRect(label_place[0], label_place[1], label_place[2], label_place[3]);
-
-        figure_info[i].ctx.textBaseline = "top";
-        figure_info[i].ctx.font = "15px 'ＭＳ ゴシック'";
-        figure_info[i].ctx.fillStyle = "black";
-        figure_info[i].ctx.textAlign = 'center';
-        figure_info[i].ctx.textBaseline = 'middle';
-        figure_info[i].ctx.fillText(figure_info[i].label_text, label_place[0] + label_place[2] / 2, label_place[1] + label_place[3] / 2, label_place[2]);
+        if (label_place[3] > LAVEL_SIZE_MAX_Y)//ラベルの縦幅の上限
+            label_place[3] = LAVEL_SIZE_MAX_Y;
+        if (label_place[2] > figure_info[i].label_text.length * 15)
+            label_place[2] = figure_info[i].label_text.length * 15 + 20;
+        label_draw(label_place, i);
     }
     //図形の拡大縮小可能時のマーカー
-    size_change_marker.ctx.fillStyle = size_change_marker.color;
-    size_change_marker.ctx.fillRect(size_change_marker.place.x, size_change_marker.place.y, size_change_marker.place.width, size_change_marker.place.height);
+    figure_ctx.fillStyle = size_change_marker.color;
+    figure_ctx.fillRect(size_change_marker.place.x, size_change_marker.place.y, size_change_marker.place.width, size_change_marker.place.height);
+
+}
+
+//四角形を描画
+function rect_draw(place, i) {
+    figure_ctx.fillRect(place[0], place[1], place[2], place[3]);
+    if (i == myedit) {//選択図形の輪郭を変化
+        figure_ctx.strokeRect(place[0], place[1], place[2], place[3]);
+
+    }
+}
+
+//ラベルの描画
+function label_draw(place, i) {
+    figure_ctx.fillStyle = figure_info[i].label_color;
+    var label_place = [place[0] + place[2] * 0.1, place[1] + place[2] * 0.1, place[2] * 0.8, place[3] * 0.3];
+    figure_ctx.fillRect(label_place[0], label_place[1], label_place[2], label_place[3]);
+
+    figure_ctx.textBaseline = "top";
+    figure_ctx.font = "15px 'ＭＳ ゴシック'";
+    figure_ctx.fillStyle = "black";
+    figure_ctx.textAlign = 'center';
+    figure_ctx.textBaseline = 'middle';
+    figure_ctx.fillText(figure_info[i].label_text, label_place[0] + label_place[2] / 2, label_place[1] + label_place[3] / 2, label_place[2]);
 
 }
 
 //画像上をクリア
 function clear_figure() {
 
-    size_change_marker.ctx.clearRect(0, 0, canvas.width, canvas.height);
+    figure_ctx.clearRect(0, 0, canvas.width, canvas.height);
 }
 
 //rgb( , , )から16進数に変換
