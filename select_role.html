@@ -5,6 +5,7 @@
     <meta charset="UTF-8" />
     <title>ログイン</title>
     <script src="https://code.jquery.com/jquery-1.9.0.min.js"></script>
+    <script src="define.js"></script>
 
     <style type="text/css">
         canvas {
@@ -117,14 +118,6 @@
         var myedit = -1;//現在選択している図形のID
         var mousex = 0, mousey = 0;//画面上のマウスの座標
         var imag_mousex, imag_mousey;//図形範囲内でのマウスの座標
-        var FIGURE = {//図形の状態
-            NULL: 0,
-            MOVE: 1,
-            CHANGE: 2,
-        };
-        var TYPE = {//図形の型
-            RECT: 0
-        };
         var change_flag = 0;
 
         //四角形クラス
@@ -222,6 +215,10 @@
                 }
                 figure_info[i].ctx.fillStyle = figure_info[i].label_color;
                 var label_place = [place[0] + place[2] * 0.1, place[1] + place[2] * 0.1, place[2] * 0.8, place[3] * 0.3];
+                if (label_place[3] > LAVEL_SIZE_MAX_Y)//ラベルの縦幅の上限
+                    label_place[3] = LAVEL_SIZE_MAX_Y;
+                if (label_place[2] > figure_info[i].label_text.length * 15)
+                    label_place[2] = figure_info[i].label_text.length * 15 + 20;
                 figure_info[i].ctx.fillRect(label_place[0], label_place[1], label_place[2], label_place[3]);
 
                 figure_info[i].ctx.textBaseline = "top";
@@ -299,9 +296,9 @@
                     else {
                         myedit = -1;
                         var get = document.forms[0];
-                        get.figure_color.value = "#00ff00";
+                        get.figure_color.value = COLOR16.GREEN;
                         get.label_text.value = "";
-                        get.label_color.value = "#ff0000";
+                        get.label_color.value = COLOR16.RED;
 
                     }
             if (myedit != -1)
@@ -419,37 +416,36 @@
 
         //マウス共に拡大縮小マーカーを移動
         function size_change_marker_move() {
-            var range = 8;
             size_change_marker.place.x = -10;
             size_change_marker.place.y = -10;
             var cnt = 0;
 
-            if (place_judge(figure_info[myedit].place[0], range, figure_info[myedit].place[1], figure_info[myedit].place[3], imag_mousex, imag_mousey)) {
-                size_change_marker.place.x = figure_info[myedit].place[0] - range / 2;
+            if (place_judge(figure_info[myedit].place[0], MARKER_RANGE, figure_info[myedit].place[1], figure_info[myedit].place[3], imag_mousex, imag_mousey)) {
+                size_change_marker.place.x = figure_info[myedit].place[0] - MARKER_RANGE / 2;
                 size_change_marker.place.y = imag_mousey;
                 cnt++;
             }
-            if (place_judge(figure_info[myedit].place[0] + figure_info[myedit].place[2] - range, range, figure_info[myedit].place[1], figure_info[myedit].place[3], imag_mousex, imag_mousey)) {
-                size_change_marker.place.x = figure_info[myedit].place[0] + figure_info[myedit].place[2] - range / 2;
+            if (place_judge(figure_info[myedit].place[0] + figure_info[myedit].place[2] - MARKER_RANGE, MARKER_RANGE, figure_info[myedit].place[1], figure_info[myedit].place[3], imag_mousex, imag_mousey)) {
+                size_change_marker.place.x = figure_info[myedit].place[0] + figure_info[myedit].place[2] - MARKER_RANGE / 2;
                 size_change_marker.place.y = imag_mousey;
                 cnt += 2;
             }
-            if (place_judge(figure_info[myedit].place[0], figure_info[myedit].place[2], figure_info[myedit].place[1], range, imag_mousex, imag_mousey)) {
+            if (place_judge(figure_info[myedit].place[0], figure_info[myedit].place[2], figure_info[myedit].place[1], MARKER_RANGE, imag_mousex, imag_mousey)) {
                 size_change_marker.place.x = imag_mousex;
-                size_change_marker.place.y = figure_info[myedit].place[1] - range / 2;
+                size_change_marker.place.y = figure_info[myedit].place[1] - MARKER_RANGE / 2;
                 cnt += 10;
             }
-            if (place_judge(figure_info[myedit].place[0], figure_info[myedit].place[2], figure_info[myedit].place[1] + figure_info[myedit].place[3] - range, range, imag_mousex, imag_mousey)) {
+            if (place_judge(figure_info[myedit].place[0], figure_info[myedit].place[2], figure_info[myedit].place[1] + figure_info[myedit].place[3] - MARKER_RANGE, MARKER_RANGE, imag_mousex, imag_mousey)) {
                 size_change_marker.place.x = imag_mousex;
-                size_change_marker.place.y = figure_info[myedit].place[1] + figure_info[myedit].place[3] - range / 2;
+                size_change_marker.place.y = figure_info[myedit].place[1] + figure_info[myedit].place[3] - MARKER_RANGE / 2;
                 cnt += 20;
             }
             if (cnt % 10 > 0 && Math.floor(cnt / 10) > 0) {
                 size_change_marker.color = "red";
                 if (cnt % 10 == 1)
-                    size_change_marker.place.x = figure_info[myedit].place[0] - range / 2;
+                    size_change_marker.place.x = figure_info[myedit].place[0] - MARKER_RANGE / 2;
                 else
-                    size_change_marker.place.x = figure_info[myedit].place[0] + figure_info[myedit].place[2] - range / 2;
+                    size_change_marker.place.x = figure_info[myedit].place[0] + figure_info[myedit].place[2] - MARKER_RANGE / 2;
 
                 // size_change_marker.place.y = -10;
 
@@ -460,21 +456,20 @@
 
         //四角形のどの方向に拡大縮小するかの判定
         function size_change_flag() {
-            var range = 4;
 
-            if (place_judge(figure_info[myedit].place[0] - range, range * 2, figure_info[myedit].place[1] - range, figure_info[myedit].place[3] + range * 2, imag_mousex, imag_mousey)) {
+            if (place_judge(figure_info[myedit].place[0], MARKER_RANGE, figure_info[myedit].place[1], figure_info[myedit].place[3], imag_mousex, imag_mousey)) {
                 figure_info[myedit].stats = FIGURE.CHANGE;
                 change_flag += 1;
             }
-            if (place_judge(figure_info[myedit].place[0] + figure_info[myedit].place[2] - range, range * 2, figure_info[myedit].place[1] - range, figure_info[myedit].place[3] + range * 2, imag_mousex, imag_mousey)) {
+            if (place_judge(figure_info[myedit].place[0] + figure_info[myedit].place[2] - MARKER_RANGE, MARKER_RANGE, figure_info[myedit].place[1], figure_info[myedit].place[3], imag_mousex, imag_mousey)) {
                 figure_info[myedit].stats = FIGURE.CHANGE;
                 change_flag += 2;
             }
-            if (place_judge(figure_info[myedit].place[0] - range, figure_info[myedit].place[2] + range, figure_info[myedit].place[1] - range, range * 2, imag_mousex, imag_mousey)) {
+            if (place_judge(figure_info[myedit].place[0], figure_info[myedit].place[2], figure_info[myedit].place[1], MARKER_RANGE, imag_mousex, imag_mousey)) {
                 figure_info[myedit].stats = FIGURE.CHANGE;
                 change_flag += 10;
             }
-            if (place_judge(figure_info[myedit].place[0] - range, figure_info[myedit].place[2] + range, figure_info[myedit].place[1] + figure_info[myedit].place[3] - range, range * 2, imag_mousex, imag_mousey)) {
+            if (place_judge(figure_info[myedit].place[0], figure_info[myedit].place[2], figure_info[myedit].place[1] + figure_info[myedit].place[3] - MARKER_RANGE, MARKER_RANGE, imag_mousex, imag_mousey)) {
                 figure_info[myedit].stats = FIGURE.CHANGE;
                 change_flag += 20;
             }
