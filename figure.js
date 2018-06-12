@@ -1,5 +1,5 @@
 //四角形クラス
-function figure(id, type, place, stats, color, label_color, label_text, ctx) {
+function figure(id, type, place, stats, color, label_color, label_text) {
     this.id = id;
     this.type = type;
     this.place = place
@@ -7,7 +7,6 @@ function figure(id, type, place, stats, color, label_color, label_text, ctx) {
     this.color = color;
     this.label_color = label_color;
     this.label_text = label_text;
-    this.ctx = ctx;
 }
 
 
@@ -45,7 +44,7 @@ function create_rect() {
         figure_info[myedit].label_text = get.label_text.value;
     }
     else//新規作成
-        figure_info.push(new figure(0, TYPE.RECT, place, FIGURE.NULL, color, label_color, get.label_text.value, ctx));
+        figure_info.push(new figure(0, TYPE.RECT, place, FIGURE.NULL, color, label_color, get.label_text.value));
 
     var get = document.getElementById("create_figure");
     get.figure_color.value = "#00ff00";
@@ -83,7 +82,46 @@ function create_circle() {
         figure_info[myedit].label_text = get.label_text.value;
     }
     else//新規作成
-        figure_info.push(new figure(0, TYPE.CIRCLE, place, FIGURE.NULL, color, label_color, get.label_text.value, ctx));
+        figure_info.push(new figure(0, TYPE.CIRCLE, place, FIGURE.NULL, color, label_color, get.label_text.value));
+
+    var get = document.getElementById("create_figure");
+    get.figure_color.value = "#00ff00";
+    get.label_text.value = "";
+    get.label_color.value = "#ff0000";
+    myedit = -1;
+    get = document.getElementById("select_figure");
+    get.figure.value = "no";
+
+}
+
+//三角形を作成、編集
+function create_triangle() {
+    var place = [80, 20, 30, 100, 130, 100];
+
+    var ctx = canvas.getContext("2d");
+    ctx.globalAlpha = 0.6;
+    var get = document.getElementById("create_figure");
+
+    //図形の色　　16進数から変換
+    var get_color = get.figure_color.value;
+    var r = parseInt(get_color.substr(1, 2), 16).toString(10);
+    var g = parseInt(get_color.substr(3, 2), 16).toString(10);
+    var b = parseInt(get_color.substr(5, 2), 16).toString(10);
+    var color = "rgb(" + r + "," + g + "," + b + ")";
+    //ラベルの色　　16進数から変換
+    get_color = get.label_color.value;
+    r = parseInt(get_color.substr(1, 2), 16).toString(10);
+    g = parseInt(get_color.substr(3, 2), 16).toString(10);
+    b = parseInt(get_color.substr(5, 2), 16).toString(10);
+    var label_color = "rgb(" + r + "," + g + "," + b + ")";
+
+    if (myedit != -1) {//編集中なら更新
+        figure_info[myedit].color = color;
+        figure_info[myedit].label_color = label_color;
+        figure_info[myedit].label_text = get.label_text.value;
+    }
+    else//新規作成
+        figure_info.push(new figure(0, TYPE.TRIANGLE, place, FIGURE.NULL, color, label_color, get.label_text.value));
 
     var get = document.getElementById("create_figure");
     get.figure_color.value = "#00ff00";
@@ -133,6 +171,22 @@ function draw_figure() {
                 label_place.push(place[2] * 2);
                 label_place[0] = place[0] - place[2] * 0.8;
                 label_place[1] = place[1] - place[2] * 0.7;
+
+                break;
+            case TYPE.TRIANGLE:
+                figure_ctx.beginPath();
+                figure_ctx.moveTo(place[0], place[1]); //最初の点の場所
+                figure_ctx.lineTo(place[2], place[3]); //2番目の点の場所
+                figure_ctx.lineTo(place[4], place[5]); //3番目の点の場所
+
+                figure_ctx.closePath();	//三角形の最後の線 closeさせる
+                figure_ctx.fill();
+
+                label_place[0] = place[0] - 20;
+                label_place[1] = place[1] + 30;
+                label_place[2] = Math.abs(place[2] - place[0]);
+
+
 
                 break;
         }

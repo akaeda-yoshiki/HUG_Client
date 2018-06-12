@@ -246,7 +246,7 @@
                         myedit = i;
                         var get = document.getElementById("select_figure");
                         get.figure.value = figure_info[i].type;
-                         get = document.getElementById("create_figure");
+                        get = document.getElementById("create_figure");
                         var result = (figure_info[i].color).split(",");
                         get.figure_color.value = rgb_to_16(result);
 
@@ -367,7 +367,7 @@
 
                     break;
                 case TYPE.TRIANGLE:
-
+                    create_triangle();
                     break;
             }
         }
