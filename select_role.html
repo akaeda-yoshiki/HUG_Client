@@ -146,7 +146,7 @@
             imag_mousex = mousex - canvas.getBoundingClientRect().left;
             imag_mousey = mousey - canvas.getBoundingClientRect().top;
 
-            if (myedit != -1)
+            if (myedit != -1 && figure_info[myedit].stats != FIGURE.MOVE)
                 size_change_marker_move();
 
         }
@@ -169,19 +169,10 @@
                     case FIGURE.CHANGE:
                         size_change();
                         break;
-                    // case FIGURE.CHANGE_X:
-
-                    //     break;
-                    // case FIGURE.CHANGE_Y:
-
-                    //     break;
-                    // case FIGURE.CHANGE_XY:
-
-                    //     break;
                 }
 
             draw_figure();//図形の描画
-            
+
             // size_change_flag();
 
         }
@@ -191,10 +182,10 @@
             if (!e) e = window.event; // レガシー
             // console.log(canvas.getBoundingClientRect().left + ":" + canvas.getBoundingClientRect().top + ":" + canvas.getBoundingClientRect().width + ":" + canvas.getBoundingClientRect().height + "::::" + mousex + ":" + mousey);
             //画像上にマウスがあるか判定
-            if (place_judge(canvas.getBoundingClientRect().left, canvas.getBoundingClientRect().width, canvas.getBoundingClientRect().top, canvas.getBoundingClientRect().height, mousex, mousey))
+            if (rect_judge(canvas.getBoundingClientRect().left, canvas.getBoundingClientRect().width, canvas.getBoundingClientRect().top, canvas.getBoundingClientRect().height, mousex, mousey))
                 for (var i = 0; i < figure_info.length; i++)
                     //図形の上にマウスがあるか判定
-                    if (place_judge(figure_info[i].place[0], figure_info[i].place[2], figure_info[i].place[1], figure_info[i].place[3], imag_mousex, imag_mousey)) {
+                    if (place_judge(i)) {
                         myedit = i;
                         var get = document.forms[0];
                         var result = (figure_info[i].color).split(",");
@@ -203,7 +194,19 @@
                         result = (figure_info[i].label_color).split(",");
                         get.label_color.value = rgb_to_16(result);
                         get.label_text.value = figure_info[i].label_text;
-                        break;;
+                        if (size_change_flag() == 1)
+                            figure_info[myedit].stats = FIGURE.CHANGE;
+                        else {
+                            rectx = imag_mousex - figure_info[myedit].place[0];
+                            recty = imag_mousey - figure_info[myedit].place[1];
+                            clear_figure();
+                            figure_info[myedit].place[0] = mousex - canvas.getBoundingClientRect().left - rectx;
+                            figure_info[myedit].place[1] = mousey - canvas.getBoundingClientRect().top - recty;
+
+                            figure_info[myedit].stats = FIGURE.MOVE;
+                            draw_figure();
+                        }
+                        break;
                     }
                     else {
                         myedit = -1;
@@ -213,19 +216,6 @@
                         get.label_color.value = COLOR16.RED;
 
                     }
-            if (myedit != -1)
-                if (size_change_flag() == 1)
-                    figure_info[myedit].stats = FIGURE.CHANGE;
-                else {
-                    rectx = imag_mousex - figure_info[myedit].place[0];
-                    recty = imag_mousey - figure_info[myedit].place[1];
-                    clear_figure();
-                    figure_info[myedit].place[0] = mousex - canvas.getBoundingClientRect().left - rectx;
-                    figure_info[myedit].place[1] = mousey - canvas.getBoundingClientRect().top - recty;
-
-                    figure_info[myedit].stats = FIGURE.MOVE;
-                    draw_figure();
-                }
         }
 
         //マウスが離された時
