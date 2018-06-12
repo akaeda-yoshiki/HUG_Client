@@ -30,8 +30,51 @@
             font-size: 20px;
 
         }
-    </style>
 
+        input[type=radio] {
+            display: none;
+            /* ラジオボタンを非表示にする */
+        }
+
+        input[type="radio"]:checked+label {
+            background: #31A9EE;
+            /* マウス選択時の背景色を指定する */
+            color: #ffffff;
+            /* マウス選択時のフォント色を指定する */
+        }
+
+        .label {
+            display: block;
+            /* ブロックレベル要素化する */
+            float: left;
+            /* 要素の左寄せ・回り込を指定する */
+            margin: 5px;
+            /* ボックス外側の余白を指定する */
+            width: 50px;
+            /* ボックスの横幅を指定する */
+            height: 30px;
+            /* ボックスの高さを指定する */
+            padding-left: 5px;
+            /* ボックス内左側の余白を指定する */
+            padding-right: 5px;
+            /* ボックス内御右側の余白を指定する */
+            color: #b20000;
+            /* フォントの色を指定 */
+            text-align: center;
+            /* テキストのセンタリングを指定する */
+            cursor: pointer;
+            /* マウスカーソルの形（リンクカーソル）を指定する */
+            border: 2px solid #006DD9;
+            /* ボックスの境界線を実線で指定する */
+            border-radius: 5px;
+            /* 角丸を指定する */
+        }
+
+        .label:hover {
+            background-color: rgb(142, 194, 250);
+            /* マウスオーバー時の背景色を指定する */
+        }
+    </style>
 </head>
 
 <body onload="init();">
@@ -64,17 +107,31 @@
 
     <!-- <center> -->
     <div>
+
+        <form id="select_figure">
+            <input type="radio" name="figure" value="□" id="rect">
+            <label for="rect" class="label">□</label>
+
+            <input type="radio" name="figure" value="〇" id="circle">
+            <label for="circle" class="label">〇</label>
+
+            <input type="radio" name="figure" value="△" id="triangle">
+            <label for="triangle" class="label">△</label>
+            <input type="radio" name="figure" value="no" id="no">
+
+        </form>
         <form id="create_figure">
-            図形の色
+
+            <br>
+            <br> 図形の色
             <input type="color" name="figure_color" list="color_list" value="#00ff00">
             <br> ラベル名
             <input type="text" name="label_text" list="label_text_list" required>
             <br>ラベルの色
             <input type="color" name="label_color" list="color_list" value="#ff0000">
 
-
-            <input type="button" value="決定" onclick="create_rect()">
-            <input type="button" value="円" onclick="create_circle()">
+            <br>
+            <input type="button" name="create" value="決定" onclick="create_figure()">
             <input type="button" value="削除" onclick="figure_delete()">
 
         </form>
@@ -187,7 +244,9 @@
                     //図形の上にマウスがあるか判定
                     if (place_judge(i)) {
                         myedit = i;
-                        var get = document.forms[0];
+                        var get = document.getElementById("select_figure");
+                        get.figure.value = figure_info[i].type;
+                         get = document.getElementById("create_figure");
                         var result = (figure_info[i].color).split(",");
                         get.figure_color.value = rgb_to_16(result);
 
@@ -210,7 +269,10 @@
                     }
                     else {
                         myedit = -1;
-                        var get = document.forms[0];
+                        var get = document.getElementById("select_figure");
+                        get.figure.value = "no";
+                        // console.log(get.figure.value);
+                        var get = document.getElementById("create_figure");
                         get.figure_color.value = COLOR16.GREEN;
                         get.label_text.value = "";
                         get.label_color.value = COLOR16.RED;
@@ -294,7 +356,21 @@
             return false;
         }
 
+        function create_figure() {
+            var get = document.getElementById("select_figure");
+            switch (get.figure.value) {
+                case TYPE.RECT:
+                    create_rect();
+                    break;
+                case TYPE.CIRCLE:
+                    create_circle();
 
+                    break;
+                case TYPE.TRIANGLE:
+
+                    break;
+            }
+        }
 
     </script>
 </body>

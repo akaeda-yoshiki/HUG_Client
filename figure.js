@@ -24,7 +24,7 @@ function create_rect() {
     var place = [20, 20, 100, 100];
     var ctx = canvas.getContext("2d");
     ctx.globalAlpha = 0.6;
-    var get = document.forms[0];
+    var get = document.getElementById("create_figure");
 
     //図形の色　　16進数から変換
     var get_color = get.figure_color.value;
@@ -47,11 +47,13 @@ function create_rect() {
     else//新規作成
         figure_info.push(new figure(0, TYPE.RECT, place, FIGURE.NULL, color, label_color, get.label_text.value, ctx));
 
-    var get = document.forms[0];
+    var get = document.getElementById("create_figure");
     get.figure_color.value = "#00ff00";
     get.label_text.value = "";
     get.label_color.value = "#ff0000";
     myedit = -1;
+    get = document.getElementById("select_figure");
+    get.figure.value = "no";
 
 }
 
@@ -60,7 +62,7 @@ function create_circle() {
     var place = [50, 50, 50];
     var ctx = canvas.getContext("2d");
     ctx.globalAlpha = 0.6;
-    var get = document.forms[0];
+    var get = document.getElementById("create_figure");
 
     //図形の色　　16進数から変換
     var get_color = get.figure_color.value;
@@ -83,11 +85,14 @@ function create_circle() {
     else//新規作成
         figure_info.push(new figure(0, TYPE.CIRCLE, place, FIGURE.NULL, color, label_color, get.label_text.value, ctx));
 
-    var get = document.forms[0];
+    var get = document.getElementById("create_figure");
     get.figure_color.value = "#00ff00";
     get.label_text.value = "";
     get.label_color.value = "#ff0000";
     myedit = -1;
+    get = document.getElementById("select_figure");
+    get.figure.value = "no";
+
 }
 
 //選択している図形の削除

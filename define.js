@@ -8,8 +8,9 @@ var FIGURE = {//図形の状態
     CHANGE: 2,
 };
 var TYPE = {//図形の型
-    RECT: 0,
-    CIRCLE: 1
+    RECT: "□",
+    CIRCLE: "〇",
+    TRIANGLE: "△"
 };
 
 var COLOR16 = {
