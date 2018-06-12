@@ -208,7 +208,7 @@ function rect_judge(x, x_range, y, y_range, plascex, placey) {
 }
 
 function circle_judge(x, y, range_min, range_max, placex, placey) {
-    if (Math.pow(range_max, 2) >= Math.pow(x - placex, 2) + Math.pow(y - placey, 2) && Math.pow(range_min, 2) <= Math.pow(x - placex, 2) + Math.pow(y - placey, 2))
+    if (range_max >= Math.hypot(x - placex, y - placey) && range_min <= Math.hypot(x - placex, y - placey))
         return true;
     return false;
 }
@@ -226,11 +226,45 @@ function size_change_marker_move() {
             if (circle_judge(figure_info[myedit].place[0], figure_info[myedit].place[1], figure_info[myedit].place[2] - CIRCLE_MARKER_RANGE, figure_info[myedit].place[2], imag_mousex, imag_mousey)) {
                 size_change_marker.place.x = imag_mousex;
                 size_change_marker.place.y = imag_mousey;
-             }
+            }
             size_change_marker.color = "blue";
             break;
 
     }
+}
+
+
+
+//四角形の拡大縮小
+function size_change() {
+
+    // console.log(Math.floor(change_flag % 10));
+
+    switch (figure_info[myedit].type) {
+        case TYPE.RECT:
+            if (change_flag % 10 == 1) {
+                figure_info[myedit].place[2] += figure_info[myedit].place[0] - imag_mousex;
+                figure_info[myedit].place[0] = imag_mousex;
+            }
+            else if (change_flag % 10 == 2) {
+                figure_info[myedit].place[2] = imag_mousex - figure_info[myedit].place[0];
+            }
+            if (Math.floor(change_flag / 10) == 1) {
+                figure_info[myedit].place[3] += figure_info[myedit].place[1] - imag_mousey;
+                figure_info[myedit].place[1] = imag_mousey;
+            }
+            else if (Math.floor(change_flag / 10) == 2) {
+                figure_info[myedit].place[3] = imag_mousey - figure_info[myedit].place[1];
+            } break;
+        case TYPE.CIRCLE:
+            figure_info[myedit].place[2] = Math.hypot(figure_info[myedit].place[0] - imag_mousex, figure_info[myedit].place[1] - imag_mousey);
+
+            break;
+
+    }
+
+
+
 }
 
 //四角形の拡大縮小マーカーを移動
@@ -271,52 +305,39 @@ function rect_size_change_marker_move() {
 //四角形のどの方向に拡大縮小するかの判定
 function size_change_flag() {
 
-    if (rect_judge(figure_info[myedit].place[0], RECT_MARKER_RANGE, figure_info[myedit].place[1], figure_info[myedit].place[3], imag_mousex, imag_mousey)) {
-        figure_info[myedit].stats = FIGURE.CHANGE;
-        change_flag += 1;
-    }
-    if (rect_judge(figure_info[myedit].place[0] + figure_info[myedit].place[2] - RECT_MARKER_RANGE, RECT_MARKER_RANGE, figure_info[myedit].place[1], figure_info[myedit].place[3], imag_mousex, imag_mousey)) {
-        figure_info[myedit].stats = FIGURE.CHANGE;
-        change_flag += 2;
-    }
-    if (rect_judge(figure_info[myedit].place[0], figure_info[myedit].place[2], figure_info[myedit].place[1], RECT_MARKER_RANGE, imag_mousex, imag_mousey)) {
-        figure_info[myedit].stats = FIGURE.CHANGE;
-        change_flag += 10;
-    }
-    if (rect_judge(figure_info[myedit].place[0], figure_info[myedit].place[2], figure_info[myedit].place[1] + figure_info[myedit].place[3] - RECT_MARKER_RANGE, RECT_MARKER_RANGE, imag_mousex, imag_mousey)) {
-        figure_info[myedit].stats = FIGURE.CHANGE;
-        change_flag += 20;
-    }
 
+    switch (figure_info[myedit].type) {
+        case TYPE.RECT:
+            if (rect_judge(figure_info[myedit].place[0], RECT_MARKER_RANGE, figure_info[myedit].place[1], figure_info[myedit].place[3], imag_mousex, imag_mousey)) {
+                figure_info[myedit].stats = FIGURE.CHANGE;
+                change_flag += 1;
+            }
+            if (rect_judge(figure_info[myedit].place[0] + figure_info[myedit].place[2] - RECT_MARKER_RANGE, RECT_MARKER_RANGE, figure_info[myedit].place[1], figure_info[myedit].place[3], imag_mousex, imag_mousey)) {
+                figure_info[myedit].stats = FIGURE.CHANGE;
+                change_flag += 2;
+            }
+            if (rect_judge(figure_info[myedit].place[0], figure_info[myedit].place[2], figure_info[myedit].place[1], RECT_MARKER_RANGE, imag_mousex, imag_mousey)) {
+                figure_info[myedit].stats = FIGURE.CHANGE;
+                change_flag += 10;
+            }
+            if (rect_judge(figure_info[myedit].place[0], figure_info[myedit].place[2], figure_info[myedit].place[1] + figure_info[myedit].place[3] - RECT_MARKER_RANGE, RECT_MARKER_RANGE, imag_mousex, imag_mousey)) {
+                figure_info[myedit].stats = FIGURE.CHANGE;
+                change_flag += 20;
+            }
+
+            break;
+        case TYPE.CIRCLE:
+            if (circle_judge(figure_info[myedit].place[0], figure_info[myedit].place[1], figure_info[myedit].place[2] - CIRCLE_MARKER_RANGE, figure_info[myedit].place[2], imag_mousex, imag_mousey)) {
+                figure_info[myedit].stats = FIGURE.CHANGE;
+                return 1;
+            }
+            break;
+
+    }
     if (change_flag != 0)
         return 1;
+
     return 0;
 }
 
-
-//四角形の拡大縮小
-function size_change() {
-
-
-
-    // console.log(Math.floor(change_flag % 10));
-    if (change_flag % 10 == 1) {
-        figure_info[myedit].place[2] += figure_info[myedit].place[0] - imag_mousex;
-        figure_info[myedit].place[0] = imag_mousex;
-    }
-    else if (change_flag % 10 == 2) {
-        figure_info[myedit].place[2] = imag_mousex - figure_info[myedit].place[0];
-    }
-    if (Math.floor(change_flag / 10) == 1) {
-        figure_info[myedit].place[3] += figure_info[myedit].place[1] - imag_mousey;
-        figure_info[myedit].place[1] = imag_mousey;
-    }
-    else if (Math.floor(change_flag / 10) == 2) {
-        figure_info[myedit].place[3] = imag_mousey - figure_info[myedit].place[1];
-    }
-
-
-
-
-}
 
