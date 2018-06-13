@@ -145,7 +145,7 @@ function figure_delete() {
 
 //図形の描画
 function draw_figure() {
-
+    // console.log(cross_product(100, 500, 100, 300, imag_mousex, imag_mousey));
     for (var i = 0; i < figure_info.length; i++) {
         var place = figure_info[i].place;
         var label_place = place.slice();
@@ -254,7 +254,19 @@ function place_judge(i) {
             if (circle_judge(figure_info[i].place[0], figure_info[i].place[1], 0, figure_info[i].place[2], imag_mousex, imag_mousey))
                 return true;
             break;
+        case TYPE.TRIANGLE:
+            return triangle_judge(figure_info[i].placem, i);
     }
+    return false;
+}
+
+//三角形の内部にあるかどうか
+function triangle_judge(place, i) {
+    var h1 = cross_product(figure_info[i].place[0], figure_info[i].place[1], figure_info[i].place[2], figure_info[i].place[3], imag_mousex, imag_mousey);
+    var h2 = cross_product(figure_info[i].place[2], figure_info[i].place[3], figure_info[i].place[4], figure_info[i].place[5], imag_mousex, imag_mousey);
+    var h3 = cross_product(figure_info[i].place[4], figure_info[i].place[5], figure_info[i].place[0], figure_info[i].place[1], imag_mousex, imag_mousey);
+    if (h1 <= 0 && h2 <= 0 && h3 <= 0)
+        return true;
     return false;
 }
 
@@ -270,6 +282,14 @@ function circle_judge(x, y, range_min, range_max, placex, placey) {
     if (range_max >= Math.hypot(x - placex, y - placey) && range_min <= Math.hypot(x - placex, y - placey))
         return true;
     return false;
+}
+
+//外積の計算結果を返す(正：右)
+function cross_product(start_x, start_y, line_x, line_y, place_x, place_y) {
+    var vector1 = [line_x - start_x, line_y - start_y];
+    var vector2 = [place_x - start_x, place_y - start_y];
+
+    return (vector1[0] * vector2[1]) - (vector2[0] * vector1[1]);
 }
 
 //マウス共に拡大縮小マーカーを移動
