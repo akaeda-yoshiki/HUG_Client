@@ -220,8 +220,12 @@
             if (myedit != -1)
                 switch (figure_info[myedit].stats) {
                     case FIGURE.MOVE://座標の更新
-                        figure_info[myedit].place[0] = mousex - canvas.getBoundingClientRect().left - rectx;
-                        figure_info[myedit].place[1] = mousey - canvas.getBoundingClientRect().top - recty;
+                        if (figure_info[myedit].TYPE == TYPE.TRIANGLE) {
+
+                        } else {
+                            figure_info[myedit].place[0] = mousex - canvas.getBoundingClientRect().left - rectx;
+                            figure_info[myedit].place[1] = mousey - canvas.getBoundingClientRect().top - recty;
+                        }
                         break;
                     case FIGURE.CHANGE:
                         size_change();
@@ -259,8 +263,8 @@
                             rectx = imag_mousex - figure_info[myedit].place[0];
                             recty = imag_mousey - figure_info[myedit].place[1];
                             clear_figure();
-                            figure_info[myedit].place[0] = mousex - canvas.getBoundingClientRect().left - rectx;
-                            figure_info[myedit].place[1] = mousey - canvas.getBoundingClientRect().top - recty;
+                            // figure_info[myedit].place[0] = mousex - canvas.getBoundingClientRect().left - rectx;
+                            // figure_info[myedit].place[1] = mousey - canvas.getBoundingClientRect().top - recty;
 
                             figure_info[myedit].stats = FIGURE.MOVE;
                             draw_figure();
