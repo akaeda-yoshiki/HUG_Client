@@ -280,7 +280,9 @@
                         myedit = -1;
                         $("#create").prop("disabled", false);
                         $("#edit").prop("disabled", true);
+                        
                         var get = document.getElementById("select_figure");
+                        get.style.display = "";
                         get.figure.value = "no";
                         // console.log(get.figure.value);
                         var get = document.getElementById("create_figure");
