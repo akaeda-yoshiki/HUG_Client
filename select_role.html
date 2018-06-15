@@ -131,7 +131,8 @@
             <input type="color" name="label_color" list="color_list" value="#ff0000">
 
             <br>
-            <input type="button" name="create" value="決定" onclick="create_figure()">
+            <input type="button" id="create" value="新規作成" onclick="create_figure()">
+            <input type="button" id="edit" value="変更" onclick="create_figure()">
             <input type="button" value="削除" onclick="figure_delete()">
 
         </form>
@@ -223,15 +224,14 @@
                         // if (figure_info[myedit].TYPE == TYPE.TRIANGLE) {
 
                         // } else {
-                            figure_info[myedit].place[0] = mousex - canvas.getBoundingClientRect().left - rectx;
-                            figure_info[myedit].place[1] = mousey - canvas.getBoundingClientRect().top - recty;
+                        figure_info[myedit].place[0] = mousex - canvas.getBoundingClientRect().left - rectx;
+                        figure_info[myedit].place[1] = mousey - canvas.getBoundingClientRect().top - recty;
                         // }
                         break;
                     case FIGURE.CHANGE:
                         size_change();
                         break;
                 }
-
             draw_figure();//図形の描画
 
             // size_change_flag();
@@ -249,7 +249,11 @@
                     if (place_judge(i)) {
                         myedit = i;
                         var get = document.getElementById("select_figure");
-                        get.figure.value = figure_info[i].type;
+                        // get.figure.value = figure_info[i].type;
+                        get.style.display = "none";
+                        $("#create").prop("disabled", true);
+                        $("#edit").prop("disabled", false);
+
                         get = document.getElementById("create_figure");
                         var result = (figure_info[i].color).split(",");
                         get.figure_color.value = rgb_to_16(result);
@@ -257,6 +261,7 @@
                         result = (figure_info[i].label_color).split(",");
                         get.label_color.value = rgb_to_16(result);
                         get.label_text.value = figure_info[i].label_text;
+
                         if (size_change_flag() == 1)
                             figure_info[myedit].stats = FIGURE.CHANGE;
                         else {
@@ -273,6 +278,8 @@
                     }
                     else {
                         myedit = -1;
+                        $("#create").prop("disabled", false);
+                        $("#edit").prop("disabled", true);
                         var get = document.getElementById("select_figure");
                         get.figure.value = "no";
                         // console.log(get.figure.value);

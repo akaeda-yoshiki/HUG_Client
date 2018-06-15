@@ -364,14 +364,12 @@ function size_change() {
             break;
         case TYPE.TRIANGLE:
             if (change_flag == 1) {
-                // figure_info[myedit].place[0] = imag_mousex;
-                // figure_info[myedit].place[1] = imag_mousey;
-                // figure_info[myedit].place[2] = imag_mousex - figure_info[myedit].place[2] + figure_info[myedit].place[0];
-                // figure_info[myedit].place[3] = imag_mousey - figure_info[myedit].place[3] + figure_info[myedit].place[1];
-                // figure_info[myedit].place[4] = imag_mousex - figure_info[myedit].place[4] + figure_info[myedit].place[0];
-                // figure_info[myedit].place[5] = imag_mousey - figure_info[myedit].place[5] + figure_info[myedit].place[1];
-
-
+                figure_info[myedit].place[2] += figure_info[myedit].place[0] - imag_mousex;
+                figure_info[myedit].place[3] += figure_info[myedit].place[1] - imag_mousey;
+                figure_info[myedit].place[4] += figure_info[myedit].place[0] - imag_mousex;
+                figure_info[myedit].place[5] += figure_info[myedit].place[1] - imag_mousey;
+                figure_info[myedit].place[0] = imag_mousex;
+                figure_info[myedit].place[1] = imag_mousey;
             }
             if (change_flag == 2) {
                 figure_info[myedit].place[2] = imag_mousex - figure_info[myedit].place[0];
