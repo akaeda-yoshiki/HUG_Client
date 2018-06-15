@@ -13,7 +13,7 @@ function figure(id, type, place, stats, color, label_color, label_text) {
 
 //画像関係の初期化処理
 function figure_init() {
-    create_circle();
+    create_triangle();
     draw_figure();//図形の描画
 
 }
@@ -280,6 +280,7 @@ function rect_judge(x, x_range, y, y_range, plascex, placey) {
     return false;
 }
 
+//中心から範囲内に含まれているか
 function circle_judge(x, y, range_min, range_max, placex, placey) {
     if (range_max >= Math.hypot(x - placex, y - placey) && range_min <= Math.hypot(x - placex, y - placey))
         return true;
@@ -309,6 +310,26 @@ function size_change_marker_move() {
                 size_change_marker.place.y = imag_mousey;
             }
             size_change_marker.color = "blue";
+            break;
+        case TYPE.TRIANGLE:
+            // if (place_judge(myedit)) {
+            if (circle_judge(figure_info[myedit].place[0], figure_info[myedit].place[1], 0, TRIANGLE_POINT_RNGE, imag_mousex, imag_mousey)) {
+                size_change_marker.place.x = figure_info[myedit].place[0] - size_change_marker.place.width / 2;
+                size_change_marker.place.y = figure_info[myedit].place[1] - size_change_marker.place.height / 2;
+                change_flag = 1;
+            }
+            if (circle_judge(figure_info[myedit].place[0] + figure_info[myedit].place[2], figure_info[myedit].place[1] + figure_info[myedit].place[3], 0, TRIANGLE_POINT_RNGE, imag_mousex, imag_mousey)) {
+                size_change_marker.place.x = figure_info[myedit].place[0] + figure_info[myedit].place[2] - size_change_marker.place.width / 2;
+                size_change_marker.place.y = figure_info[myedit].place[1] + figure_info[myedit].place[3] - size_change_marker.place.height / 2;
+                change_flag = 2;
+            }
+            if (circle_judge(figure_info[myedit].place[0] + figure_info[myedit].place[4], figure_info[myedit].place[1] + figure_info[myedit].place[5], 0, TRIANGLE_POINT_RNGE, imag_mousex, imag_mousey)) {
+                size_change_marker.place.x = figure_info[myedit].place[0] + figure_info[myedit].place[4] - size_change_marker.place.width / 2;
+                size_change_marker.place.y = figure_info[myedit].place[1] + figure_info[myedit].place[5] - size_change_marker.place.height / 2;
+                change_flag = 3;
+            }
+            size_change_marker.color = "red";
+            // }
             break;
 
     }
@@ -340,6 +361,26 @@ function size_change() {
         case TYPE.CIRCLE:
             figure_info[myedit].place[2] = Math.hypot(figure_info[myedit].place[0] - imag_mousex, figure_info[myedit].place[1] - imag_mousey);
 
+            break;
+        case TYPE.TRIANGLE:
+            if (change_flag == 1) {
+                // figure_info[myedit].place[0] = imag_mousex;
+                // figure_info[myedit].place[1] = imag_mousey;
+                // figure_info[myedit].place[2] = imag_mousex - figure_info[myedit].place[2] + figure_info[myedit].place[0];
+                // figure_info[myedit].place[3] = imag_mousey - figure_info[myedit].place[3] + figure_info[myedit].place[1];
+                // figure_info[myedit].place[4] = imag_mousex - figure_info[myedit].place[4] + figure_info[myedit].place[0];
+                // figure_info[myedit].place[5] = imag_mousey - figure_info[myedit].place[5] + figure_info[myedit].place[1];
+
+
+            }
+            if (change_flag == 2) {
+                figure_info[myedit].place[2] = imag_mousex - figure_info[myedit].place[0];
+                figure_info[myedit].place[3] = imag_mousey - figure_info[myedit].place[1];
+            }
+            if (change_flag == 3) {
+                figure_info[myedit].place[4] = imag_mousex - figure_info[myedit].place[0];
+                figure_info[myedit].place[5] = imag_mousey - figure_info[myedit].place[1];
+            }
             break;
 
     }
@@ -383,35 +424,52 @@ function rect_size_change_marker_move() {
         size_change_marker.color = "blue";
 }
 
-//四角形のどの方向に拡大縮小するかの判定
+//拡大縮小するかの判定
 function size_change_flag() {
 
+    var place = figure_info[myedit].place;
 
     switch (figure_info[myedit].type) {
         case TYPE.RECT:
-            if (rect_judge(figure_info[myedit].place[0], RECT_MARKER_RANGE, figure_info[myedit].place[1], figure_info[myedit].place[3], imag_mousex, imag_mousey)) {
+            if (rect_judge(place[0], RECT_MARKER_RANGE, place[1], place[3], imag_mousex, imag_mousey)) {
                 figure_info[myedit].stats = FIGURE.CHANGE;
                 change_flag += 1;
             }
-            if (rect_judge(figure_info[myedit].place[0] + figure_info[myedit].place[2] - RECT_MARKER_RANGE, RECT_MARKER_RANGE, figure_info[myedit].place[1], figure_info[myedit].place[3], imag_mousex, imag_mousey)) {
+            if (rect_judge(place[0] + place[2] - RECT_MARKER_RANGE, RECT_MARKER_RANGE, place[1], place[3], imag_mousex, imag_mousey)) {
                 figure_info[myedit].stats = FIGURE.CHANGE;
                 change_flag += 2;
             }
-            if (rect_judge(figure_info[myedit].place[0], figure_info[myedit].place[2], figure_info[myedit].place[1], RECT_MARKER_RANGE, imag_mousex, imag_mousey)) {
+            if (rect_judge(place[0], place[2], place[1], RECT_MARKER_RANGE, imag_mousex, imag_mousey)) {
                 figure_info[myedit].stats = FIGURE.CHANGE;
                 change_flag += 10;
             }
-            if (rect_judge(figure_info[myedit].place[0], figure_info[myedit].place[2], figure_info[myedit].place[1] + figure_info[myedit].place[3] - RECT_MARKER_RANGE, RECT_MARKER_RANGE, imag_mousex, imag_mousey)) {
+            if (rect_judge(place[0], place[2], place[1] + place[3] - RECT_MARKER_RANGE, RECT_MARKER_RANGE, imag_mousex, imag_mousey)) {
                 figure_info[myedit].stats = FIGURE.CHANGE;
                 change_flag += 20;
             }
 
             break;
         case TYPE.CIRCLE:
-            if (circle_judge(figure_info[myedit].place[0], figure_info[myedit].place[1], figure_info[myedit].place[2] - CIRCLE_MARKER_RANGE, figure_info[myedit].place[2], imag_mousex, imag_mousey)) {
+            if (circle_judge(place[0], place[1], place[2] - CIRCLE_MARKER_RANGE, place[2], imag_mousex, imag_mousey)) {
                 figure_info[myedit].stats = FIGURE.CHANGE;
                 return 1;
             }
+            break;
+        case TYPE.TRIANGLE:
+            if (circle_judge(place[0], place[1], 0, TRIANGLE_POINT_RNGE, imag_mousex, imag_mousey)) {
+                figure_info[myedit].stats = FIGURE.CHANGE;
+                return 1;
+            }
+            if (circle_judge(place[0] + place[2], place[1] + place[3], 0, TRIANGLE_POINT_RNGE, imag_mousex, imag_mousey)) {
+                figure_info[myedit].stats = FIGURE.CHANGE;
+                return 1;
+            }
+            if (circle_judge(place[0] + place[4], place[1] + place[5], 0, TRIANGLE_POINT_RNGE, imag_mousex, imag_mousey)) {
+                figure_info[myedit].stats = FIGURE.CHANGE;
+                return 1;
+
+            }
+
             break;
 
     }
