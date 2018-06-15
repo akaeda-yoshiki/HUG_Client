@@ -96,7 +96,7 @@ function create_circle() {
 
 //三角形を作成、編集
 function create_triangle() {
-    var place = [80, 20, 30, 100, 130, 100];
+    var place = [80, 20, -50, 80, 50, 80];
 
     var ctx = canvas.getContext("2d");
     ctx.globalAlpha = 0.6;
@@ -176,12 +176,14 @@ function draw_figure() {
             case TYPE.TRIANGLE:
                 figure_ctx.beginPath();
                 figure_ctx.moveTo(place[0], place[1]); //最初の点の場所
-                figure_ctx.lineTo(place[2], place[3]); //2番目の点の場所
-                figure_ctx.lineTo(place[4], place[5]); //3番目の点の場所
+                figure_ctx.lineTo(place[0] + place[2], place[1] + place[3]); //2番目の点の場所
+                figure_ctx.lineTo(place[0] + place[4], place[1] + place[5]); //3番目の点の場所
 
                 figure_ctx.closePath();	//三角形の最後の線 closeさせる
                 figure_ctx.fill();
-
+                if (i == myedit) {//選択図形の輪郭を変化
+                    figure_ctx.stroke();
+                }
                 label_place[0] = place[0] - 20;
                 label_place[1] = place[1] + 30;
                 label_place[2] = Math.abs(place[2] - place[0]);
@@ -262,9 +264,9 @@ function place_judge(i) {
 
 //三角形の内部にあるかどうか
 function triangle_judge(place, i) {
-    var h1 = cross_product(figure_info[i].place[0], figure_info[i].place[1], figure_info[i].place[2], figure_info[i].place[3], imag_mousex, imag_mousey);
-    var h2 = cross_product(figure_info[i].place[2], figure_info[i].place[3], figure_info[i].place[4], figure_info[i].place[5], imag_mousex, imag_mousey);
-    var h3 = cross_product(figure_info[i].place[4], figure_info[i].place[5], figure_info[i].place[0], figure_info[i].place[1], imag_mousex, imag_mousey);
+    var h1 = cross_product(figure_info[i].place[0], figure_info[i].place[1], figure_info[i].place[0] + figure_info[i].place[2], figure_info[i].place[1] + figure_info[i].place[3], imag_mousex, imag_mousey);
+    var h2 = cross_product(figure_info[i].place[0] + figure_info[i].place[2], figure_info[i].place[1] + figure_info[i].place[3], figure_info[i].place[0] + figure_info[i].place[4], figure_info[i].place[1] + figure_info[i].place[5], imag_mousex, imag_mousey);
+    var h3 = cross_product(figure_info[i].place[0] + figure_info[i].place[4], figure_info[i].place[1] + figure_info[i].place[5], figure_info[i].place[0], figure_info[i].place[1], imag_mousex, imag_mousey);
     if (h1 <= 0 && h2 <= 0 && h3 <= 0)
         return true;
     return false;

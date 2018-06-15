@@ -220,12 +220,12 @@
             if (myedit != -1)
                 switch (figure_info[myedit].stats) {
                     case FIGURE.MOVE://座標の更新
-                        if (figure_info[myedit].TYPE == TYPE.TRIANGLE) {
+                        // if (figure_info[myedit].TYPE == TYPE.TRIANGLE) {
 
-                        } else {
+                        // } else {
                             figure_info[myedit].place[0] = mousex - canvas.getBoundingClientRect().left - rectx;
                             figure_info[myedit].place[1] = mousey - canvas.getBoundingClientRect().top - recty;
-                        }
+                        // }
                         break;
                     case FIGURE.CHANGE:
                         size_change();
