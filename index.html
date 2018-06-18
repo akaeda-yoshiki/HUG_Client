@@ -207,7 +207,12 @@
                             }
                             break;
                         case 'new':
-
+                            if (recieve == 'ok')
+                                window.location.href = "select_role.html";
+                            else {
+                                $("error").empty();
+                                $("error").append("そのIDすでに登録されています");
+                            }
                             break;
 
                         case 'forget':
