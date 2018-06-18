@@ -16,8 +16,25 @@
             font-size: 20px;
         }
 
+        h1 {
+            color: #364e96;
+            /*文字色*/
+            padding: 0.5em 0;
+            /*上下の余白*/
+            border-top: solid 3px #364e96;
+            /*上線*/
+            border-bottom: solid 3px #364e96;
+            /*下線*/
+            width: 200px;
+            font-size: 20px;
+        }
+
         not_draw {
             display: none;
+        }
+
+        error {
+            color: red;
         }
     </style>
 </head>
@@ -27,47 +44,159 @@
     <br>
     <br>
     <br>
-
     <center>
-        <div>
-            <form id="user">
-                <label for="mail">メールアドレス</label>
+        <img src="title.png">
+
+
+        <form id="login">
+            <h1>ログイン</h1>
+            <div>
+                <br>
+                <label for="mail">ログインID（メールアドレス）</label>
+                <br>
                 <input type="text" name="mail" id="mail" required>
                 <br>
-                <label for="user_name">ユーザー名</label>
-                <input type="text" name="user_name" id="user_name" required>
+                <br>
+                <label for="passward">パスワード</label>
+                <br>
+                <input type="text" name="passward" id="passward" required>
+                <br>
                 <br>
                 <input type="button" value="ログイン" onclick="login()">
-            </form>
-        </div>
+            </div>
+        </form>
+        <form id="new_user" style="display:none;">
+            <h1>ユーザ登録</h1>
+            <div>
+                <br>
+                <label for="mail">ログインID（メールアドレス）</label>
+                <br>
+                <input type="text" name="mail" id="mail" required>
+                <br>
+                <br>
+                <label for="passward">パスワード</label>
+                <br>
+                <input type="text" name="passward1" id="passward1" required>
+                <br>
+                <input type="text" name="passward2" id="passward2" required>
+                <br> 再入力（確認用）
+                <br>
+                <br>
+                <input type="button" value="登録" onclick="new_user()">
+            </div>
+        </form>
+        <form id="forget" style="display:none;">
+            <h1>パスワード通知</h1>
+            <div>
+                <br>
+                <label for="mail">ログインID（メールアドレス）</label>
+                <br>
+                <input type="text" name="mail" id="mail" required>
+                <br>
+                <br>
+                <input type="button" value="パスワードを通知" onclick="forget()">
+            </div>
+        </form>
+
+        <error></error>
+        <br>
+        <br>
+        <a href="#!" class="tab_b" onclick="to_login()">ログイン</a>
+        <br>
+        <br>
+        <a href="#!" class="tab_b" onclick="to_new_user()">新規登録</a>
+        <br>
+        <br>
+        <a href="#!" class="tab_b" onclick="to_forget()">パスワードを忘れた</a>
+
     </center>
 
     <script>
-        var mail, user_name;
+        var mail, passward;
         //サーバーにIDとパスワードを送信
         function login() {
             // var get = document.forms[0];
             // document.
             // var form = document.createElement("form");
             // var text = document.forms.user.mail.value;
-            // document.write(text);
-            if (document.forms.user.mail.value != "" && document.forms.user.user_name.value != "") {
+            // alert(document.forms.login.mail.value + "::" + document.forms.login.passward.value);
+            if (document.forms.login.mail.value != "" && document.forms.login.passward.value != "") {
                 // document.write("入力されています。");
                 // window.location.href =　"select_role.html";
-                mail = document.forms.user.mail.value;
-                user_name = document.forms.user.user_name.value
-                document.getElementById("user").style.display = "none";
+                mail = document.forms.login.mail.value;
+                passward = document.forms.login.passward.value;
+                // document.getElementById("login").style.display = "none";
                 // document.getElementById("role").style.display = "block";
-                document.write('<input type="button" value="PM" onclick="send(0)" display="none">');
-                document.write('<input type="button" value="PS" onclick="send(1)" display="none">');
-                document.write('<input type="button" value="J" onclick="send(2)" display="none">');
+                // document.write('<input type="button" value="PM" onclick="send(0)" display="">');
+                // document.write('<input type="button" value="PS" onclick="send(1)" display="">');
+                // document.write('<input type="button" value="J" onclick="send(2)" display="">');
 
                 // send();
                 // window.location.href = "select_role.html";
             }
             else {
-                alert("全ての項目を入力してください。");
+                $("error").empty();
+                $("error").append("入力情報が不足しています");
             }
+
+        }
+
+        //新規登録
+        function new_user() {
+            if (document.forms.new_user.mail.value != "" && document.forms.new_user.passward1.value != "" && document.forms.new_user.passward2.value != "") {
+                if (document.forms.new_user.passward1.value == document.forms.new_user.passward2.value) {
+                    mail = document.forms.new_user.mail.value;
+                    passward = document.forms.new_user.passward1.value;
+                    // send();
+                    // window.location.href = "select_role.html";
+                }
+                else {
+                    $("error").empty();
+                    $("error").append("パスワードが一致しません");
+                }
+            }
+            else {
+                // alert("全ての項目を入力してください。");
+                $("error").empty();
+                $("error").append("入力情報が不足しています");
+            }
+        }
+
+        //パスワード再通知
+        function forget() {
+            if (document.forms.forget.mail.value != "") {
+                mail = document.forms.forget.mail.value;
+                // send();
+                // window.location.href = "select_role.html";
+                $("error").empty();
+                $("error").append("パスワードを通知しました");
+            }
+            else {
+                // alert("全ての項目を入力してください。");
+                $("error").empty();
+                $("error").append("入力情報が不足しています");
+            }
+        }
+
+        //ログイン画面へ切り替え
+        function to_login() {
+            document.getElementById("login").style.display = "";
+            document.getElementById("new_user").style.display = "none";
+            document.getElementById("forget").style.display = "none";
+        }
+
+        //新規登録画面へ切り替え
+        function to_new_user() {
+            document.getElementById("login").style.display = "none";
+            document.getElementById("new_user").style.display = "";
+            document.getElementById("forget").style.display = "none";
+        }
+
+        //パスワード通知画面へ切り替え
+        function to_forget() {
+            document.getElementById("login").style.display = "none";
+            document.getElementById("new_user").style.display = "none";
+            document.getElementById("forget").style.display = "";
 
         }
         var word = ["PM", "PS", "J"];
@@ -94,7 +223,6 @@
             return false;
         }
     </script>
-    <a href="http://192.168.0.159/2018grade4/HUG/HUG_Client/select_role.html" class="tab_b">次へ</a>
 </body>
 
 </html>
