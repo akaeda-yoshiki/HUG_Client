@@ -6,6 +6,8 @@
         <title>ホーム</title>
         <link rel="stylesheet" type="text/css" href="header.css">
         <script type="text/javascript" src="menu.js"> </script>
+        <script src="https://code.jquery.com/jquery-1.9.0.min.js"></script>
+
         <style>
                 .block1 {
                         background: rgb(219, 247, 238);
@@ -79,7 +81,50 @@
         </div>
         <div class="block1">
                 日時
+                <select id="month_list">
+                        <option value="0">月</option>
+                </select>
+                <select id="day_list">
+                        <option value="0">日</option>
+                </select>
+                <select id="hour_list">
+                        <option value="-1">時</option>
+                </select>
+                <select id="minute_list">
+                        <option value="-1">分</option>
+                </select>
+                <script>
+                        for (var i = 0; i < 12; i++) {
+                                $('#month_list').append($('<option>').html((i + 1) + "月").val(i + 1));
+                        }
+                        for (var i = 0; i < 31; i++) {
+                                // for (var i = 0; i < new Date(year, month, 0).getDate(); i++) {
+                                $('#day_list').append($('<option>').html((i + 1) + "日").val(i + 1));
+                        }
+                        for (var i = 0; i < 23; i++) {
+                                // for (var i = 0; i < new Date(year, month, 0).getDate(); i++) {
+                                $('#hour_list').append($('<option>').html((i) + "時").val(i));
+                        }
+                        for (var i = 0; i < 59; i++) {
+                                // for (var i = 0; i < new Date(year, month, 0).getDate(); i++) {
+                                $('#minute_list').append($('<option>').html((i) + "分").val(i));
+                        }
+                </script>
+                <select id="season_list">
+                        <option value="-1">季節</option>
+                        <option value="0">春</option>
+                        <option value="1">夏</option>
+                        <option value="2">秋</option>
+                        <option value="3">冬</option>
 
+                </select>
+                <select id="timezone_list">
+                        <option value="-1">時間帯</option>
+                        <option value="0">早朝</option>
+                        <option value="1">午前</option>
+                        <option value="2">午後</option>
+
+                </select>
         </div>
         <div class="block2">
                 地域
