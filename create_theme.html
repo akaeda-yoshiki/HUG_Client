@@ -1,10 +1,37 @@
 <!DOCTYPE html>
 <html>
+
 <head>
         <meta charset="UTF-8" />
         <title>ホーム</title>
         <link rel="stylesheet" type="text/css" href="header.css">
         <script type="text/javascript" src="menu.js"> </script>
+        <style>
+                .block1 {
+                        background: rgb(219, 247, 238);
+                        width: 70%;
+                        font-size: 20px;
+                        padding: 0.5em 0.5em;
+                        /* font-weight: bold; */
+                }
+
+                .block2 {
+                        background: rgb(219, 237, 255);
+                        width: 70%;
+                        font-size: 20px;
+                        padding: 0.5em 0.5em;
+                }
+
+                textarea {
+                        width: 400px;
+                        height: 100px;
+                        resize: none;
+                }
+
+                .draw_right {
+                        text-align: right;
+                }
+        </style>
 </head>
 
 <body>
@@ -13,6 +40,69 @@
         </script>
 
         <br>
+        <br>
+
+        <div class="block1">
+                タイトル*
+                <div class="draw_right">
+                        <input type="text" id="title" required>
+                </div>
+        </div>
+
+        <div class="block2">
+                カテゴリ*
+                <div class="draw_right">
+                        <!-- <a style="margin-right: 0;"> -->
+                        <select id="category_list">
+                                <option value="0">地震</option>
+                                <option value="1">津波</option>
+                                <option value="2">火事</option>
+
+                        </select>
+                        <input type="text" id="category" required>
+                        <!-- </a> -->
+                </div>
+        </div>
+        <div class="block1">
+                状況* &nbsp;&nbsp;
+                <textarea id="situation" cols="10" rows="10"></textarea>
+
+        </div>
+        <div class="block2">
+                評価項目*
+
+                <input type="checkbox" class="assessment_checkbox01"> 体調
+                <input type="checkbox" class="assessment_checkbox02">ストレス
+                <br>
+                <input type="text" id="assessment">
+
+        </div>
+        <div class="block1">
+                日時
+
+        </div>
+        <div class="block2">
+                地域
+                <input type="text" id="area">
+        </div>
+        <div class="block1">
+                画像
+
+        </div>
+        <div class="block2">
+                対象者
+                <input type="text" id="target">
+        </div>
+        <div class="block1">
+                ねらい
+                <textarea id="aim" cols="10" rows="10"></textarea>
+        </div>
+        <div class="block2">
+                公開可否*
+                <input type="radio" name="open_radio" id="open_radio1">公開
+                <input type="radio" name="open_radio" id="open_radio2">非公開
+
+        </div>
 </body>
 
 </html>
