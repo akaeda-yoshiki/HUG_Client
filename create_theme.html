@@ -10,7 +10,7 @@
 
         <style>
                 .block1 {
-                        background: rgb(219, 247, 238);
+                        background: rgb(209, 231, 255);
                         width: 85%;
                         font-size: 20px;
                         padding: 0.5em 0.5em;
@@ -20,7 +20,7 @@
                 }
 
                 .block2 {
-                        background: rgb(219, 237, 255);
+                        background: rgb(236, 245, 255);
                         width: 85%;
                         font-size: 20px;
                         padding: 0.5em 0.5em;
@@ -55,8 +55,8 @@
 </head>
 
 <body>
-        <div style="background-color:gray; width:2px; height:100%;position: absolute;left:85%;z-index: 2;"></div>
-        <div style="background-color:gray; width:2px; height:100%;position: absolute;left:26%;z-index: 2;"></div>
+        <!-- <div style="background-color:gray; width:2px; height:100%;position: absolute;left:85%;z-index: 2;"></div>
+        <div style="background-color:gray; width:2px; height:100%;position: absolute;left:26%;z-index: 2;"></div> -->
 
         <script type="text/javascript">
                 write_header(1);
@@ -87,10 +87,10 @@
                 <!-- </a> -->
         </div>
         <div class="block1">
-                状況*
-                <right>
-                        <textarea id="situation" cols="10" rows="10"></textarea>
-                </right>
+                <place style="position: relative; top:-100px;">
+                        状況*
+                </place>
+                <textarea id="situation" cols="10" rows="10"></textarea>
 
         </div>
         <div class="block2">
@@ -105,7 +105,7 @@
         </div>
         <div class="block1">
                 日時/時期
-                <place style="position: relative; left:32px ">
+                <place style="position: relative; left:32px;">
                         <select id="month_list">
                                 <option value="0">月</option>
                         </select>
@@ -131,7 +131,7 @@
                                         $('#minute_list').append($('<option>').html((i) + "分").val(i));
                         </script>
                 </place>
-                <place style="position: relative; left:100px">
+                <place style="position: relative; left:100px;">
 
                         <select id="season_list">
                                 <option value="-1">季節</option>
@@ -164,12 +164,14 @@
                 <input type="text" id="target" class="textarea_smoll" style="left:62px">
         </div>
         <div class="block1">
-                ねらい
+                <place style="position: relative; top:-100px;">
+                        ねらい
+                </place>
                 <textarea id="aim" cols="10" rows="10" style="left:62px"></textarea>
         </div>
         <div class="block2">
                 公開可否*
-                <place style="position: relative; left:25px">
+                <place style="position: relative; left:25px;">
                         <input type="radio" name="open_radio" id="open_radio1">公開
                         <input type="radio" name="open_radio" id="open_radio2">非公開
                 </place>
