@@ -44,6 +44,13 @@
                         left: 30px;
                 }
 
+                draw_area {
+                        width: 70%;
+                        height: 20px;
+                        position: relative;
+                        left: 30px;
+                }
+
                 .draw_right {
                         text-align: right;
                 }
@@ -63,120 +70,274 @@
         </script>
         <br>
         <br>
+        <form id="input">
+                <!-- <form id="input" style="display: none;"> -->
 
-        <div class="block1" id="title">
-                タイトル*
-                <!-- <textarea id="situation" cols="10" rows="10" style="height: 20px;left: 30px;">
+                <div class="block1" id="title">
+                        タイトル*
+                        <!-- <textarea id="situation" cols="10" rows="10" style="height: 20px;left: 30px;">
 
                 </textarea> -->
-                <!-- <div class="draw_right"> -->
-                <input type="text" id="title" class="textarea_smoll" required>
-                <!-- </div> -->
-        </div>
+                        <!-- <div class="draw_right"> -->
+                        <input type="text" id="title" class="textarea_smoll" required>
+                        <!-- </div> -->
+                </div>
 
-        <div class="block2">
-                カテゴリ*
-                <!-- <a style="margin-right: 0;"> -->
-                <select id="category_list" class="textarea_smoll" style="width: 30%;">
-                        <option value="0">地震</option>
-                        <option value="1">津波</option>
-                        <option value="2">火事</option>
+                <div class="block2">
+                        カテゴリ*
+                        <!-- <a style="margin-right: 0;"> -->
+                        <select id="category_list" class="textarea_smoll" style="width: 30%;">
+                                <option value="">自分で入力</option>
+                                <option value="地震">地震</option>
+                                <option value="津波">津波</option>
+                                <option value="火事">火事</option>
 
-                </select>
-                <input type="text" id="category" class="textarea_smoll" style="width: 39%;" required>
-                <!-- </a> -->
-        </div>
-        <div class="block1">
-                <place style="position: relative; top:-100px;">
-                        状況*
-                </place>
-                <textarea id="situation" cols="10" rows="10"></textarea>
+                        </select>
+                        <input type="text" id="category" class="textarea_smoll" style="width: 39%;" required>
+                        <!-- </a> -->
+                </div>
+                <div class="block1">
+                        <place style="position: relative; top:-100px;">
+                                状況*
+                        </place>
+                        <textarea id="situation" cols="10" rows="10"></textarea>
 
-        </div>
-        <div class="block2">
-                評価項目*
-                <place style="position: relative; left:25px">
-                        <input type="checkbox" class="assessment_checkbox01"> 体調
-                        <input type="checkbox" class="assessment_checkbox02">ストレス
-                </place>
+                </div>
+                <div class="block2">
+                        評価項目*
+                        <place style="position: relative; left:25px">
+                                <input type="checkbox" name="assessment" value="体調"> 体調
+                                <input type="checkbox" name="assessment" value="ストレス">ストレス
+                        </place>
+                        <br>
+                        <!-- <form id="assessment_form"> -->
+                        <input type="text" id="assessment_input0" class="textarea_smoll" style="width: 33%; left:128px">
+                        <input type="text" id="assessment_input1" class="textarea_smoll" style="width: 33%;left:140px">
+                        <br>
+                        <input type="text" id="assessment_input2" class="textarea_smoll" style="width: 33%; left:128px">
+                        <input type="text" id="assessment_input3" class="textarea_smoll" style="width: 33%;left:140px">
+                        <!-- </form> -->
+                </div>
+                <div class="block1">
+                        日時/時期
+                        <place style="position: relative; left:32px;">
+                                <select id="month_list">
+                                        <option value="">月</option>
+                                </select>
+                                <select id="day_list">
+                                        <option value="">日</option>
+                                </select>
+                                <select id="hour_list">
+                                        <option value="">時</option>
+                                </select>
+                                <select id="minute_list">
+                                        <option value="">分</option>
+                                </select>
+                                <script>
+                                        for (var i = 0; i < 12; i++)
+                                                $('#month_list').append($('<option>').html((i + 1) + "月").val(i + 1));
+                                        for (var i = 0; i < 31; i++) {
+                                                // for (var i = 0; i < new Date(year, month, 0).getDate(); i++) {
+                                                $('#day_list').append($('<option>').html((i + 1) + "日").val(i + 1));
+                                        }
+                                        for (var i = 0; i < 23; i++)
+                                                $('#hour_list').append($('<option>').html((i) + "時").val(i));
+                                        for (var i = 0; i < 59; i++)
+                                                $('#minute_list').append($('<option>').html((i) + "分").val(i));
+                                </script>
+                        </place>
+                        <place style="position: relative; left:100px;">
+
+                                <select id="season_list">
+                                        <option value="">季節</option>
+                                        <option value="春">春</option>
+                                        <option value="夏">夏</option>
+                                        <option value="秋">秋</option>
+                                        <option value="冬">冬</option>
+
+                                </select>
+                                <select id="timezone_list">
+                                        <option value="">時間帯</option>
+                                        <option value="早朝">早朝</option>
+                                        <option value="午前">午前</option>
+                                        <option value="午後">午後</option>
+
+                                </select>
+                        </place>
+
+                </div>
+                <div class="block2">
+                        地域
+                        <input type="text" id="area" class="textarea_smoll" style="left:82px">
+                </div>
+                <div class="block1">
+                        画像
+
+                </div>
+                <div class="block2">
+                        対象者
+                        <input type="text" id="target" class="textarea_smoll" style="left:62px">
+                </div>
+                <div class="block1">
+                        <place style="position: relative; top:-100px;">
+                                ねらい
+                        </place>
+                        <textarea id="aim" cols="10" rows="10" style="left:62px"></textarea>
+                </div>
+                <div class="block2">
+                        公開可否*
+                        <place style="position: relative; left:25px;">
+                                <input type="radio" name="open_radio" id="open_radio1" value="公開">公開
+                                <input type="radio" name="open_radio" id="open_radio2" value="非公開">非公開
+                        </place>
+                </div>
                 <br>
-                <input type="text" id="assessment1" class="textarea_smoll" style="width: 33%; left:128px">
-                <input type="text" id="assessment2" class="textarea_smoll" style="width: 33%;left:140px">
-        </div>
-        <div class="block1">
-                日時/時期
-                <place style="position: relative; left:32px;">
-                        <select id="month_list">
-                                <option value="0">月</option>
-                        </select>
-                        <select id="day_list">
-                                <option value="0">日</option>
-                        </select>
-                        <select id="hour_list">
-                                <option value="-1">時</option>
-                        </select>
-                        <select id="minute_list">
-                                <option value="-1">分</option>
-                        </select>
-                        <script>
-                                for (var i = 0; i < 12; i++)
-                                        $('#month_list').append($('<option>').html((i + 1) + "月").val(i + 1));
-                                for (var i = 0; i < 31; i++) {
-                                        // for (var i = 0; i < new Date(year, month, 0).getDate(); i++) {
-                                        $('#day_list').append($('<option>').html((i + 1) + "日").val(i + 1));
-                                }
-                                for (var i = 0; i < 23; i++)
-                                        $('#hour_list').append($('<option>').html((i) + "時").val(i));
-                                for (var i = 0; i < 59; i++)
-                                        $('#minute_list').append($('<option>').html((i) + "分").val(i));
-                        </script>
-                </place>
-                <place style="position: relative; left:100px;">
+                <center>
+                        <input type="button" value="次へ" onclick="next()">
+                </center>
+        </form>
+        <form id="draw" style="display: none;">
+                <!-- <form id="draw"> -->
+                <div class="block1" id="title">
+                        タイトル*
+                        <draw_area id="title_text"></draw_area>
+                </div>
 
-                        <select id="season_list">
-                                <option value="-1">季節</option>
-                                <option value="0">春</option>
-                                <option value="1">夏</option>
-                                <option value="2">秋</option>
-                                <option value="3">冬</option>
+                <div class="block2">
+                        カテゴリ*
+                        <draw_area id="category_text"></draw_area>
+                </div>
+                <div class="block1">
+                        <!-- <place style="position: relative; top:-100px;"> -->
+                        状況*
+                        <!-- </place> -->
+                        <draw_area id="situation_text"></draw_area>
+                </div>
+                <div class="block2">
+                        評価項目*
+                        <draw_area id="assessment_text"></draw_area>
+                </div>
+                <div class="block1">
+                        日時/時期
+                        <draw_area id="time_text"></draw_area>
 
-                        </select>
-                        <select id="timezone_list">
-                                <option value="-1">時間帯</option>
-                                <option value="0">早朝</option>
-                                <option value="1">午前</option>
-                                <option value="2">午後</option>
+                </div>
+                <div class="block2">
+                        地域
+                        <draw_area id="area_text"></draw_area>
+                </div>
+                <div class="block1">
+                        画像
 
-                        </select>
-                </place>
-
-        </div>
-        <div class="block2">
-                地域
-                <input type="text" id="area" class="textarea_smoll" style="left:82px">
-        </div>
-        <div class="block1">
-                画像
-
-        </div>
-        <div class="block2">
-                対象者
-                <input type="text" id="target" class="textarea_smoll" style="left:62px">
-        </div>
-        <div class="block1">
-                <place style="position: relative; top:-100px;">
+                </div>
+                <div class="block2">
+                        対象者
+                        <draw_area id="target_text"></draw_area>
+                </div>
+                <div class="block1">
+                        <!-- <place style="position: relative; top:-100px;"> -->
                         ねらい
-                </place>
-                <textarea id="aim" cols="10" rows="10" style="left:62px"></textarea>
-        </div>
-        <div class="block2">
-                公開可否*
-                <place style="position: relative; left:25px;">
-                        <input type="radio" name="open_radio" id="open_radio1">公開
-                        <input type="radio" name="open_radio" id="open_radio2">非公開
-                </place>
-        </div>
+                        <!-- </place> -->
+                        <draw_area id="aim_text"></draw_area>
+                </div>
+                <div class="block2">
+                        公開可否*
+                        <draw_area id="open_text"></draw_area>
+                </div>
+                <br>
+                <center>
+                        <input type="button" value="訂正" onclick="back()"> &nbsp; &nbsp; &nbsp; &nbsp;
+                        <input type="button" value="内容確定" onclick="decision()">
+                </center>
+        </form>
+        <script>
+                //次へボタンが押された
+                function next() {
+                        document.getElementById("input").style.display = "none";
+                        document.getElementById("draw").style.display = "";
 
+                        var get = document.forms.input;
+                        // document.write();
+                        // document.forms.draw.title_text.value = get.title.value;
+                        $("#title_text").empty();
+                        $("#title_text").append(get.title.value);
+
+                        $("#category_text").empty();
+                        if (get.category_list.value != "")
+                                $("#category_text").append(get.category_list.value);
+                        else
+                                $("#category_text").append(get.category.value);
+
+                        $("#situation_text").empty();
+                        $("#situation_text").append(get.situation.value);
+
+                        $("#assessment_text").empty();
+                        var check = get.assessment;
+                        var cnt = 0;
+                        for (var i = 0; i < check.length; i++)
+                                if (check[i].checked) {
+                                        $("#assessment_text").append(check[i].value + "&nbsp;&nbsp;&nbsp;&nbsp;");
+                                        cnt++;
+                                }
+                        for (var i = 0; i < 4; i++)
+                                if (document.getElementById("assessment_input" + i).value != "") {
+                                        $("#assessment_text").append(document.getElementById("assessment_input" + i).value + "&nbsp;&nbsp;&nbsp;&nbsp;");
+                                        cnt++;
+                                }
+                        // $("#assessment_text").append(cnt);
+                        var f = 0;
+                        $("#time_text").empty();
+                        if (get.month_list.value != "") {
+                                $("#time_text").append(get.month_list.value + "月");
+                                f = 1;
+                        }
+                        if (get.day_list.value != "") {
+                                $("#time_text").append(get.day_list.value + "日");
+                                f = 1;
+                        }
+                        if (get.hour_list.value != "") {
+                                $("#time_text").append(get.hour_list.value + "時");
+                                f = 1;
+                        }
+                        if (get.minute_list.value != "") {
+                                $("#time_text").append(get.minute_list.value + "分");
+                                f = 1;
+                        }
+                        if (get.season_list.value != "") {
+                                if (f == 1)
+                                        $("#time_text").append("&nbsp;&nbsp;&nbsp;&nbsp;");
+                                $("#time_text").append(get.season_list.value);
+                                $("#time_text").append("&nbsp;&nbsp;&nbsp;&nbsp;");
+                        }
+                        if (get.timezone_list.value != "")
+                                $("#time_text").append(get.timezone_list.value);
+
+
+                        $("#area_text").empty();
+                        $("#area_text").append(get.area.value);
+
+                        $("#target_text").empty();
+                        $("#target_text").append(get.target.value);
+
+                        $("#aim_text").empty();
+                        $("#aim_text").append(get.aim.value);
+
+                        $("#open_text").empty();
+                        $("#open_text").append(get.open_radio.value);
+
+                }
+                //訂正ボタンが押された
+                function back() {
+                        document.getElementById("input").style.display = "";
+                        document.getElementById("draw").style.display = "none";
+                }
+                //内容確定ボタンが押された
+                function decision() {
+
+                }
+
+
+        </script>
 
 </body>
 

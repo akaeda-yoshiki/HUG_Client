@@ -2,6 +2,7 @@
 /* **  メニュー　***************************************************** */
 .menu_btn{
         position: relative;
+        left:5%;
         display: inline-block;
         font-weight: bold;
         padding: 0.25em 0.5em;
@@ -23,6 +24,7 @@
 }
 .menu_btn_pushed{
         position: relative;
+        left:5%;
         display: inline-block;
         font-weight: bold;
         padding: 0.25em 0.5em;
