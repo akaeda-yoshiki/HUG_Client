@@ -61,6 +61,7 @@
         </style>
         <script>
                 $(document).ready(function () {
+                        //カテゴリー
                         $.ajax({
                                 type: "POST",
                                 url: "http://192.168.0.159/2018grade4/HUG/HUG_Server/category.php",
@@ -72,7 +73,27 @@
                         }).fail(function (XMLHttpRequest, textStatus, errorThrown) {
                                 alert('Error : ' + errorThrown);
                         });
+
+                        // var chkboxstr = '<input type="checkbox" name="genre" value="' + value.escapeHTML() + '" id="genre_' + index + '">'
+                        //         + '<label for="genre_' + index + '">' + value.escapeHTML() + '</label>';
+                        // hoge.insert(chkboxstr);
+                        //評価項目
+                        $.ajax({
+                                type: "POST",
+                                url: "http://192.168.0.159/2018grade4/HUG/HUG_Server/assessment.php",
+                                dataType: "json",
+                        }).done(function (data, dataType) {
+                                // document.write(data);
+                                for (var i = 0; i < data.length; i++) {
+                                        $("#assessment_checkbox").append('<input type="checkbox" name="assessment" value="' + data[i].word + '">' + data[i].word +"&nbsp;&nbsp;");
+                                        // $("#assessment_checkbox").append($('<input type="checkbox">')).html(data[i].word).val(data[i].word);
+
+                                }
+                        }).fail(function (XMLHttpRequest, textStatus, errorThrown) {
+                                alert('Error : ' + errorThrown);
+                        });
                 });
+
         </script>
 </head>
 
@@ -124,11 +145,11 @@
                 <div class="block2">
                         <a id="assessment_input_text">評価項目*</a>
                         <a id="assessment_error" style="position: relative; top:30px; left:-100px;">1個～10個</a>
-                        <!-- <a id="assessment_error" style="color: red;">評価項目の選択可能個数は1個以上10個未満です。</a> -->
                         <br>
                         <place style="position: relative; left:128px;top:-30px;">
-                                <input type="checkbox" name="assessment" value="体調"> 体調
-                                <input type="checkbox" name="assessment" value="ストレス">ストレス
+                                <!-- <input type="checkbox" name="assessment" value="体調"> 体調
+                                <input type="checkbox" name="assessment" value="ストレス">ストレス -->
+                                <div id="assessment_checkbox"></div>
                         </place>
                         <br>
                         <!-- <form id="assessment_form"> -->
