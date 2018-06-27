@@ -71,21 +71,14 @@
         <br>
         <br>
         <form id="input">
-                <!-- <form id="input" style="display: none;"> -->
-
-                <div class="block1" id="title">
-                        タイトル*
-                        <!-- <textarea id="situation" cols="10" rows="10" style="height: 20px;left: 30px;">
-
-                </textarea> -->
-                        <!-- <div class="draw_right"> -->
+                *がついている項目は必ず入力してください
+                <div class="block1">
+                        <a id="title_input_text">タイトル*</a>
                         <input type="text" id="title" class="textarea_smoll" required>
-                        <!-- </div> -->
                 </div>
 
                 <div class="block2">
-                        カテゴリ*
-                        <!-- <a style="margin-right: 0;"> -->
+                        <a id="category_input_text">カテゴリ*</a>
                         <select id="category_list" class="textarea_smoll" style="width: 30%;">
                                 <option value="">自分で入力</option>
                                 <option value="地震">地震</option>
@@ -98,24 +91,27 @@
                 </div>
                 <div class="block1">
                         <place style="position: relative; top:-100px;">
-                                状況*
+                                <a id="situation_input_text">状況*</a>
                         </place>
                         <textarea id="situation" cols="10" rows="10"></textarea>
 
                 </div>
                 <div class="block2">
-                        評価項目*
-                        <place style="position: relative; left:25px">
+                        <a id="assessment_input_text">評価項目*</a>
+                        <a id="assessment_error" style="position: relative; top:30px; left:-100px;">1個～10個</a>
+                        <!-- <a id="assessment_error" style="color: red;">評価項目の選択可能個数は1個以上10個未満です。</a> -->
+                        <br>
+                        <place style="position: relative; left:128px;top:-30px;">
                                 <input type="checkbox" name="assessment" value="体調"> 体調
                                 <input type="checkbox" name="assessment" value="ストレス">ストレス
                         </place>
                         <br>
                         <!-- <form id="assessment_form"> -->
-                        <input type="text" id="assessment_input0" class="textarea_smoll" style="width: 33%; left:128px">
-                        <input type="text" id="assessment_input1" class="textarea_smoll" style="width: 33%;left:140px">
+                        <input type="text" id="assessment_input0" class="textarea_smoll" style="width: 33%;top:-30px;left:128px">
+                        <input type="text" id="assessment_input1" class="textarea_smoll" style="width: 33%;top:-30px;left:140px">
                         <br>
-                        <input type="text" id="assessment_input2" class="textarea_smoll" style="width: 33%; left:128px">
-                        <input type="text" id="assessment_input3" class="textarea_smoll" style="width: 33%;left:140px">
+                        <input type="text" id="assessment_input2" class="textarea_smoll" style="width: 33%;top:-30px;left:128px">
+                        <input type="text" id="assessment_input3" class="textarea_smoll" style="width: 33%;top:-30px;left:140px">
                         <!-- </form> -->
                 </div>
                 <div class="block1">
@@ -185,7 +181,7 @@
                         <textarea id="aim" cols="10" rows="10" style="left:62px"></textarea>
                 </div>
                 <div class="block2">
-                        公開可否*
+                        <a id="open_input_text">公開可否*</a>
                         <place style="position: relative; left:25px;">
                                 <input type="radio" name="open_radio" id="open_radio1" value="公開">公開
                                 <input type="radio" name="open_radio" id="open_radio2" value="非公開">非公開
@@ -193,6 +189,8 @@
                 </div>
                 <br>
                 <center>
+                        <a id="required_error" style="color: red;display: none;">入力内容に不備があります。<br><br></a>
+                        
                         <input type="button" value="次へ" onclick="next()">
                 </center>
         </form>
@@ -253,23 +251,39 @@
         <script>
                 //次へボタンが押された
                 function next() {
-                        document.getElementById("input").style.display = "none";
-                        document.getElementById("draw").style.display = "";
-
+                        var required_flag = true;
                         var get = document.forms.input;
-                        // document.write();
+                        // document.write(get.title.value);
                         // document.forms.draw.title_text.value = get.title.value;
                         $("#title_text").empty();
                         $("#title_text").append(get.title.value);
+                        document.getElementById("title_input_text").style.color = "";
+                        if (get.title.value == "") {
+                                required_flag = false;
+                                document.getElementById("title_input_text").style.color = "red";
+                        }
 
+
+                        // document.getElementById("title_text").style.color = "red";
                         $("#category_text").empty();
+                        document.getElementById("category_input_text").style.color = "";
                         if (get.category_list.value != "")
                                 $("#category_text").append(get.category_list.value);
-                        else
+                        else {
                                 $("#category_text").append(get.category.value);
+                                if (get.category.value == "") {
+                                        required_flag = false;
+                                        document.getElementById("category_input_text").style.color = "red";
+                                }
 
+                        }
                         $("#situation_text").empty();
                         $("#situation_text").append(get.situation.value);
+                        document.getElementById("situation_input_text").style.color = "";
+                        if (get.situation.value == "") {
+                                required_flag = false;
+                                document.getElementById("situation_input_text").style.color = "red";
+                        }
 
                         $("#assessment_text").empty();
                         var check = get.assessment;
@@ -284,6 +298,14 @@
                                         $("#assessment_text").append(document.getElementById("assessment_input" + i).value + "&nbsp;&nbsp;&nbsp;&nbsp;");
                                         cnt++;
                                 }
+                        document.getElementById("assessment_input_text").style.color = "";
+                        if (cnt == 0 || cnt >= 10) {
+                                required_flag = false;
+                                document.getElementById("assessment_input_text").style.color = "red";
+                                document.getElementById("assessment_error").style.display = "";
+
+                        }
+
                         // $("#assessment_text").append(cnt);
                         var f = 0;
                         $("#time_text").empty();
@@ -324,7 +346,25 @@
 
                         $("#open_text").empty();
                         $("#open_text").append(get.open_radio.value);
+                        document.getElementById("open_input_text").style.color = "";
+                        if (get.open_radio.value == "") {
+                                required_flag = false;
+                                document.getElementById("open_input_text").style.color = "red";
+                        }
 
+
+                        if (required_flag == true) {
+                                document.getElementById("input").style.display = "none";
+                                document.getElementById("draw").style.display = "";
+
+                                document.getElementById("required_error").style.display = "none";
+                                document.getElementById("assessment_error").style.display = "none";
+
+                        }
+                        else {
+                                document.getElementById("required_error").style.display = "";
+
+                        }
                 }
                 //訂正ボタンが押された
                 function back() {
