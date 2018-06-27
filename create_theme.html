@@ -79,16 +79,27 @@
 
                 <div class="block2">
                         <a id="category_input_text">カテゴリ*</a>
-                        <select id="category_list" class="textarea_smoll" style="width: 30%;">
-                                <option value="">自分で入力</option>
+                        <select id="category_list" class="textarea_smoll" style="width: 30%;" onchange="category_update()">
+                                <option value=""></option>
+                                <option value="-1">自分で入力</option>
                                 <option value="地震">地震</option>
                                 <option value="津波">津波</option>
                                 <option value="火事">火事</option>
-
                         </select>
-                        <input type="text" id="category" class="textarea_smoll" style="width: 39%;" required>
-                        <!-- </a> -->
+                        <input type="text" id="category" class="textarea_smoll" style="width: 39%;display: none;" required>
                 </div>
+                <script>
+                        function category_update() {
+                                var get = document.forms.input;
+                                if (get.category_list.value == "-1")
+                                        document.getElementById("category").style.display = "";
+                                else
+                                        document.getElementById("category").style.display = "none";
+
+                        }
+                </script>
+
+
                 <div class="block1">
                         <place style="position: relative; top:-100px;">
                                 <a id="situation_input_text">状況*</a>
@@ -189,8 +200,11 @@
                 </div>
                 <br>
                 <center>
-                        <a id="required_error" style="color: red;display: none;">入力内容に不備があります。<br><br></a>
-                        
+                        <a id="required_error" style="color: red;display: none;">入力内容に不備があります。
+                                <br>
+                                <br>
+                        </a>
+
                         <input type="button" value="次へ" onclick="next()">
                 </center>
         </form>
@@ -267,15 +281,19 @@
                         // document.getElementById("title_text").style.color = "red";
                         $("#category_text").empty();
                         document.getElementById("category_input_text").style.color = "";
-                        if (get.category_list.value != "")
-                                $("#category_text").append(get.category_list.value);
-                        else {
+                        if (get.category_list.value == "-1") {
                                 $("#category_text").append(get.category.value);
                                 if (get.category.value == "") {
                                         required_flag = false;
                                         document.getElementById("category_input_text").style.color = "red";
                                 }
-
+                        }
+                        else if (get.category_list.value == "") {
+                                required_flag = false;
+                                document.getElementById("category_input_text").style.color = "red";
+                        }
+                        else {
+                                $("#category_text").append(get.category_list.value);
                         }
                         $("#situation_text").empty();
                         $("#situation_text").append(get.situation.value);
