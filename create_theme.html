@@ -5,6 +5,7 @@
         <meta charset="UTF-8" />
         <title>ホーム</title>
         <link rel="stylesheet" type="text/css" href="header.css">
+        <script type="text/javascript" src="define.js"> </script>
         <script type="text/javascript" src="menu.js"> </script>
         <script src="https://code.jquery.com/jquery-1.9.0.min.js"></script>
 
@@ -85,7 +86,7 @@
                         }).done(function (data, dataType) {
                                 // document.write(data);
                                 for (var i = 0; i < data.length; i++) {
-                                        $("#assessment_checkbox").append('<input type="checkbox" name="assessment" value="' + data[i].word + '">' + data[i].word +"&nbsp;&nbsp;");
+                                        $("#assessment_checkbox").append('<input type="checkbox" name="assessment" value="' + data[i].word + '">' + data[i].word + "&nbsp;&nbsp;");
                                         // $("#assessment_checkbox").append($('<input type="checkbox">')).html(data[i].word).val(data[i].word);
 
                                 }
@@ -346,7 +347,7 @@
                                         $("#assessment_text").append(check[i].value + "&nbsp;&nbsp;&nbsp;&nbsp;");
                                         cnt++;
                                 }
-                        for (var i = 0; i < 4; i++)
+                        for (var i = 0; i < ASSESSENT_INPUT_TEXT_NUM; i++)
                                 if (document.getElementById("assessment_input" + i).value != "") {
                                         $("#assessment_text").append(document.getElementById("assessment_input" + i).value + "&nbsp;&nbsp;&nbsp;&nbsp;");
                                         cnt++;
@@ -427,17 +428,39 @@
                 //内容確定ボタンが押された
                 function decide() {
                         var get = document.forms.input;
-
-                        $.ajax({ //ajaxによる非同期通信発生
-                                type: "POST", //POST送信でデータを受け渡す
-                                url: "http://192.168.0.159/2018grade4/HUG/HUG_Server/category.php",
-                                data: {
-                                        word: get.category.value
-                                },
-                                error: function (XMLHttpRequest, textStatus, errorThrown) { //接続が失敗
-                                        // alert('エラーです！'); //エラーを表示
+                        if (get.category_list.value == "入力")
+                                $.ajax({ //ajaxによる非同期通信発生
+                                        type: "POST", //POST送信でデータを受け渡す
+                                        url: "http://192.168.0.159/2018grade4/HUG/HUG_Server/category.php",
+                                        data: {
+                                                word: get.category.value
+                                        },
+                                        error: function (XMLHttpRequest, textStatus, errorThrown) { //接続が失敗
+                                                // alert('エラーです！'); //エラーを表示
+                                        }
+                                });
+                        var f = 0;
+                        for (var i = 0; i < ASSESSENT_INPUT_TEXT_NUM; i++)
+                                if (document.getElementById("assessment_input" + i).value != "") {
+                                        f = 1;
                                 }
-                        });
+                        if (f == 1)
+                                $.ajax({ //ajaxによる非同期通信発生
+                                        type: "POST", //POST送信でデータを受け渡す
+                                        url: "http://192.168.0.159/2018grade4/HUG/HUG_Server/assessment.php",
+                                        data: {
+                                                word0: document.getElementById("assessment_input" + 0).value,
+                                                word1: document.getElementById("assessment_input" + 1).value,
+                                                word2: document.getElementById("assessment_input" + 2).value,
+                                                word3: document.getElementById("assessment_input" + 3).value
+                                        },
+                                        success:function(data){
+                                                alert(data);
+                                        },
+                                        error: function (XMLHttpRequest, textStatus, errorThrown) { //接続が失敗
+                                                // alert('エラーです！'); //エラーを表示
+                                        }
+                                });
                 }
 
                 //新しくカテゴリーに単語を追加
