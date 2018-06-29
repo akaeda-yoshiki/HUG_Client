@@ -328,6 +328,7 @@
                 </center>
         </form>
         <script>
+                var assessment_send = [], category_send, time_send = "";
                 //次へボタンが押された
                 function next() {
                         var required_flag = true;
@@ -348,6 +349,7 @@
                         document.getElementById("category_input_text").style.color = "";
                         if (get.category_list.value == "入力") {
                                 $("#category_text").append(get.category.value);
+                                category_send = get.category.value;
                                 if (get.category.value == "") {
                                         required_flag = false;
                                         document.getElementById("category_input_text").style.color = "red";
@@ -358,6 +360,7 @@
                                 document.getElementById("category_input_text").style.color = "red";
                         }
                         else {
+                                category_send = get.category_list.value;
                                 $("#category_text").append(get.category_list.value);
                         }
                         $("#situation_text").empty();
@@ -374,11 +377,13 @@
                         for (var i = 0; i < check.length; i++)
                                 if (check[i].checked) {
                                         $("#assessment_text").append(check[i].value + "&nbsp;&nbsp;&nbsp;&nbsp;");
+                                        assessment_send.push(check[i].value);
                                         cnt++;
                                 }
                         for (var i = 0; i < ASSESSENT_INPUT_TEXT_NUM; i++)
                                 if (document.getElementById("assessment_input" + i).value != "") {
                                         $("#assessment_text").append(document.getElementById("assessment_input" + i).value + "&nbsp;&nbsp;&nbsp;&nbsp;");
+                                        assessment_send.push(document.getElementById("assessment_input" + i).value);
                                         cnt++;
                                 }
                         document.getElementById("assessment_input_text").style.color = "";
@@ -392,30 +397,40 @@
                         // $("#assessment_text").append(cnt);
                         var f = 0;
                         $("#time_text").empty();
+                        time_send = "";
                         if (get.month_list.value != "") {
-                                $("#time_text").append(get.month_list.value + "月");
+                                time_send += get.month_list.value + "月"
+                                // $("#time_text").append(get.month_list.value + "月");
                                 f = 1;
                         }
                         if (get.day_list.value != "") {
-                                $("#time_text").append(get.day_list.value + "日");
+                                time_send += get.day_list.value + "日"
+                                //$("#time_text").append(get.day_list.value + "日");
                                 f = 1;
                         }
                         if (get.hour_list.value != "") {
-                                $("#time_text").append(get.hour_list.value + "時");
+                                time_send += get.hour_list.value + "時"
+                                // $("#time_text").append(get.hour_list.value + "時");
                                 f = 1;
                         }
                         if (get.minute_list.value != "") {
-                                $("#time_text").append(get.minute_list.value + "分");
+                                time_send += get.minute_list.value + "分"
+                                //$("#time_text").append(get.minute_list.value + "分");
                                 f = 1;
                         }
                         if (get.season_list.value != "") {
                                 if (f == 1)
-                                        $("#time_text").append("&nbsp;&nbsp;&nbsp;&nbsp;");
-                                $("#time_text").append(get.season_list.value);
-                                $("#time_text").append("&nbsp;&nbsp;&nbsp;&nbsp;");
+                                        time_send += "　　";
+                                //$("#time_text").append("&nbsp;&nbsp;&nbsp;&nbsp;");
+                                time_send += get.season_list.value;
+                                time_send += "　　";
+                                // $("#time_text").append(get.season_list.value);
+                                // $("#time_text").append("&nbsp;&nbsp;&nbsp;&nbsp;");
                         }
                         if (get.timezone_list.value != "")
-                                $("#time_text").append(get.timezone_list.value);
+                                time_send += get.timezone_list.value;
+                        // $("#time_text").append(get.timezone_list.value);
+                        $("#time_text").append(time_send);
 
 
                         $("#area_text").empty();
@@ -456,6 +471,36 @@
                 }
                 //内容確定ボタンが押された
                 function decide() {
+                        var get = document.forms.input;
+
+                        $.ajax({ //ajaxによる非同期通信発生
+                                type: "POST", //POST送信でデータを受け渡す
+                                url: "http://192.168.0.159/2018grade4/HUG/HUG_Server/theme.php",
+                                data: {
+                                        title: get.title.value,
+                                        category: category_send,
+                                        situation: get.situation.value,
+                                        time: time_send,
+                                        area: get.area.value,
+                                        target: get.target.value,
+                                        aim: get.aim.value,
+                                        open: get.open_radio.value,
+                                        assessment0: assessment_send[0],
+                                        assessment1: assessment_send[1],
+                                        assessment2: assessment_send[2],
+                                        assessment3: assessment_send[3],
+                                        assessment4: assessment_send[4],
+                                        assessment5: assessment_send[5],
+                                        assessment6: assessment_send[6],
+                                        assessment7: assessment_send[7],
+                                        assessment8: assessment_send[8],
+                                        assessment9: assessment_send[9]
+                                },
+                                error: function (XMLHttpRequest, textStatus, errorThrown) { //接続が失敗
+                                        alert('エラーです！'); //エラーを表示
+                                }
+                        });
+
                         var get = document.forms.input;
                         if (get.category_list.value == "入力")
                                 $.ajax({ //ajaxによる非同期通信発生
