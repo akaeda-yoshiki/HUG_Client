@@ -8,7 +8,7 @@
         <script type="text/javascript" src="define.js"> </script>
         <script type="text/javascript" src="menu.js"> </script>
         <script src="https://code.jquery.com/jquery-1.9.0.min.js"></script>
-
+        <script type="text/javascript" src="jquery.balloon.js"></script>
         <style>
                 .block1 {
                         background: rgb(209, 231, 255);
@@ -61,6 +61,10 @@
                 }
         </style>
         <script>
+
+
+                $('texi_and_pop').balloon();
+
                 $(document).ready(function () {
                         //カテゴリー
                         $.ajax({
@@ -100,7 +104,11 @@
 
 <body>
         <!-- <div style="background-color:gray; width:2px; height:100%;position: absolute;left:85%;z-index: 2;"></div>
-        <div style="background-color:gray; width:2px; height:100%;position: absolute;left:26%;z-index: 2;"></div> -->
+        <div style="background-color:gray; width:2px; height:100%;position: absolute;left:26%;z-index
+        
+        
+        
+        : 2;"></div> -->
 
         <script type="text/javascript">
                 write_header(1);
@@ -110,20 +118,22 @@
         <form id="input">
                 *がついている項目は必ず入力してください
                 <div class="block1">
-                        <a id="title_input_text">タイトル*</a>
+                        <!-- <a id="title_input_text" onmouseover="title.style='display: none;'" onmouseout="title.style='display:'">タイトル*</a> -->
+
+                        <text_and_pop id="title_input_text" title="ある程度状況を想像しやすいタイトルを記入して下さい">タイトル*</text_and_pop>
                         <input type="text" id="title" class="textarea_smoll" required>
                 </div>
 
                 <div class="block2">
-                        <a id="category_input_text">カテゴリ*</a>
-                        <select id="category_list" class="textarea_smoll" style="width: 30%;" onchange="category_update()">
+                        <text_and_pop id="category_input_text" title="関連度の高いカテゴリーを選択してください">カテゴリー*</text_and_pop>
+                        <select id="category_list" class="textarea_smoll" style="width: 30%;left: 10px;" onchange="category_update()">
                                 <option value=""></option>
                                 <!-- <option value="-1">自分で入力</option>
                                 <option value="地震">地震</option>
                                 <option value="津波">津波</option>
                                 <option value="火事">火事</option> -->
                         </select>
-                        <input type="text" id="category" class="textarea_smoll" style="width: 39%;display: none;" required>
+                        <input type="text" id="category" class="textarea_smoll" style="width: 34%;display: none;" required>
                 </div>
                 <script>
                         function category_update() {
@@ -138,13 +148,13 @@
 
                 <div class="block1">
                         <place style="position: relative; top:-100px;">
-                                <a id="situation_input_text">状況*</a>
+                                <text_and_pop id="situation_input_text" title="状況をわかりやすく記入してください">状況*</text_and_pop>
                         </place>
                         <textarea id="situation" cols="10" rows="10"></textarea>
 
                 </div>
                 <div class="block2">
-                        <a id="assessment_input_text">評価項目*</a>
+                        <text_and_pop id="assessment_input_text" title="このテーマに関連度の高い評価項目を1~10個選択してください<br>一覧にない場合は記入してください">評価項目*</text_and_pop>
                         <a id="assessment_error" style="position: relative; top:30px; left:-100px;">1個～10個</a>
                         <br>
                         <place style="position: relative; left:128px;top:-30px;">
@@ -162,7 +172,7 @@
                         <!-- </form> -->
                 </div>
                 <div class="block1">
-                        日時/時期
+                        <text_and_pop title="状況が発生した日時・時期を記入してください">日時/時期</text_and_pop>
                         <place style="position: relative; left:32px;">
                                 <select id="month_list">
                                         <option value="">月</option>
@@ -210,11 +220,11 @@
 
                 </div>
                 <div class="block2">
-                        地域
+                        <text_and_pop title="関連のある地域を記入してください">地域</text_and_pop>
                         <input type="text" id="area" class="textarea_smoll" style="left:82px">
                 </div>
                 <div class="block1">
-                        画像
+                        <text_and_pop title="施設内の地図など避難所に関する画像を選択してください">画像</text_and_pop>
                         <input type="file" id="image_file" style="position: relative; left:82px;" onchange="image_update()">
                         <div id="image_input_draw"></div>
                 </div>
@@ -236,17 +246,17 @@
 
                 </script>
                 <div class="block2">
-                        対象者
+                        <text_and_pop title="この状況に関連のある人物を記入してください">対象者</text_and_pop>
                         <input type="text" id="target" class="textarea_smoll" style="left:62px">
                 </div>
                 <div class="block1">
                         <place style="position: relative; top:-100px;">
-                                ねらい
+                                <text_and_pop title="このテーマをプレイすることでのねらいがあれば記入してください">ねらい</text_and_pop>
                         </place>
                         <textarea id="aim" cols="10" rows="10" style="left:62px"></textarea>
                 </div>
                 <div class="block2">
-                        <a id="open_input_text">公開可否*</a>
+                        <text_and_pop id="open_input_text" title="他の人に公開してもよいかどうかを選択してください">公開可否*</text_and_pop>
                         <place style="position: relative; left:25px;">
                                 <input type="radio" name="open_radio" id="open_radio1" value="公開">公開
                                 <input type="radio" name="open_radio" id="open_radio2" value="非公開">非公開
@@ -270,7 +280,7 @@
                 </div>
 
                 <div class="block2">
-                        カテゴリ*
+                        カテゴリー*
                         <draw_area id="category_text"></draw_area>
                 </div>
                 <div class="block1">
