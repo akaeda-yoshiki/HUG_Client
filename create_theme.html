@@ -17,7 +17,6 @@
                         padding: 0.5em 0.5em;
                         position: relative;
                         left: 7%;
-                        /* font-weight: bold; */
                 }
 
                 .block2 {
@@ -29,13 +28,12 @@
                         left: 7%;
                 }
 
+
                 textarea {
                         width: 70%;
-                        /* height: 100px; */
                         resize: none;
                         position: relative;
                         left: 70px;
-                        /* top: 20px; */
                 }
 
                 .textarea_smoll {
@@ -63,114 +61,98 @@
         <script>
 
 
-                $('texi_and_pop').balloon();
+                $('texi_and_pop').balloon();//マウスオーバーの割り当て
 
+                //マスターテーブルからカテゴリーを受信
                 $(document).ready(function () {
-                        //カテゴリー
                         $.ajax({
                                 type: "POST",
                                 url: "http://192.168.0.159/2018grade4/HUG/HUG_Server/category.php",
                                 dataType: "json",
                         }).done(function (data, dataType) {
+                                //カテゴリーのプルダウンに追加
                                 for (var i = 0; i < data.length; i++) {
                                         $('#category_list').append($('<option>').html(data[i].word).val(data[i].word));
                                 }
                         }).fail(function (XMLHttpRequest, textStatus, errorThrown) {
-                                alert('Error : ' + errorThrown);
+                                // alert('Error : ' + errorThrown);
                         });
 
-                        // var chkboxstr = '<input type="checkbox" name="genre" value="' + value.escapeHTML() + '" id="genre_' + index + '">'
-                        //         + '<label for="genre_' + index + '">' + value.escapeHTML() + '</label>';
-                        // hoge.insert(chkboxstr);
-                        //評価項目
+                        //マスターテーブルから評価項目を受信
                         $.ajax({
                                 type: "POST",
                                 url: "http://192.168.0.159/2018grade4/HUG/HUG_Server/assessment.php",
                                 dataType: "json",
                         }).done(function (data, dataType) {
-                                // document.write(data);
+                                //評価項目のチェックリストに追加
                                 for (var i = 0; i < data.length; i++) {
                                         $("#assessment_checkbox").append('<input type="checkbox" name="assessment" value="' + data[i].word + '">' + data[i].word + "&nbsp;&nbsp;");
-                                        // $("#assessment_checkbox").append($('<input type="checkbox">')).html(data[i].word).val(data[i].word);
-
                                 }
                         }).fail(function (XMLHttpRequest, textStatus, errorThrown) {
-                                alert('Error : ' + errorThrown);
+                                // alert('Error : ' + errorThrown);
                         });
                 });
-
         </script>
 </head>
 
 <body>
-        <!-- <div style="background-color:gray; width:2px; height:100%;position: absolute;left:85%;z-index: 2;"></div>
-        <div style="background-color:gray; width:2px; height:100%;position: absolute;left:26%;z-index
-        
-        
-        
-        : 2;"></div> -->
-
         <script type="text/javascript">
-                write_header(1);
+                write_header(1);//共通部分の描画
         </script>
         <br>
         <br>
+        <!-- 入力画面 *************************************************************-->
         <form id="input">
                 *がついている項目は必ず入力してください
+                <!-- タイトル -->
                 <div class="block1">
-                        <!-- <a id="title_input_text" onmouseover="title.style='display: none;'" onmouseout="title.style='display:'">タイトル*</a> -->
-
                         <text_and_pop id="title_input_text" title="ある程度状況を想像しやすいタイトルを記入して下さい">タイトル*</text_and_pop>
                         <input type="text" id="title" class="textarea_smoll" required>
                 </div>
-
+                <!-- カテゴリー -->
                 <div class="block2">
                         <text_and_pop id="category_input_text" title="関連度の高いカテゴリーを選択してください">カテゴリー*</text_and_pop>
                         <select id="category_list" class="textarea_smoll" style="width: 30%;left: 10px;" onchange="category_update()">
                                 <option value=""></option>
-                                <!-- <option value="-1">自分で入力</option>
-                                <option value="地震">地震</option>
-                                <option value="津波">津波</option>
-                                <option value="火事">火事</option> -->
                         </select>
                         <input type="text" id="category" class="textarea_smoll" style="width: 34%;display: none;" required>
                 </div>
                 <script>
+                        // カテゴリーのプルダウンが更新
                         function category_update() {
                                 var get = document.forms.input;
-                                if (get.category_list.value == "入力")
+
+                                if (get.category_list.value == "入力")//「入力」を選択時は入力画面を表示
                                         document.getElementById("category").style.display = "";
                                 else
                                         document.getElementById("category").style.display = "none";
                         }
                 </script>
-
-
+                <!-- 状況 -->
                 <div class="block1">
                         <place style="position: relative; top:-100px;">
                                 <text_and_pop id="situation_input_text" title="状況をわかりやすく記入してください">状況*</text_and_pop>
                         </place>
                         <textarea id="situation" cols="10" rows="10"></textarea>
-
                 </div>
+                <!-- 評価項目 -->
                 <div class="block2">
                         <text_and_pop id="assessment_input_text" title="このテーマに関連度の高い評価項目を1~10個選択してください<br>一覧にない場合は記入してください">評価項目*</text_and_pop>
                         <a id="assessment_error" style="position: relative; top:30px; left:-100px;">1個～10個</a>
                         <br>
                         <place style="position: relative; left:128px;top:-30px;">
-                                <!-- <input type="checkbox" name="assessment" value="体調"> 体調
-                                <input type="checkbox" name="assessment" value="ストレス">ストレス -->
+                                <!-- マスターテーブルからの情報を記載 -->
                                 <div id="assessment_checkbox"></div>
                         </place>
                         <br>
-                        <!-- <form id="assessment_form"> -->
+                        <!-- テキスト入力エリア -->
                         <input type="text" id="assessment_input0" class="textarea_smoll" style="width: 33%;top:-30px;left:128px">
                         <input type="text" id="assessment_input1" class="textarea_smoll" style="width: 33%;top:-30px;left:140px">
                         <br>
                         <input type="text" id="assessment_input2" class="textarea_smoll" style="width: 33%;top:-30px;left:128px">
                         <input type="text" id="assessment_input3" class="textarea_smoll" style="width: 33%;top:-30px;left:140px">
-                        <!-- </form> -->
                 </div>
+                <!-- 日時・時期 -->
                 <div class="block1">
                         <text_and_pop title="状況が発生した日時・時期を記入してください">日時/時期</text_and_pop>
                         <place style="position: relative; left:32px;">
@@ -187,6 +169,7 @@
                                         <option value="">分</option>
                                 </select>
                                 <script>
+                                        // 月、日、時、分を動的に作成
                                         for (var i = 0; i < 12; i++)
                                                 $('#month_list').append($('<option>').html((i + 1) + "月").val(i + 1));
                                         for (var i = 0; i < 31; i++) {
@@ -217,44 +200,47 @@
 
                                 </select>
                         </place>
-
                 </div>
+                <!-- 地域 -->
                 <div class="block2">
                         <text_and_pop title="関連のある地域を記入してください">地域</text_and_pop>
                         <input type="text" id="area" class="textarea_smoll" style="left:82px">
                 </div>
+                <!-- 画像 -->
                 <div class="block1">
                         <text_and_pop title="施設内の地図など避難所に関する画像を選択してください">画像</text_and_pop>
                         <input type="file" id="image_file" style="position: relative; left:82px;" onchange="image_update()">
                         <div id="image_input_draw"></div>
                 </div>
                 <script>
+                        // 画像が選択されたら表示
                         function image_update() {
                                 var file = document.forms.input.image_file.files;
                                 var reader = new FileReader();
                                 reader.readAsDataURL(file[0]); //dataURL形式でファイルを読み込む
-                                //ファイルの読込が終了した時の処理
-                                reader.onload = function () {
+
+                                reader.onload = function () {//ファイルの読込が終了した時の処理
                                         var dataUrl = reader.result;
 
-                                        //読み込んだ画像の表示
+                                        //読み込んだ画像の表示（入力画面、確認画面）
                                         document.getElementById("image_input_draw").innerHTML = "<br><center><img src='" + dataUrl + "'></center>";
                                         document.getElementById("image_draw").innerHTML = "<br><center><img src='" + dataUrl + "'></center>";
-
                                 }
                         };
-
                 </script>
+                <!-- 対象者 -->
                 <div class="block2">
                         <text_and_pop title="この状況に関連のある人物を記入してください">対象者</text_and_pop>
                         <input type="text" id="target" class="textarea_smoll" style="left:62px">
                 </div>
+                <!-- ねらい -->
                 <div class="block1">
                         <place style="position: relative; top:-100px;">
                                 <text_and_pop title="このテーマをプレイすることでのねらいがあれば記入してください">ねらい</text_and_pop>
                         </place>
                         <textarea id="aim" cols="10" rows="10" style="left:62px"></textarea>
                 </div>
+                <!-- 公開の可否 -->
                 <div class="block2">
                         <text_and_pop id="open_input_text" title="他の人に公開してもよいかどうかを選択してください">公開可否*</text_and_pop>
                         <place style="position: relative; left:25px;">
@@ -264,6 +250,7 @@
                 </div>
                 <br>
                 <center>
+                        <!-- エラーメッセージ -->
                         <a id="required_error" style="color: red;display: none;">入力内容に不備があります。
                                 <br>
                                 <br>
@@ -272,8 +259,8 @@
                         <input type="button" value="次へ" onclick="next()">
                 </center>
         </form>
+        <!-- 確認画面 *************************************************************-->
         <form id="draw" style="display: none;">
-                <!-- <form id="draw"> -->
                 <div class="block1" id="title">
                         タイトル*
                         <draw_area id="title_text"></draw_area>
@@ -284,9 +271,7 @@
                         <draw_area id="category_text"></draw_area>
                 </div>
                 <div class="block1">
-                        <!-- <place style="position: relative; top:-100px;"> -->
                         状況*
-                        <!-- </place> -->
                         <draw_area id="situation_text"></draw_area>
                 </div>
                 <div class="block2">
@@ -312,9 +297,7 @@
                         <draw_area id="target_text"></draw_area>
                 </div>
                 <div class="block1">
-                        <!-- <place style="position: relative; top:-100px;"> -->
                         ねらい
-                        <!-- </place> -->
                         <draw_area id="aim_text"></draw_area>
                 </div>
                 <div class="block2">
@@ -323,18 +306,19 @@
                 </div>
                 <br>
                 <center>
+                        <!-- ボタン -->
                         <input type="button" value="訂正" onclick="back()"> &nbsp; &nbsp; &nbsp; &nbsp;
                         <input type="button" value="内容確定" onclick="decide()">
                 </center>
         </form>
         <script>
-                var assessment_send = [], category_send, time_send = "";
-                //次へボタンが押された
+                var assessment_send = [], category_send, time_send = "";//登録時に送信する用
+                //次へボタンが押された時
                 function next() {
-                        var required_flag = true;
+                        var required_flag = true;//入力必須事項の確認用
                         var get = document.forms.input;
-                        // document.write(get.title.value);
-                        // document.forms.draw.title_text.value = get.title.value;
+
+                        // タイトル
                         $("#title_text").empty();
                         $("#title_text").append(get.title.value);
                         document.getElementById("title_input_text").style.color = "";
@@ -343,11 +327,10 @@
                                 document.getElementById("title_input_text").style.color = "red";
                         }
 
-
-                        // document.getElementById("title_text").style.color = "red";
+                        // カテゴリー
                         $("#category_text").empty();
                         document.getElementById("category_input_text").style.color = "";
-                        if (get.category_list.value == "入力") {
+                        if (get.category_list.value == "入力") {//「入力」を選択時
                                 $("#category_text").append(get.category.value);
                                 category_send = get.category.value;
                                 if (get.category.value == "") {
@@ -355,7 +338,7 @@
                                         document.getElementById("category_input_text").style.color = "red";
                                 }
                         }
-                        else if (get.category_list.value == "") {
+                        else if (get.category_list.value == "") {//未選択時
                                 required_flag = false;
                                 document.getElementById("category_input_text").style.color = "red";
                         }
@@ -363,6 +346,8 @@
                                 category_send = get.category_list.value;
                                 $("#category_text").append(get.category_list.value);
                         }
+
+                        //状況
                         $("#situation_text").empty();
                         $("#situation_text").append(get.situation.value);
                         document.getElementById("situation_input_text").style.color = "";
@@ -371,15 +356,18 @@
                                 document.getElementById("situation_input_text").style.color = "red";
                         }
 
+                        // 評価項目
                         $("#assessment_text").empty();
                         var check = get.assessment;
                         var cnt = 0;
+                        //マスターテーブルからのものをチェック
                         for (var i = 0; i < check.length; i++)
                                 if (check[i].checked) {
                                         $("#assessment_text").append(check[i].value + "&nbsp;&nbsp;&nbsp;&nbsp;");
                                         assessment_send.push(check[i].value);
                                         cnt++;
                                 }
+                        // 入力可能なもの
                         for (var i = 0; i < ASSESSENT_INPUT_TEXT_NUM; i++)
                                 if (document.getElementById("assessment_input" + i).value != "") {
                                         $("#assessment_text").append(document.getElementById("assessment_input" + i).value + "&nbsp;&nbsp;&nbsp;&nbsp;");
@@ -387,61 +375,55 @@
                                         cnt++;
                                 }
                         document.getElementById("assessment_input_text").style.color = "";
-                        if (cnt == 0 || cnt >= 10) {
+                        if (cnt == 0 || cnt >= 10) {//選択している数が1~10かどうか確認
                                 required_flag = false;
                                 document.getElementById("assessment_input_text").style.color = "red";
-                                document.getElementById("assessment_error").style.display = "";
 
                         }
 
-                        // $("#assessment_text").append(cnt);
+                        // 日時・時期
                         var f = 0;
                         $("#time_text").empty();
                         time_send = "";
                         if (get.month_list.value != "") {
                                 time_send += get.month_list.value + "月"
-                                // $("#time_text").append(get.month_list.value + "月");
                                 f = 1;
                         }
                         if (get.day_list.value != "") {
                                 time_send += get.day_list.value + "日"
-                                //$("#time_text").append(get.day_list.value + "日");
                                 f = 1;
                         }
                         if (get.hour_list.value != "") {
                                 time_send += get.hour_list.value + "時"
-                                // $("#time_text").append(get.hour_list.value + "時");
                                 f = 1;
                         }
                         if (get.minute_list.value != "") {
                                 time_send += get.minute_list.value + "分"
-                                //$("#time_text").append(get.minute_list.value + "分");
                                 f = 1;
                         }
                         if (get.season_list.value != "") {
                                 if (f == 1)
                                         time_send += "　　";
-                                //$("#time_text").append("&nbsp;&nbsp;&nbsp;&nbsp;");
                                 time_send += get.season_list.value;
                                 time_send += "　　";
-                                // $("#time_text").append(get.season_list.value);
-                                // $("#time_text").append("&nbsp;&nbsp;&nbsp;&nbsp;");
                         }
                         if (get.timezone_list.value != "")
                                 time_send += get.timezone_list.value;
-                        // $("#time_text").append(get.timezone_list.value);
                         $("#time_text").append(time_send);
 
-
+                        // 地域
                         $("#area_text").empty();
                         $("#area_text").append(get.area.value);
 
+                        // 対象者
                         $("#target_text").empty();
                         $("#target_text").append(get.target.value);
 
+                        // ねらい
                         $("#aim_text").empty();
                         $("#aim_text").append(get.aim.value);
 
+                        // 公開の可否
                         $("#open_text").empty();
                         $("#open_text").append(get.open_radio.value);
                         document.getElementById("open_input_text").style.color = "";
@@ -451,12 +433,12 @@
                         }
 
 
+                        // 入力必須事項の確認
                         if (required_flag == true) {
                                 document.getElementById("input").style.display = "none";
                                 document.getElementById("draw").style.display = "";
 
                                 document.getElementById("required_error").style.display = "none";
-                                document.getElementById("assessment_error").style.display = "none";
 
                         }
                         else {
@@ -464,17 +446,19 @@
 
                         }
                 }
+
                 //訂正ボタンが押された
                 function back() {
                         document.getElementById("input").style.display = "";
                         document.getElementById("draw").style.display = "none";
                 }
+
                 //内容確定ボタンが押された
                 function decide() {
                         var get = document.forms.input;
 
-                        $.ajax({ //ajaxによる非同期通信発生
-                                type: "POST", //POST送信でデータを受け渡す
+                        $.ajax({ //非同期通信
+                                type: "POST",
                                 url: "http://192.168.0.159/2018grade4/HUG/HUG_Server/theme.php",
                                 data: {
                                         title: get.title.value,
@@ -497,14 +481,15 @@
                                         assessment9: assessment_send[9]
                                 },
                                 error: function (XMLHttpRequest, textStatus, errorThrown) { //接続が失敗
-                                        alert('エラーです！'); //エラーを表示
+                                        // alert('エラーです！'); //エラーを表示
                                 }
                         });
 
+                        //カテゴリーの新規入力があれば
                         var get = document.forms.input;
                         if (get.category_list.value == "入力")
-                                $.ajax({ //ajaxによる非同期通信発生
-                                        type: "POST", //POST送信でデータを受け渡す
+                                $.ajax({ //非同期通信
+                                        type: "POST",
                                         url: "http://192.168.0.159/2018grade4/HUG/HUG_Server/category.php",
                                         data: {
                                                 word: get.category.value
@@ -513,14 +498,16 @@
                                                 // alert('エラーです！'); //エラーを表示
                                         }
                                 });
+
+                        // 評価項目の新規入力があれば
                         var f = 0;
                         for (var i = 0; i < ASSESSENT_INPUT_TEXT_NUM; i++)
                                 if (document.getElementById("assessment_input" + i).value != "") {
                                         f = 1;
                                 }
                         if (f == 1)
-                                $.ajax({ //ajaxによる非同期通信発生
-                                        type: "POST", //POST送信でデータを受け渡す
+                                $.ajax({ //非同期通信
+                                        type: "POST", 
                                         url: "http://192.168.0.159/2018grade4/HUG/HUG_Server/assessment.php",
                                         data: {
                                                 word0: document.getElementById("assessment_input" + 0).value,
@@ -536,12 +523,6 @@
                                         }
                                 });
                 }
-
-                //新しくカテゴリーに単語を追加
-                function send() {
-
-                }
-
         </script>
 
 </body>
