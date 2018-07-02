@@ -21,7 +21,7 @@ function write_header(faze) {
                         html += '<a href=' + fail_name[3] + ' class="menu_btn">' + word[3] + '</a>';
                         html += '<a href=' + fail_name[4] + ' class="menu_btn">' + word[4] + '</a>';
                         // html += '&nbsp;&nbsp;&nbsp;&nbsp;';
-                        html += '<a href=' + fail_name[5] + ' class="menu_btn">' + word[5] + '</a>';
+                        html += '<a href=' + fail_name[5] + ' class="menu_btn"style="left:10%;">' + word[5] + '</a>';
                         break;
                 case 1://テーマ作成
                         html += '<a href=' + fail_name[0] + ' class="menu_btn">' + word[0] + '</a>';
@@ -30,7 +30,7 @@ function write_header(faze) {
                         html += '<a href=' + fail_name[3] + ' class="menu_btn">' + word[3] + '</a>';
                         html += '<a href=' + fail_name[4] + ' class="menu_btn">' + word[4] + '</a>';
                         // html += '&nbsp;&nbsp;&nbsp;&nbsp;';
-                        html += '<a href=' + fail_name[5] + ' class="menu_btn">' + word[5] + '</a>';
+                        html += '<a href=' + fail_name[5] + ' class="menu_btn"style="left:10%;>' + word[5] + '</a>';
                         break;
                 case 2://プレイ
                         html += '<a href=' + fail_name[0] + ' class="menu_btn">' + word[0] + '</a>';
@@ -39,7 +39,7 @@ function write_header(faze) {
                         html += '<a href=' + fail_name[3] + ' class="menu_btn">' + word[3] + '</a>';
                         html += '<a href=' + fail_name[4] + ' class="menu_btn">' + word[4] + '</a>';
                         // html += '&nbsp;&nbsp;&nbsp;&nbsp;';
-                        html += '<a href=' + fail_name[5] + ' class="menu_btn">' + word[5] + '</a>';
+                        html += '<a href=' + fail_name[5] + ' class="menu_btn"style="left:10%;>' + word[5] + '</a>';
                         break;
                 case 3://振り返り
                         html += '<a href=' + fail_name[0] + ' class="menu_btn">' + word[0] + '</a>';
@@ -48,7 +48,7 @@ function write_header(faze) {
                         html += '<a href=' + fail_name[3] + ' class="menu_btn_pushed">' + word[3] + '</a>';
                         html += '<a href=' + fail_name[4] + ' class="menu_btn">' + word[4] + '</a>';
                         // html += '&nbsp;&nbsp;&nbsp;&nbsp;';
-                        html += '<a href=' + fail_name[5] + ' class="menu_btn">' + word[5] + '</a>';
+                        html += '<a href=' + fail_name[5] + ' class="menu_btn"style="left:10%;>' + word[5] + '</a>';
                         break;
                 case 4://振り返り
                         html += '<a href=' + fail_name[0] + ' class="menu_btn">' + word[0] + '</a>';
@@ -57,7 +57,7 @@ function write_header(faze) {
                         html += '<a href=' + fail_name[3] + ' class="menu_btn">' + word[3] + '</a>';
                         html += '<a href=' + fail_name[4] + ' class="menu_btn_pushed">' + word[4] + '</a>';
                         // html += '&nbsp;&nbsp;&nbsp;&nbsp;';
-                        html += '<a href=' + fail_name[5] + ' class="menu_btn">' + word[5] + '</a>';
+                        html += '<a href=' + fail_name[5] + ' class="menu_btn"style="left:10%;>' + word[5] + '</a>';
                         break;
                 default:
                         html += '<a href=' + fail_name[0] + ' class="menu_btn">' + word[0] + '</a>';
@@ -66,7 +66,7 @@ function write_header(faze) {
                         html += '<a href=' + fail_name[3] + ' class="menu_btn">' + word[3] + '</a>';
                         html += '<a href=' + fail_name[4] + ' class="menu_btn">' + word[4] + '</a>';
                         // html += '&nbsp;&nbsp;&nbsp;&nbsp;';
-                        html += '<a href=' + fail_name[5] + ' class="menu_btn">' + word[5] + '</a>';
+                        html += '<a href=' + fail_name[5] + ' class="menu_btn"style="left:10%;>' + word[5] + '</a>';
                         break;
         }
 

@@ -2,7 +2,7 @@
 /* **  メニュー　***************************************************** */
 .menu_btn{
         position: relative;
-        left:5%;
+        left:3%;
         display: inline-block;
         font-weight: bold;
         padding: 0.25em 0.5em;
@@ -24,7 +24,7 @@
 }
 .menu_btn_pushed{
         position: relative;
-        left:5%;
+        left:3%;
         display: inline-block;
         font-weight: bold;
         padding: 0.25em 0.5em;
@@ -40,6 +40,6 @@
 }
 
 .menu_btn_pushed:hover {
-        background: #00bcd4;
+        background: rgb(0, 109, 212);
         color: white;
 }
