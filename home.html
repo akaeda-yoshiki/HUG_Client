@@ -1,17 +1,52 @@
 <!DOCTYPE html>
 <html>
+
 <head>
         <meta charset="UTF-8" />
         <title>ホーム</title>
         <link rel="stylesheet" type="text/css" href="header.css">
         <script type="text/javascript" src="menu.js"> </script>
+        <script src="https://code.jquery.com/jquery-1.9.0.min.js"></script>
+
+        <script>
+                //マスターテーブルからカテゴリーを受信
+                $(document).ready(function () {
+                        // $.ajax({
+                        //         type: "POST",
+                        //         url: "http://192.168.0.159/2018grade4/HUG/HUG_Server/theme.php",
+                        //         dataType: "json",
+                        // }).done(function (data, dataType) {
+                        //         //カテゴリーのプルダウンに追加
+                        //         // for (var i = 0; i < data.length; i++) {
+                        //         //         $('#category_list').append($('<option>').html(data[i].word).val(data[i].word));
+                        //         // }
+                        //         $("#aa").append(data);
+                        // }).fail(function (XMLHttpRequest, textStatus, errorThrown) {
+                        //         alert('Error : ' + errorThrown);
+                        // });
+
+                        $.ajax({ //非同期通信
+                                type: "POST",
+                                url: "http://192.168.0.159/2018grade4/HUG/HUG_Server/theme.php",
+                                data: {
+                                        mode: "1"
+                                },
+                                success: function (data) {
+                                        // alert(data);
+                                        document.write(data);
+                                },
+                                error: function (XMLHttpRequest, textStatus, errorThrown) { //接続が失敗
+                                        // alert('エラーです！'); //エラーを表示
+                                }
+                        });
+                });</script>
 </head>
 
 <body>
         <script type="text/javascript">
                 write_header(0);
         </script>
-
+        <a id="aa"></a>
         <br>
 </body>
 
