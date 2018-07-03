@@ -59,7 +59,8 @@
 
                 th {
                         font: bold 11px "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif;
-                        color: #4f6b72;
+                        color: #ffffff;
+                        font-size: 15px;
                         /* border: 1px solid #0e100f; */
                         letter-spacing: 2px;
                         text-transform: uppercase;
@@ -73,6 +74,17 @@
                 td {
                         border: 1px solid #59b1b8;
                         background: #fff;
+                        /* background: #59b1b8; */
+                        padding: 6px 6px 6px 12px;
+                        color: #151a1b;
+                        border-left: none;
+                        border-right: none;
+
+                }
+
+                td1 {
+                        border: 1px solid #59b1b8;
+                        background: #d0f7fa;
                         padding: 6px 6px 6px 12px;
                         color: #151a1b;
                         border-left: none;
@@ -86,94 +98,8 @@
         <script>
                 //マスターテーブルからカテゴリーを受信
                 $(document).ready(function () {
-                        // $.ajax({
-                        //         type: "POST",
-                        //         url: "http://192.168.0.159/2018grade4/HUG/HUG_Server/theme.php",
-                        //         dataType: "json",
-                        // }).done(function (data, dataType) {
-                        //         //カテゴリーのプルダウンに追加
-                        //         // for (var i = 0; i < data.length; i++) {
-                        //         //         $('#category_list').append($('<option>').html(data[i].word).val(data[i].word));
-                        //         // }
-                        //         $("#aa").append(data);
-                        // }).fail(function (XMLHttpRequest, textStatus, errorThrown) {
-                        //         alert('Error : ' + errorThrown);
-                        // });
 
-                        $.ajax({ //非同期通信
-                                type: "POST",
-                                url: "http://192.168.0.159/2018grade4/HUG/HUG_Server/theme.php",
-                                data: {
-                                        mode: "1"
-                                },
-                                success: function (data) {
-                                        // for (var i = 0; i < data.length; i++) {
-                                        //         $("#aa").append('<div class="block' + (i % 2 + 1) + '" value="' + data[i].id + '">' + data[i].title + "</div>");
-                                        // }
-                                        var $content = $('#mytable');
-                                        for (var i = 0; i < data.length; i++) {
-                                                var add = "";
-                                                add += "<tr><td><a href='#!' onclick='()' class='square_btn'>" + data[i].title + "</a>";
-                                                add += "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
-                                                add += "<td>" + data[i].create_day + "</td>";
-                                                add += "<td>" + data[i].category + "</td>";
-                                                add += "<td>" + data[i].play_count + "</td></tr>";
-
-                                                $content.append(add);
-                                        }
-
-                                        // //*****************表の作成　ここから**********************************
-                                        // var tbody = document.createElement('tbody');
-
-                                        // //見出し
-                                        // var th = document.createElement('th');
-                                        // th.appendChild(document.createTextNode("タイトル"));
-                                        // var th1 = document.createElement('th');
-                                        // th1.appendChild(document.createTextNode("作成日"));
-                                        // var th2 = document.createElement('th');
-                                        // th2.appendChild(document.createTextNode("カテゴリー"));
-                                        // var th3 = document.createElement('th');
-                                        // th3.appendChild(document.createTextNode("プレイ回数"));
-                                        // var tr = document.createElement('tr');
-                                        // tr.appendChild(th);
-                                        // tr.appendChild(th1);
-                                        // tr.appendChild(th2);
-                                        // tr.appendChild(th3);
-                                        // tbody.appendChild(tr);
-
-                                        // //各列の作成
-                                        // for (var i = 0; i < data.length; i++) {
-                                        //         // var exit = data[i].exit_time.substr(0, 4) + "/" + data[i].exit_time.substr(4, 2) + "/" + data[i].exit_time.substr(6, 4);
-                                        //         var td = document.createElement('td');
-                                        //         td.appendChild(document.createTextNode(data[i].title));
-                                        //         var td1 = document.createElement('td');
-                                        //         td1.appendChild(document.createTextNode(data[i].create_day));
-                                        //         var td2 = document.createElement('td');
-                                        //         td2.appendChild(document.createTextNode(data[i].category));
-                                        //         var td3 = document.createElement('td');
-                                        //         td3.appendChild(document.createTextNode(data[i].play_count));
-
-
-                                        //         var tr = document.createElement('tr');
-                                        //         tr.appendChild(td);
-                                        //         tr.appendChild(td1);
-                                        //         tr.appendChild(td2);
-                                        //         tr.appendChild(td3);
-
-                                        //         tbody.appendChild(tr);
-                                        // }
-                                        // var table = document.createElement('table');
-                                        // table.id = "theme_table";
-                                        // table.appendChild(tbody);
-                                        // // var place = document.createElement('block1');
-                                        // // place.appendChild(table);
-                                        // //bodyに追加
-                                        // document.getElementsByTagName('body')[0].appendChild(table);
-                                },
-                                error: function (XMLHttpRequest, textStatus, errorThrown) { //接続が失敗
-                                        // alert('エラーです！'); //エラーを表示
-                                }
-                        });
+                        get_theme("not_all");
                 });</script>
 </head>
 
@@ -181,26 +107,54 @@
         <script type="text/javascript">
                 write_header(0);
         </script>
-        <br>
-        <br>
-        <!-- <a style="position: absolute;left: 30%;z-index: 1;">作成日</a>
 
-        <div class="block">
-                <a >タイトル</a>
-                <a style="position: absolute;left: 23%;">作成日</a>
-                <a style="position: relative;left: 35%;">カテゴリー</a>
-                <a style="position: relative;left: 85%;">プレイ回数</a>
-        </div> -->
-        <table id='mytable'>
-                <tr>
-                        <th>タイトル</th>
-                        <th>作成日</th>
-                        <th>カテゴリー</th>
-                        <th>プレイ回数</th>
-                </tr>
-        </table>
+        <br>
+        <br>
+        <input type="button" id="get_theme_button" style="position: relative; left:7%;" value="テーマ一覧" onclick='get_theme("all")'>
+        <input type="button" id="back_button" style="position: relative; left:7%;display: none;" value="戻る" onclick='get_theme("not_all")'>
+        <br>
+        <a id="table">
+                <table id='mytable'>
+                </table>
+        </a>
         <a id="aa"></a>
         <br>
+        <script>
+                function get_theme(mode) {
+                        if (mode == "all") {
+                                document.getElementById("get_theme_button").style.display = "none";
+                                document.getElementById("back_button").style.display = "";
+                        } else {
+                                document.getElementById("get_theme_button").style.display = "";
+                                document.getElementById("back_button").style.display = "none";
+                        }
+                        var $content = $('#mytable');
+                        $content.empty();
+                        $content.append("<tr><th>タイトル</th><th>作成日</th><th>カテゴリー</th><th>プレイ回数</th></tr>");
+                        $.ajax({ //非同期通信
+                                type: "POST",
+                                url: "http://192.168.0.159/2018grade4/HUG/HUG_Server/theme.php",
+                                data: {
+                                        mode: mode
+                                },
+                                success: function (data) {
+
+                                        for (var i = 0; i < data.length; i++) {
+                                                var add = "";
+                                                add += "<tr><td><a href='#!' onclick='()' class='square_btn'>" + data[i].title + "</a>";
+                                                add += "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
+                                                add += "<td>" + data[i].create_day + "</td>";
+                                                add += "<td>" + data[i].category + "</td>";
+                                                add += "<td>" + data[i].play_count + "</td></tr>";
+                                                $content.append(add);
+                                        }
+                                },
+                                error: function (XMLHttpRequest, textStatus, errorThrown) { //接続が失敗
+                                        // alert('エラーです！'); //エラーを表示
+                                }
+                        });
+                }
+        </script>
 </body>
 
 </html>
