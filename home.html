@@ -5,6 +5,81 @@
         <meta charset="UTF-8" />
         <title>ホーム</title>
         <link rel="stylesheet" type="text/css" href="header.css">
+        <style>
+                place {
+                        position: relative;
+                        /* left: 150px;
+                        top: 250px; */
+                }
+
+                .block {
+                        background: rgb(59, 102, 148);
+                        color: aliceblue;
+                        width: 85%;
+                        font-size: 20px;
+                        padding: 0.5em 0.5em;
+                        position: relative;
+                        left: 7%;
+                        border: thin solid black;
+                        border-bottom: none;
+                }
+
+                .block1 {
+                        background: rgb(209, 231, 255);
+                        width: 85%;
+                        font-size: 20px;
+                        padding: 0.5em 0.5em;
+                        position: relative;
+                        left: 7%;
+                        border: thin solid;
+                }
+
+                .block2 {
+                        background: rgb(236, 245, 255);
+                        width: 85%;
+                        font-size: 20px;
+                        padding: 0.5em 0.5em;
+                        position: relative;
+                        left: 7%;
+                        border: thin solid;
+                        border-bottom: none;
+                        border-top: none;
+                }
+
+
+                table {
+                        width: 85%;
+                        position: relative;
+                        left: 7%;
+                        padding: 0;
+                        border: 0;
+                        border-spacing: 0;
+                        border-collapse: collapse;
+                }
+
+                th {
+                        font: bold 11px "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif;
+                        color: #4f6b72;
+                        /* border: 1px solid #0e100f; */
+                        letter-spacing: 2px;
+                        text-transform: uppercase;
+                        text-align: left;
+                        padding: 6px 6px 6px 12px;
+                        background: #59b1b8;
+                        border-left: none;
+                        border-right: none;
+                }
+
+                td {
+                        border: 1px solid #59b1b8;
+                        background: #fff;
+                        padding: 6px 6px 6px 12px;
+                        color: #151a1b;
+                        border-left: none;
+                        border-right: none;
+
+                }
+        </style>
         <script type="text/javascript" src="menu.js"> </script>
         <script src="https://code.jquery.com/jquery-1.9.0.min.js"></script>
 
@@ -32,8 +107,68 @@
                                         mode: "1"
                                 },
                                 success: function (data) {
-                                        // alert(data);
-                                        document.write(data);
+                                        // for (var i = 0; i < data.length; i++) {
+                                        //         $("#aa").append('<div class="block' + (i % 2 + 1) + '" value="' + data[i].id + '">' + data[i].title + "</div>");
+                                        // }
+                                        var $content = $('#mytable');
+                                        for (var i = 0; i < data.length; i++) {
+                                                var add = "";
+                                                add += "<tr><td><a href='#!' onclick='()' class='square_btn'>" + data[i].title + "</a>";
+                                                add += "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
+                                                add += "<td>" + data[i].create_day + "</td>";
+                                                add += "<td>" + data[i].category + "</td>";
+                                                add += "<td>" + data[i].play_count + "</td></tr>";
+
+                                                $content.append(add);
+                                        }
+
+                                        // //*****************表の作成　ここから**********************************
+                                        // var tbody = document.createElement('tbody');
+
+                                        // //見出し
+                                        // var th = document.createElement('th');
+                                        // th.appendChild(document.createTextNode("タイトル"));
+                                        // var th1 = document.createElement('th');
+                                        // th1.appendChild(document.createTextNode("作成日"));
+                                        // var th2 = document.createElement('th');
+                                        // th2.appendChild(document.createTextNode("カテゴリー"));
+                                        // var th3 = document.createElement('th');
+                                        // th3.appendChild(document.createTextNode("プレイ回数"));
+                                        // var tr = document.createElement('tr');
+                                        // tr.appendChild(th);
+                                        // tr.appendChild(th1);
+                                        // tr.appendChild(th2);
+                                        // tr.appendChild(th3);
+                                        // tbody.appendChild(tr);
+
+                                        // //各列の作成
+                                        // for (var i = 0; i < data.length; i++) {
+                                        //         // var exit = data[i].exit_time.substr(0, 4) + "/" + data[i].exit_time.substr(4, 2) + "/" + data[i].exit_time.substr(6, 4);
+                                        //         var td = document.createElement('td');
+                                        //         td.appendChild(document.createTextNode(data[i].title));
+                                        //         var td1 = document.createElement('td');
+                                        //         td1.appendChild(document.createTextNode(data[i].create_day));
+                                        //         var td2 = document.createElement('td');
+                                        //         td2.appendChild(document.createTextNode(data[i].category));
+                                        //         var td3 = document.createElement('td');
+                                        //         td3.appendChild(document.createTextNode(data[i].play_count));
+
+
+                                        //         var tr = document.createElement('tr');
+                                        //         tr.appendChild(td);
+                                        //         tr.appendChild(td1);
+                                        //         tr.appendChild(td2);
+                                        //         tr.appendChild(td3);
+
+                                        //         tbody.appendChild(tr);
+                                        // }
+                                        // var table = document.createElement('table');
+                                        // table.id = "theme_table";
+                                        // table.appendChild(tbody);
+                                        // // var place = document.createElement('block1');
+                                        // // place.appendChild(table);
+                                        // //bodyに追加
+                                        // document.getElementsByTagName('body')[0].appendChild(table);
                                 },
                                 error: function (XMLHttpRequest, textStatus, errorThrown) { //接続が失敗
                                         // alert('エラーです！'); //エラーを表示
@@ -46,6 +181,24 @@
         <script type="text/javascript">
                 write_header(0);
         </script>
+        <br>
+        <br>
+        <!-- <a style="position: absolute;left: 30%;z-index: 1;">作成日</a>
+
+        <div class="block">
+                <a >タイトル</a>
+                <a style="position: absolute;left: 23%;">作成日</a>
+                <a style="position: relative;left: 35%;">カテゴリー</a>
+                <a style="position: relative;left: 85%;">プレイ回数</a>
+        </div> -->
+        <table id='mytable'>
+                <tr>
+                        <th>タイトル</th>
+                        <th>作成日</th>
+                        <th>カテゴリー</th>
+                        <th>プレイ回数</th>
+                </tr>
+        </table>
         <a id="aa"></a>
         <br>
 </body>
