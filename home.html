@@ -33,7 +33,6 @@
                 td {
                         border: 1px solid #59b1b8;
                         background: #fff;
-                        /* background: #59b1b8; */
                         padding: 6px 6px 6px 12px;
                         color: #151a1b;
                         border-left: none;
@@ -58,6 +57,16 @@
                         position: relative;
                         left: 7%;
                 }
+
+                .block3 {
+                        background: #d9edfd;
+                        width: 85%;
+                        font-size: 20px;
+                        padding: 0.5em 0.5em;
+                        position: relative;
+                        left: 7%;
+                        border: solid 2px #b4b6c2;
+                }
         </style>
         <script type="text/javascript" src="menu.js"> </script>
         <script src="https://code.jquery.com/jquery-1.9.0.min.js"></script>
@@ -77,8 +86,20 @@
 
         <br>
         <br>
-        <input type="button" id="get_theme_button" style="position: relative; left:7%;" value="テーマ一覧" onclick='get_theme("all")'>
-        <input type="button" id="back_button" style="position: relative; left:7%;display: none;" value="戻る" onclick='get_theme("not_all")'>
+        <div class="block3" style="border-bottom: none;">
+                並び順
+                <input type="button" id="sort_day" style="position: relative; left:50px;border: solid 2px #203aff;" value="作成日" onclick='exchange_mode("day")'>
+                <input type="button" id="sort_play" style="position: relative; left:80px;" value="プレイ回数" onclick='exchange_mode("play")'>
+        </div>
+        <div class="block3">
+                絞り込み
+                <!-- <input type="button" id="sort_day" style="position: relative; left:30px;border: solid 2px #203aff;" value="作成日" onclick='get_theme("all")'>
+                <input type="button" id="sort_play" style="position: relative; left:15%;" value="プレイ回数" onclick='get_theme("all")'> -->
+        </div>
+        <br>
+        <input type="button" id="get_theme_button" style="position: relative; left:7%;" value="テーマ一覧" onclick='exchange_volume("all")'>
+        <input type="button" id="back_button" style="position: relative; left:7%;display: none;" value="戻る" onclick='exchange_volume("not_all")'>
+
         <br>
         <a id="table">
                 <table id='mytable'>
@@ -134,20 +155,53 @@
         </form>
         <br>
         <script>
+                var now_mode = "day";
+
+                //表示するテーマの数を切り替え
+                function exchange_volume(word) {
+                        console.log(now_mode);
+                        if (word == "all") {//全件表示
+                                if (now_mode.indexOf("all") == -1) {
+                                        now_mode = "all_" + now_mode;
+                                        document.getElementById("get_theme_button").style.display = "none";
+                                        document.getElementById("back_button").style.display = "";
+                                        get_theme();
+                                }
+                        } else if (word == "not_all") {//一部表示
+                                if (now_mode.indexOf("all") != -1) {
+                                        now_mode = now_mode.substr(4);
+                                        document.getElementById("get_theme_button").style.display = "";
+                                        document.getElementById("back_button").style.display = "none";
+                                        get_theme();
+                                }
+                        }
+                }
+
+                //ソートの切り替え
+                function exchange_mode(mode) {
+                        document.getElementById("sort_day").style.border = "";
+                        document.getElementById("sort_play").style.border = "";
+
+                        //選択中のボタンの縁を変更
+                        document.getElementById("sort_" + mode).style.border = "solid 2px";
+                        document.getElementById("sort_" + mode).style.borderColor = "#203aff";
+
+                        //並び替えの変更
+                        if (now_mode.indexOf("all") == -1) {//全件
+                                now_mode = mode;
+                                get_theme();
+                        }
+                        else {//一部
+                                now_mode = "all_" + mode;
+                                get_theme();
+                        }
+                }
 
                 //テーマを受信、引数  all：全公開可テーマ　not_all：最新５つの公開可テーマ
-                function get_theme(mode) {
+                function get_theme() {
                         document.getElementById("table").style.display = "";
                         document.getElementById("detail").style.display = "none";
-                        if (mode == "all") {
-                                document.getElementById("get_theme_button").style.display = "none";
-                                document.getElementById("back_button").style.display = "";
 
-
-                        } else {
-                                document.getElementById("get_theme_button").style.display = "";
-                                document.getElementById("back_button").style.display = "none";
-                        }
                         var $content = $('#mytable');
                         $content.empty();
                         $content.append("<tr><th>タイトル</th><th>作成日</th><th>カテゴリー</th><th>プレイ回数</th></tr>");
@@ -155,7 +209,7 @@
                                 type: "POST",
                                 url: "http://192.168.0.159/2018grade4/HUG/HUG_Server/theme.php",
                                 data: {
-                                        mode: mode
+                                        mode: now_mode
                                 },
                                 success: function (data) {
 
@@ -232,6 +286,7 @@
                                 }
                         });
 
+                        //ボタンや表の表示・非表示の切り替え
                         document.getElementById("get_theme_button").style.display = "none";
                         document.getElementById("back_button").style.display = "";
                         document.getElementById("table").style.display = "none";
