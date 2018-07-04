@@ -29,6 +29,7 @@
             font-size: 20px;
             text-decoration: none;
         }
+
         .tag_b:hover {
             color: #364e96;
             /*文字色*/
@@ -42,7 +43,7 @@
             font-size: 25px;
             text-decoration: none;
         }
-        
+
         .tag_r {
             color: #af2626;
             /*文字色*/
@@ -92,7 +93,7 @@
                 <br>
                 <label for="passward">パスワード</label>
                 <br>
-                <input type="text" name="passward" id="passward" required>
+                <input type="password" name="passward" id="passward" required>
                 <br>
                 <br>
                 <input type="button" value="ログイン" onclick="login()">
@@ -109,9 +110,9 @@
                 <br>
                 <label for="passward">パスワード</label>
                 <br>
-                <input type="text" name="passward1" id="passward1" required>
+                <input type="password" name="passward1" id="passward1" required>
                 <br>
-                <input type="text" name="passward2" id="passward2" required>
+                <input type="password" name="passward2" id="passward2" required>
                 <br> 再入力（確認用）
                 <br>
                 <br>
@@ -140,7 +141,7 @@
         <a href="#!" onclick="to_new_user()">新規登録</a> -->
         <br>
         <br>
-        <a href="#!" onclick="to_forget()" id="pass_forget" >パスワードを忘れた</a>
+        <a href="#!" onclick="to_forget()" id="pass_forget">パスワードを忘れた</a>
 
     </center>
 
@@ -204,7 +205,7 @@
             document.getElementById("pass_forget").style.display = "";
             document.getElementById("user_button").className = "tag_b";
             document.getElementById("login_button").className = "tag_r";
-
+            $("error").empty();
         }
 
         //新規登録画面へ切り替え
@@ -215,6 +216,7 @@
             document.getElementById("pass_forget").style.display = "none";
             document.getElementById("user_button").className = "tag_r";
             document.getElementById("login_button").className = "tag_b";
+            $("error").empty();
         }
 
         //パスワード通知画面へ切り替え
@@ -225,6 +227,7 @@
             document.getElementById("pass_forget").style.display = "none";
             document.getElementById("user_button").className = "tag_b";
             document.getElementById("login_button").className = "tag_b";
+            $("error").empty();
         }
         function send() {
             $.ajax({ //ajaxによる非同期通信発生
@@ -240,19 +243,18 @@
                     switch (faze) {
                         case 'login':
                             if (recieve != 'null')
-                                window.location.href = "select_role.html";
+                                window.location.href = "home.html";
                             else {
                                 $("error").empty();
                                 $("error").append("IDとパスワードが一致しません");
                             }
                             break;
                         case 'new':
-                            if (recieve == 'ok')
-                                window.location.href = "select_role.html";
-                            else {
+                            if (recieve != 'null') {
                                 $("error").empty();
                                 $("error").append("そのIDすでに登録されています");
                             }
+                            else window.location.href = "home.html";
                             break;
 
                         case 'forget':
