@@ -72,9 +72,38 @@
         <script src="https://code.jquery.com/jquery-1.9.0.min.js"></script>
 
         <script>
-                //マスターテーブルからカテゴリーを受信
+
                 $(document).ready(function () {
                         get_theme();
+
+                        //マスターテーブルからカテゴリーを受信
+                        $.ajax({
+                                type: "POST",
+                                url: "http://192.168.0.159/2018grade4/HUG/HUG_Server/category.php",
+                                dataType: "json",
+                        }).done(function (data, dataType) {
+                                //カテゴリーのプルダウンに追加
+                                for (var i = 0; i < data.length; i++) {
+                                        if (data[i].word != "入力")
+                                                $('#search_category').append($('<option>').html(data[i].word).val(data[i].word));
+                                }
+                        }).fail(function (XMLHttpRequest, textStatus, errorThrown) {
+                                // alert('Error : ' + errorThrown);
+                        });
+
+                        //マスターテーブルから評価項目を受信
+                        $.ajax({
+                                type: "POST",
+                                url: "http://192.168.0.159/2018grade4/HUG/HUG_Server/assessment.php",
+                                dataType: "json",
+                        }).done(function (data, dataType) {
+                                //評価項目のチェックリストに追加
+                                for (var i = 0; i < data.length; i++) {
+                                        $('#search_assessment').append($('<option>').html(data[i].word).val(data[i].word));
+                                }
+                        }).fail(function (XMLHttpRequest, textStatus, errorThrown) {
+                                // alert('Error : ' + errorThrown);
+                        });
                 });</script>
 </head>
 
@@ -92,8 +121,37 @@
         </div>
         <div class="block3">
                 絞り込み
-                <!-- <input type="button" id="sort_day" style="position: relative; left:30px;border: solid 2px #203aff;" value="作成日" onclick='get_theme("all")'>
-                <input type="button" id="sort_play" style="position: relative; left:15%;" value="プレイ回数" onclick='get_theme("all")'> -->
+                <!-- <br> -->
+                <a style="position: relative; left:30px;">
+                        タイトル
+                        <input type="text" id="search_title" style="position: relative; left:128px;">
+                </a>
+                <br>
+
+                <a style="position: relative; left:115px;">
+                        カテゴリー
+                        <select id="search_category" style="width: 172px;position: relative; left:110px;">
+                                <option value=""></option>
+                        </select>
+                        <!-- <input type="text" id="search_category" style="position: relative; left:110px;"> -->
+                        <br> キーワード（状況）
+                        <input type="text" id="search_situation" style="position: relative; left:30px;">
+                        <br> 日時・時期
+                        <input type="text" id="search_time" style="position: relative; left:110px;">
+                        <br> 地域
+                        <input type="text" id="search_area" style="position: relative; left:170px;">
+                        <br> 対象者
+                        <input type="text" id="search_target" style="position: relative; left:150px;">
+                        <br> キーワード（ねらい）
+                        <input type="text" id="search_aim" style="position: relative; left:10px;">
+                        <br> 評価項目
+                        <select id="search_assessment" style="width: 172px;position: relative; left:130px;">
+                                <option value=""></option>
+                        </select>
+                        <!-- <input type="text" id="search_assessment" style="position: relative; left:130px;"> -->
+                        <br><br>
+                        <input type="button"  value="絞り込む" onclick=''>
+                </a>
         </div>
         <br>
         <input type="button" id="get_theme_button" style="position: relative; left:7%;" value="テーマ一覧" onclick='exchange_volume("all")'>
@@ -158,7 +216,7 @@
 
                 //表示するテーマの数を切り替え
                 function exchange_volume(word) {
-                       
+
                         if (word == "all") {//全件表示
                                 if (now_mode.indexOf("all") == -1) {
                                         now_mode = "all_" + now_mode;
