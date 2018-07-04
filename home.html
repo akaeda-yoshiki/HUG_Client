@@ -6,47 +6,6 @@
         <title>ホーム</title>
         <link rel="stylesheet" type="text/css" href="header.css">
         <style>
-                place {
-                        position: relative;
-                        /* left: 150px;
-                        top: 250px; */
-                }
-
-                .block {
-                        background: rgb(59, 102, 148);
-                        color: aliceblue;
-                        width: 85%;
-                        font-size: 20px;
-                        padding: 0.5em 0.5em;
-                        position: relative;
-                        left: 7%;
-                        border: thin solid black;
-                        border-bottom: none;
-                }
-
-                .block1 {
-                        background: rgb(209, 231, 255);
-                        width: 85%;
-                        font-size: 20px;
-                        padding: 0.5em 0.5em;
-                        position: relative;
-                        left: 7%;
-                        border: thin solid;
-                }
-
-                .block2 {
-                        background: rgb(236, 245, 255);
-                        width: 85%;
-                        font-size: 20px;
-                        padding: 0.5em 0.5em;
-                        position: relative;
-                        left: 7%;
-                        border: thin solid;
-                        border-bottom: none;
-                        border-top: none;
-                }
-
-
                 table {
                         width: 85%;
                         position: relative;
@@ -60,7 +19,7 @@
                 th {
                         font: bold 11px "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif;
                         color: #ffffff;
-                        font-size: 15px;
+                        font-size: 16px;
                         /* border: 1px solid #0e100f; */
                         letter-spacing: 2px;
                         text-transform: uppercase;
@@ -82,14 +41,22 @@
 
                 }
 
-                td1 {
-                        border: 1px solid #59b1b8;
-                        background: #d0f7fa;
-                        padding: 6px 6px 6px 12px;
-                        color: #151a1b;
-                        border-left: none;
-                        border-right: none;
+                .block1 {
+                        background: rgb(209, 231, 255);
+                        width: 85%;
+                        font-size: 20px;
+                        padding: 0.5em 0.5em;
+                        position: relative;
+                        left: 7%;
+                }
 
+                .block2 {
+                        background: rgb(236, 245, 255);
+                        width: 85%;
+                        font-size: 20px;
+                        padding: 0.5em 0.5em;
+                        position: relative;
+                        left: 7%;
                 }
         </style>
         <script type="text/javascript" src="menu.js"> </script>
@@ -117,13 +84,66 @@
                 <table id='mytable'>
                 </table>
         </a>
-        <a id="aa"></a>
+
+        <!-- 確認画面 *************************************************************-->
+        <form id="detail" style="display: none;">
+                <div class="block1" id="title">
+                        タイトル
+                        <draw_area id="title_text" style="position: relative;left: 50px;"></draw_area>
+                </div>
+
+                <div class="block2">
+                        カテゴリー
+                        <draw_area id="category_text" style="position: relative;left: 30px;"></draw_area>
+                </div>
+                <div class="block1">
+                        状況
+                        <draw_area id="situation_text" style="position: relative;left: 90px;"></draw_area>
+                </div>
+                <div class="block2">
+                        評価項目
+                        <draw_area id="assessment_text" style="position: relative;left: 50px;"></draw_area>
+                </div>
+                <div class="block1">
+                        日時/時期
+                        <draw_area id="time_text" style="position: relative;left: 50px;"></draw_area>
+
+                </div>
+                <div class="block2">
+                        地域
+                        <draw_area id="area_text" style="position: relative;left: 90px;"></draw_area>
+                </div>
+                <div class="block1">
+                        画像
+                        <div id="image_draw" style="position: relative;left: 90px;"></div>
+
+                </div>
+                <div class="block2">
+                        対象者
+                        <draw_area id="target_text" style="position: relative;left: 70px;"></draw_area>
+                </div>
+                <div class="block1">
+                        ねらい
+                        <draw_area id="aim_text" style="position: relative;left: 70px;"></draw_area>
+                </div>
+                <div class="block2">
+                        公開可否
+                        <draw_area id="open_text" style="position: relative;left: 50px;"></draw_area>
+                </div>
+                <br>
+        </form>
         <br>
         <script>
+
+                //テーマを受信、引数  all：全公開可テーマ　not_all：最新５つの公開可テーマ
                 function get_theme(mode) {
+                        document.getElementById("table").style.display = "";
+                        document.getElementById("detail").style.display = "none";
                         if (mode == "all") {
                                 document.getElementById("get_theme_button").style.display = "none";
                                 document.getElementById("back_button").style.display = "";
+
+
                         } else {
                                 document.getElementById("get_theme_button").style.display = "";
                                 document.getElementById("back_button").style.display = "none";
@@ -141,7 +161,7 @@
 
                                         for (var i = 0; i < data.length; i++) {
                                                 var add = "";
-                                                add += "<tr><td><a href='#!' onclick='()' class='square_btn'>" + data[i].title + "</a>";
+                                                add += "<tr><td><a href='#!' onclick='theme_detail(" + data[i].id + ")' class='square_btn'>" + data[i].title + "</a>";
                                                 add += "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
                                                 add += "<td>" + data[i].create_day + "</td>";
                                                 add += "<td>" + data[i].category + "</td>";
@@ -154,6 +174,71 @@
                                 }
                         });
                 }
+
+                //テーマの詳細を表示
+                function theme_detail(id) {
+
+                        $.ajax({ //非同期通信
+                                type: "POST",
+                                url: "http://192.168.0.159/2018grade4/HUG/HUG_Server/theme.php",
+                                data: {
+                                        id: id
+                                },
+                                success: function (data) {
+                                        // タイトル
+                                        $("#title_text").empty();
+                                        $("#title_text").append(data[0].title);
+                                        // カテゴリー
+                                        $("#category_text").empty();
+                                        $("#category_text").append(data[0].category);
+
+                                        //状況
+                                        $("#situation_text").empty();
+                                        $("#situation_text").append(data[0].situation);
+                                        // 評価項目
+                                        $("#assessment_text").empty();
+                                        $("#assessment_text").append(data[0].assessment0);
+                                        $("#assessment_text").append("&nbsp;&nbsp;&nbsp;&nbsp;" + data[0].assessment1);
+                                        $("#assessment_text").append("&nbsp;&nbsp;&nbsp;&nbsp;" + data[0].assessment2);
+                                        $("#assessment_text").append("&nbsp;&nbsp;&nbsp;&nbsp;" + data[0].assessment3);
+                                        $("#assessment_text").append("&nbsp;&nbsp;&nbsp;&nbsp;" + data[0].assessment4);
+                                        $("#assessment_text").append("&nbsp;&nbsp;&nbsp;&nbsp;" + data[0].assessment5);
+                                        $("#assessment_text").append("&nbsp;&nbsp;&nbsp;&nbsp;" + data[0].assessment6);
+                                        $("#assessment_text").append("&nbsp;&nbsp;&nbsp;&nbsp;" + data[0].assessment7);
+                                        $("#assessment_text").append("&nbsp;&nbsp;&nbsp;&nbsp;" + data[0].assessment8);
+                                        $("#assessment_text").append("&nbsp;&nbsp;&nbsp;&nbsp;" + data[0].assessment9);
+                                        // 日時・時期
+                                        $("#time_text").empty();
+                                        $("#time_text").append(data[0].time);
+
+                                        // 地域
+                                        $("#area_text").empty();
+                                        $("#area_text").append(data[0].area);
+
+                                        // 対象者
+                                        $("#target_text").empty();
+                                        $("#target_text").append(data[0].target);
+
+                                        // ねらい
+                                        $("#aim_text").empty();
+                                        $("#aim_text").append(data[0].aim);
+
+                                        // 公開の可否
+                                        $("#open_text").empty();
+                                        $("#open_text").append(data[0].open);
+                                },
+                                error: function (XMLHttpRequest, textStatus, errorThrown) { //接続が失敗
+                                        // alert('エラーです！'); //エラーを表示
+                                }
+                        });
+
+                        document.getElementById("get_theme_button").style.display = "none";
+                        document.getElementById("back_button").style.display = "";
+                        document.getElementById("table").style.display = "none";
+                        document.getElementById("detail").style.display = "";
+                }
+
+
         </script>
 </body>
 
