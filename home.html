@@ -74,8 +74,7 @@
         <script>
                 //マスターテーブルからカテゴリーを受信
                 $(document).ready(function () {
-
-                        get_theme("not_all");
+                        get_theme();
                 });</script>
 </head>
 
@@ -159,7 +158,7 @@
 
                 //表示するテーマの数を切り替え
                 function exchange_volume(word) {
-                        console.log(now_mode);
+                       
                         if (word == "all") {//全件表示
                                 if (now_mode.indexOf("all") == -1) {
                                         now_mode = "all_" + now_mode;
@@ -199,6 +198,7 @@
 
                 //テーマを受信、引数  all：全公開可テーマ　not_all：最新５つの公開可テーマ
                 function get_theme() {
+                        console.log(now_mode);
                         document.getElementById("table").style.display = "";
                         document.getElementById("detail").style.display = "none";
 
