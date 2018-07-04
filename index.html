@@ -105,7 +105,7 @@
                 <br>
                 <label for="mail">ログインID（メールアドレス）</label>
                 <br>
-                <input type="text" name="mail" id="mail" required>
+                <input type="text" id="new_mail" required>
                 <br>
                 <br>
                 <label for="passward">パスワード</label>
@@ -125,7 +125,7 @@
                 <br>
                 <label for="mail">ログインID（メールアドレス）</label>
                 <br>
-                <input type="text" name="mail" id="mail" required>
+                <input type="text" id="forget_mail" required>
                 <br>
                 <br>
                 <input type="button" value="パスワードを通知" onclick="forget()">
@@ -164,9 +164,9 @@
 
         //新規登録
         function new_user() {
-            if (document.forms.new_user.mail.value != "" && document.forms.new_user.passward1.value != "" && document.forms.new_user.passward2.value != "") {
+            if (document.forms.new_user.new_mail.value != "" && document.forms.new_user.passward1.value != "" && document.forms.new_user.passward2.value != "") {
                 if (document.forms.new_user.passward1.value == document.forms.new_user.passward2.value) {
-                    mail = document.forms.new_user.mail.value;
+                    mail = document.forms.new_user.new_mail.value;
                     passward = document.forms.new_user.passward1.value;
                     faze = "new";
                     send();
@@ -184,8 +184,8 @@
 
         //パスワード再通知
         function forget() {
-            if (document.forms.forget.mail.value != "") {
-                mail = document.forms.forget.mail.value;
+            if (document.forms.forget.forget_mail.value != "") {
+                mail = document.forms.forget.forget_mail.value;
                 faze = "forget";
                 // send();
                 $("error").empty();
