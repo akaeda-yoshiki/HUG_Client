@@ -101,6 +101,15 @@
         </script>
         <br>
         <br>
+        <form id="file_input">
+                <!-- <input type="file" name="file_1"> -->
+                <!-- <button type="button" onclick="file_upload()">アップロード</button> -->
+
+                <text_and_pop title="施設内の地図など避難所に関する画像を選択してください">画像</text_and_pop>
+                <input type="file" id="image_file" style="position: relative; left:82px;" onchange="image_update()">
+        </form>
+        <input type="button" value="次へ" onclick="file()">
+
         <!-- 入力画面 *************************************************************-->
         <form id="input">
                 *がついている項目は必ず入力してください
@@ -208,8 +217,13 @@
                 </div>
                 <!-- 画像 -->
                 <div class="block1">
+                        <!-- <form id="file_input"> -->
+                        <!-- <input type="file" name="file_1"> -->
+                        <!-- <button type="button" onclick="file_upload()">アップロード</button> -->
+
                         <text_and_pop title="施設内の地図など避難所に関する画像を選択してください">画像</text_and_pop>
                         <input type="file" id="image_file" style="position: relative; left:82px;" onchange="image_update()">
+                        <!-- </form> -->
                         <div id="image_input_draw"></div>
                 </div>
                 <script>
@@ -225,6 +239,14 @@
                                         //読み込んだ画像の表示（入力画面、確認画面）
                                         document.getElementById("image_input_draw").innerHTML = "<br><center><img src='" + dataUrl + "'></center>";
                                         document.getElementById("image_draw").innerHTML = "<br><center><img src='" + dataUrl + "'></center>";
+
+                                        // ファイル名のみ取得して表示します
+                                        var selectFileSample4 = document.getElementById("image_file").value;
+                                        var regex = /\\|\\/;
+                                        var array = selectFileSample4.split(regex);
+
+                                        image_send = array[array.length - 1];
+                                        image_send = image_send.split(".")[1];
                                 }
                         };
                 </script>
@@ -312,7 +334,7 @@
                 </center>
         </form>
         <script>
-                var assessment_send = [], category_send, time_send = "";//登録時に送信する用
+                var assessment_send = [], category_send, time_send = "", image_send = "";//登録時に送信する用
                 //次へボタンが押された時
                 function next() {
                         var required_flag = true;//入力必須事項の確認用
@@ -456,7 +478,7 @@
                 //内容確定ボタンが押された
                 function decide() {
                         var get = document.forms.input;
-
+                        console.log(image_send);
                         $.ajax({ //非同期通信
                                 type: "POST",
                                 url: "http://192.168.0.159/2018grade4/HUG/HUG_Server/theme.php",
@@ -466,6 +488,7 @@
                                         situation: get.situation.value,
                                         time: time_send,
                                         area: get.area.value,
+                                        image: image_send,
                                         target: get.target.value,
                                         aim: get.aim.value,
                                         open: get.open_radio.value,
@@ -507,7 +530,7 @@
                                 }
                         if (f == 1)
                                 $.ajax({ //非同期通信
-                                        type: "POST", 
+                                        type: "POST",
                                         url: "http://192.168.0.159/2018grade4/HUG/HUG_Server/assessment.php",
                                         data: {
                                                 word0: document.getElementById("assessment_input" + 0).value,
@@ -522,7 +545,55 @@
                                                 // alert('エラーです！'); //エラーを表示
                                         }
                                 });
-                                window.location.href = 'home.html';
+
+                        // jQueryでdocument読み込み完了
+                        // jQuery(document).ready(function () {
+                        // ボタンが押されたとき
+                        // jQuery("#upload_btn").click(function () {
+                        jQuery('image_file').upload(
+                                'http://192.168.0.159/2018grade4/HUG/HUG_Server/file_upload.php',    // 送信先
+                                { type: 'photo' },     // 同時にPOSTするデータ
+                                function (result) {
+                                        console.log(result);
+                                },
+                                'text'       // 戻り値の種類
+                        );
+                        // });
+                        // });
+
+                        //         // フォームデータを取得
+                        //         var formdata = new FormData($('#image_file'));
+
+                        //         // POSTでアップロード
+                        //         $.ajax({
+                        //                 url: "http://192.168.0.159/2018grade4/HUG/HUG_Server/file_upload.php",
+                        //                 type: "POST",
+                        //                 data: formdata,
+                        //                 cache: false,
+                        //                 contentType: false,
+                        //                 processData: false,
+                        //                 dataType: "html"
+                        //         })
+                        //                 .done(function (data, textStatus, jqXHR) {
+                        //                         alert(data);
+                        //                 })
+                        //                 .fail(function (jqXHR, textStatus, errorThrown) {
+                        //                         alert("fail");
+                        //                 });
+                        //         // window.location.href = 'home.html';
+                }
+                function file() {
+                        var form = document.getElementById("image_file");
+                        var formdata = new FormData(form);
+                        $.ajax({
+                                type: 'POST',
+                                url: 'http://192.168.0.159/2018grade4/HUG/HUG_Server/file_upload.php',
+                                data: formdata,
+                                processData: false,	// jQueryがデータを処理しないように設定
+                                contentType: false,	// jQueryがcontentTypeを設定しないように設定
+                                success: function (data) { alert("success") },
+                                error: function (data) { alert("error:" + data.statusText); }
+                        });
                 }
         </script>
 
