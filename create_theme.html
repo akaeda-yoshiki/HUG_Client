@@ -487,7 +487,9 @@
                 function decide() {
                         var get1 = document.forms.input1;
                         var get2 = document.forms.input2;
-                        console.log(image_send);
+                        // console.log(image_send);
+
+                        file();
                         $.ajax({ //非同期通信
                                 type: "POST",
                                 url: "http://192.168.0.159/2018grade4/HUG/HUG_Server/theme.php",
@@ -555,7 +557,7 @@
                                         }
                                 });
 
-                        file();
+                        
                         window.location.href = 'home.html';
                 }
                 function file() {
