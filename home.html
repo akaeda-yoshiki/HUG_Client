@@ -193,7 +193,7 @@
                 </div>
                 <div class="block1">
                         画像
-                        <div id="image_draw" style="position: relative;left: 90px;"></div>
+                        <div id="image_text" style="position: relative;left: 90px;"></div>
 
                 </div>
                 <div class="block2">
@@ -326,6 +326,10 @@
                                         // 地域
                                         $("#area_text").empty();
                                         $("#area_text").append(data[0].area);
+
+                                        // 画像
+                                        $("#image_text").empty();
+                                        $("#image_text").append(data[0].image);
 
                                         // 対象者
                                         $("#target_text").empty();

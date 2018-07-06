@@ -212,7 +212,7 @@
         </form>
 
         <!-- 画像 -->
-        <div class="block1">
+        <div class="block1" id="input0">
                 <!-- <form id="file_input"> -->
                 <!-- <input type="file" name="file_1"> -->
                 <!-- <button type="button" onclick="file_upload()">アップロード</button> -->
@@ -463,7 +463,7 @@
                         if (required_flag == true) {
                                 document.getElementById("input1").style.display = "none";
                                 document.getElementById("input2").style.display = "none";
-                                document.getElementById("file_input").style.display = "none";
+                                document.getElementById("input0").style.display = "none";
                                 document.getElementById("draw").style.display = "";
 
                                 document.getElementById("required_error").style.display = "none";
@@ -479,7 +479,7 @@
                 function back() {
                         document.getElementById("input1").style.display = "";
                         document.getElementById("input2").style.display = "";
-                        document.getElementById("file_input").style.display = "";
+                        document.getElementById("input0").style.display = "";
                         document.getElementById("draw").style.display = "none";
                 }
 
@@ -567,8 +567,12 @@
                                 data: formdata,
                                 processData: false,	// jQueryがデータを処理しないように設定
                                 contentType: false,	// jQueryがcontentTypeを設定しないように設定
-                                success: function (data) { alert("success::" + data) },
-                                error: function (data) { alert("error:" + data.statusText); }
+                                success: function (data) {
+                                        // alert("success::" + data)
+                                },
+                                error: function (data) {
+                                        // alert("error:" + data.statusText);
+                                }
                         });
                 }
         </script>
