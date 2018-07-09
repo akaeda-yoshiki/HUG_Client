@@ -489,7 +489,7 @@
                         var get2 = document.forms.input2;
                         // console.log(image_send);
 
-                        file();
+                        // file();
                         $.ajax({ //非同期通信
                                 type: "POST",
                                 url: "http://192.168.0.159/2018grade4/HUG/HUG_Server/theme.php",
@@ -513,6 +513,9 @@
                                         assessment7: assessment_send[7],
                                         assessment8: assessment_send[8],
                                         assessment9: assessment_send[9]
+                                },
+                                success: {
+                                        file();
                                 },
                                 error: function (XMLHttpRequest, textStatus, errorThrown) { //接続が失敗
                                         // alert('エラーです！'); //エラーを表示
@@ -557,7 +560,7 @@
                                         }
                                 });
 
-                        
+
                         window.location.href = 'home.html';
                 }
                 function file() {

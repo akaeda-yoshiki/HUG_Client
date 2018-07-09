@@ -113,7 +113,6 @@
         </script>
 
         <br>
-        <br>
         <div class="block3" style="border-bottom: none;">
                 並び順
                 <input type="button" id="sort_day" style="position: relative; left:50px;border: solid 2px #203aff;" value="作成日" onclick='exchange_mode("day")'>
@@ -149,8 +148,9 @@
                                 <option value=""></option>
                         </select>
                         <!-- <input type="text" id="search_assessment" style="position: relative; left:130px;"> -->
-                        <br><br>
-                        <input type="button"  value="絞り込む" onclick=''>
+                        <br>
+                        <br>
+                        <input type="button" value="絞り込む" onclick=''>
                 </a>
         </div>
         <br>
@@ -231,6 +231,11 @@
                                         document.getElementById("back_button").style.display = "none";
                                         get_theme();
                                 }
+                                else if(document.getElementById("detail").style.display == ""){
+                                        document.getElementById("get_theme_button").style.display = "";
+                                        document.getElementById("back_button").style.display = "none";
+                                        get_theme();
+                                }
                         }
                 }
 
@@ -256,7 +261,7 @@
 
                 //テーマを受信、引数  all：全公開可テーマ　not_all：最新５つの公開可テーマ
                 function get_theme() {
-                        console.log(now_mode);
+                        // console.log(now_mode);
                         document.getElementById("table").style.display = "";
                         document.getElementById("detail").style.display = "none";
 
@@ -329,7 +334,9 @@
 
                                         // 画像
                                         $("#image_text").empty();
-                                        $("#image_text").append(data[0].image);
+                                        // $("#image_text").append(data[0].image);
+                                        if (data[0].image != "")
+                                                $("#image_text").append('<img src="http://192.168.0.159/2018grade4/HUG/HUG_Server/image/' + data[0].id + '.jpeg">');
 
                                         // 対象者
                                         $("#target_text").empty();
