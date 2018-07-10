@@ -49,14 +49,6 @@
                         position: relative;
                         left: 30px;
                 }
-
-                .draw_right {
-                        text-align: right;
-                }
-
-                right {
-                        text-align: right;
-                }
         </style>
         <script>
 
@@ -85,9 +77,17 @@
                                 dataType: "json",
                         }).done(function (data, dataType) {
                                 //評価項目のチェックリストに追加
+                                var cnt = 0;
                                 for (var i = 0; i < data.length; i++) {
+                                        cnt += 2 + data[i].word.length;
+                                        if (cnt >= 30) {
+                                                $("#assessment_checkbox").append('<br>');
+                                                cnt = 2 + data[i].word.length;
+                                        }
+
                                         $("#assessment_checkbox").append('<input type="checkbox" name="assessment" value="' + data[i].word + '">' + data[i].word + "&nbsp;&nbsp;");
                                 }
+                                console.log(cnt);
                         }).fail(function (XMLHttpRequest, textStatus, errorThrown) {
                                 // alert('Error : ' + errorThrown);
                         });
@@ -101,9 +101,6 @@
         </script>
         <br>
         <br>
-
-        <!-- <input type="button" value="次へ" onclick="file()"> -->
-
         <!-- 入力画面 *************************************************************-->
         <form id="input1">
                 *がついている項目は必ず入力してください
@@ -213,24 +210,18 @@
 
         <!-- 画像 -->
         <div class="block1" id="input0">
-                <!-- <form id="file_input"> -->
-                <!-- <input type="file" name="file_1"> -->
-                <!-- <button type="button" onclick="file_upload()">アップロード</button> -->
                 <text_and_pop title="施設内の地図など避難所に関する画像を選択してください">画像</text_and_pop>
 
                 <form id="file_input" action="http://192.168.0.159/2018grade4/HUG/HUG_Server/file_upload.php" method="post" enctype="multipart/form-data">
                         <!-- <br> -->
-                        <input type="file" name="pic" id="image_file" style="position: relative; left:128px;top:-30px;" onchange="image_update()">
+                        <input type="file" name="pic" id="image_file" style="position: relative; left:128px;top:-20px;" onchange="image_update()">
                         <!-- <br> -->
                 </form>
-                <!-- <input type="file" id="image_file" style="position: relative; left:82px;" onchange="image_update()"> -->
-                <!-- </form> -->
                 <div id="image_input_draw"></div>
         </div>
         <script>
                 // 画像が選択されたら表示
                 function image_update() {
-                        // var file = document.forms.input.file.image_file.files;
                         var file = document.getElementById("image_file").files;
                         var reader = new FileReader();
                         reader.readAsDataURL(file[0]); //dataURL形式でファイルを読み込む
@@ -487,9 +478,6 @@
                 function decide() {
                         var get1 = document.forms.input1;
                         var get2 = document.forms.input2;
-                        // console.log(image_send);
-
-                        // file();
                         $.ajax({ //非同期通信
                                 type: "POST",
                                 url: "http://192.168.0.159/2018grade4/HUG/HUG_Server/theme.php",
@@ -514,7 +502,7 @@
                                         assessment8: assessment_send[8],
                                         assessment9: assessment_send[9]
                                 },
-                                success: {
+                                success: function (data) {
                                         file();
                                 },
                                 error: function (XMLHttpRequest, textStatus, errorThrown) { //接続が失敗
