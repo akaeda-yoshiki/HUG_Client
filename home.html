@@ -119,39 +119,41 @@
                 <input type="button" id="sort_play" style="position: relative; left:80px;" value="プレイ回数" onclick='exchange_mode("play")'>
         </div>
         <div class="block3">
-                絞り込み
-                <!-- <br> -->
-                <a style="position: relative; left:30px;">
-                        タイトル
-                        <input type="text" id="search_title" style="position: relative; left:128px;">
-                </a>
-                <br>
+                <form id="search">
+                        絞り込み
+                        <!-- <br> -->
+                        <a style="position: relative; left:30px;">
+                                タイトル
+                                <input type="text" id="search_title" style="position: relative; left:128px;">
+                        </a>
+                        <br>
 
-                <a style="position: relative; left:115px;">
-                        カテゴリー
-                        <select id="search_category" style="width: 172px;position: relative; left:110px;">
-                                <option value=""></option>
-                        </select>
-                        <!-- <input type="text" id="search_category" style="position: relative; left:110px;"> -->
-                        <br> キーワード（状況）
-                        <input type="text" id="search_situation" style="position: relative; left:30px;">
-                        <br> 日時・時期
-                        <input type="text" id="search_time" style="position: relative; left:110px;">
-                        <br> 地域
-                        <input type="text" id="search_area" style="position: relative; left:170px;">
-                        <br> 対象者
-                        <input type="text" id="search_target" style="position: relative; left:150px;">
-                        <br> キーワード（ねらい）
-                        <input type="text" id="search_aim" style="position: relative; left:10px;">
-                        <br> 評価項目
-                        <select id="search_assessment" style="width: 172px;position: relative; left:130px;">
-                                <option value=""></option>
-                        </select>
-                        <!-- <input type="text" id="search_assessment" style="position: relative; left:130px;"> -->
-                        <br>
-                        <br>
-                        <input type="button" value="絞り込む" onclick=''>
-                </a>
+                        <a style="position: relative; left:115px;">
+                                カテゴリー
+                                <select id="search_category" style="width: 172px;position: relative; left:110px;">
+                                        <option value=""></option>
+                                </select>
+                                <!-- <input type="text" id="search_category" style="position: relative; left:110px;"> -->
+                                <br> 状況
+                                <input type="text" id="search_situation" style="position: relative; left:170px;">
+                                <br> 日時・時期
+                                <input type="text" id="search_time" style="position: relative; left:110px;">
+                                <br> 地域
+                                <input type="text" id="search_area" style="position: relative; left:170px;">
+                                <br> 対象者
+                                <input type="text" id="search_target" style="position: relative; left:150px;">
+                                <br> ねらい
+                                <input type="text" id="search_aim" style="position: relative; left:150px;">
+                                <br> 評価項目
+                                <select id="search_assessment" style="width: 172px;position: relative; left:130px;">
+                                        <option value=""></option>
+                                </select>
+                                <!-- <input type="text" id="search_assessment" style="position: relative; left:130px;"> -->
+                                <br>
+                                <br>
+                                <input type="button" value="絞り込む" onclick='get_theme()'>
+                        </a>
+                </form>
         </div>
         <br>
         <input type="button" id="get_theme_button" style="position: relative; left:7%;" value="テーマ一覧" onclick='exchange_volume("all")'>
@@ -231,7 +233,7 @@
                                         document.getElementById("back_button").style.display = "none";
                                         get_theme();
                                 }
-                                else if(document.getElementById("detail").style.display == ""){
+                                else if (document.getElementById("detail").style.display == "") {
                                         document.getElementById("get_theme_button").style.display = "";
                                         document.getElementById("back_button").style.display = "none";
                                         get_theme();
@@ -268,11 +270,23 @@
                         var $content = $('#mytable');
                         $content.empty();
                         $content.append("<tr><th>タイトル</th><th>作成日</th><th>カテゴリー</th><th>プレイ回数</th></tr>");
+                        
+                        
+                        var get = document.forms.search;
+                        // console.log(search.search_title);
                         $.ajax({ //非同期通信
                                 type: "POST",
                                 url: "http://192.168.0.159/2018grade4/HUG/HUG_Server/theme.php",
                                 data: {
-                                        mode: now_mode
+                                        mode: now_mode,
+                                        title:search.search_title.value,
+                                        category:search_category.value,
+                                        situation:search_situation.value,
+                                        time:search_time.value,
+                                        area:search_area.value,
+                                        target:search_target.value,
+                                        aim:search_aim.value,
+                                        assessment:search_assessment.value
                                 },
                                 success: function (data) {
 
@@ -335,7 +349,7 @@
                                         // 画像
                                         $("#image_text").empty();
                                         // $("#image_text").append(data[0].image);
-                                        if (data[0].image != "")
+                                        if (data[0].image != "" && data[0].image != null)
                                                 $("#image_text").append('<img src="http://192.168.0.159/2018grade4/HUG/HUG_Server/image/' + data[0].id + '.jpeg">');
 
                                         // 対象者
