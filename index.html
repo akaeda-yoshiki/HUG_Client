@@ -66,6 +66,9 @@
             color: red;
         }
     </style>
+    <script>
+        window.sessionStorage.clear();// 全てのセッションの削除
+    </script>
 </head>
 
 <body>
@@ -239,11 +242,21 @@
                     faze: faze
                 },
                 success: function (recieve) { //接続が成功
-                    // alert(recieve);
+
+
+                    //    alert(recieve);
                     switch (faze) {
                         case 'login':
-                            if (recieve != 'null')
+                            if (recieve != 'null') {
                                 window.location.href = "home.html";
+                                recieve = recieve.substr(10);
+                                recieve = recieve.substr(0, recieve.length - 3);
+                                window.sessionStorage.setItem(["mail"], mail);
+                                if (recieve == "ul")
+                                    window.sessionStorage.setItem(["name"], "名無し");
+                                else
+                                    window.sessionStorage.setItem(["name"], recieve);
+                            }
                             else {
                                 $("error").empty();
                                 $("error").append("IDとパスワードが一致しません");
@@ -254,7 +267,11 @@
                                 $("error").empty();
                                 $("error").append("そのIDすでに登録されています");
                             }
-                            else window.location.href = "home.html";
+                            else {
+                                window.sessionStorage.setItem(["mail"], mail);
+                                window.sessionStorage.setItem(["name"], "名無し");
+                                window.location.href = "home.html";
+                            }
                             break;
 
                         case 'forget':

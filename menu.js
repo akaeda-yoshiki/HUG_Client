@@ -4,6 +4,7 @@ var fail_name = Array("home.html", "create_theme.html", "play.html", "reflection
 function write_header(faze) {
         var html = "";
         html += '<br>';
+        html += window.sessionStorage.getItem(["name"]) + 'さんとしてログインしています<br>';
         //     html += '<system_name>';
         //     html += '入退室管理システム';
         //     html += '</system_name><br>';
@@ -69,7 +70,12 @@ function write_header(faze) {
                         html += '<a href=' + fail_name[5] + ' class="menu_btn"style="left:10%;">' + word[5] + '</a>';
                         break;
         }
-
+        html += "<br>";
         document.write(html);//htmlに書き込み
 
+}
+
+//ログアウト時の処理
+function logout() {
+        window.sessionStorage.clear();// 全てのセッションの削除
 }

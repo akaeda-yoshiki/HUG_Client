@@ -6,6 +6,8 @@
         <title>ホーム</title>
         <link rel="stylesheet" type="text/css" href="header.css">
         <script type="text/javascript" src="menu.js"> </script>
+        <script src="https://code.jquery.com/jquery-1.9.0.min.js"></script>
+
 </head>
 
 <body>
@@ -17,24 +19,51 @@
         <br>
         <form id="input">
                 ユーザー名
-                <input type="text" id="name" style="position: relative; left:30px;" class="" required>
+                <input type="text" id="name" style="position: relative; left:30px;" class="" value="">
+                <script>
+                        document.forms.input.name.value = window.sessionStorage.getItem(["name"]);
+                </script>
                 <br>
                 <br> パスワード &nbsp;&nbsp;&nbsp;&nbsp;現在のパスワード
-                <input type="text" id="name" style="position: relative; left:80px;" class="" required>
+                <input type="text" id="now_password" style="position: relative; left:80px;" class="">
                 <a style="position: relative; left:108px;">
                         <br>新しいパスワード
-                        <input type="text" id="name" class="" style="position: relative; left:80px;" required>
+                        <input type="text" id="new_password1" class="" style="position: relative; left:80px;">
                         <br>新しいパスワード（確認用）
-                        <input type="text" id="name" class="" required>
+                        <input type="text" id="new_password2" class="">
                 </a>
                 <br>
                 <br>
                 <div style="text-align: center">
-                        <input type="button" id="sort_day" style="position: relative; left:50px;" value="変更" onclick=''>
+                        <input type="button" id="sort_day" style="position: relative; left:50px;" value="変更" onclick='profile_updata()'>
                 </div>
 
         </form>
         <br>
+        <script>
+
+                //ユーザーの情報を更新
+                function profile_updata() {
+                        var get = document.forms.input;
+                        // alert(get.name.value + "::" + new_password1.value);
+                        $.ajax({ //非同期通信
+                                type: "POST",
+                                url: "http://192.168.0.159/2018grade4/HUG/HUG_Server/profile_updata.php",
+                                data: {
+                                        mail: window.sessionStorage.getItem(["mail"]),
+                                        name: get.name.value,
+                                        pass: get.new_password1.value
+                                },
+                                success:function(data){
+                                        window.location.href = "profile.html";
+                                },
+                                error: function (XMLHttpRequest, textStatus, errorThrown) { //接続が失敗
+                                        // alert('エラーです！'); //エラーを表示
+                                }
+                        });
+
+                }
+        </script>
 </body>
 
 </html>
