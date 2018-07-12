@@ -21,7 +21,8 @@
                 ユーザー名
                 <input type="text" id="name" style="position: relative; left:30px;" class="" value="">
                 <script>
-                        document.forms.input.name.value = window.sessionStorage.getItem(["name"]);
+                        if ( window.sessionStorage.getItem(["name"]) != "名無し")
+                                document.forms.input.name.value = window.sessionStorage.getItem(["name"]);
                 </script>
                 <br>
                 <br> パスワード &nbsp;&nbsp;&nbsp;&nbsp;現在のパスワード
