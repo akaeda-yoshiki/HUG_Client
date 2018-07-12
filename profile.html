@@ -37,7 +37,7 @@
                 <div style="text-align: center">
                         <input type="button" id="sort_day" style="position: relative; left:50px;" value="変更" onclick='profile_updata()'>
                 </div>
-
+                <error style="color: red;"></error>
         </form>
         <br>
         <script>
@@ -45,22 +45,39 @@
                 //ユーザーの情報を更新
                 function profile_updata() {
                         var get = document.forms.input;
+                        var flag = 0;
                         // alert(get.name.value + "::" + new_password1.value);
-                        $.ajax({ //非同期通信
-                                type: "POST",
-                                url: "http://192.168.0.159/2018grade4/HUG/HUG_Server/profile_updata.php",
-                                data: {
-                                        mail: window.sessionStorage.getItem(["mail"]),
-                                        name: get.name.value,
-                                        pass: get.new_password1.value
-                                },
-                                success:function(data){
-                                        window.location.href = "profile.html";
-                                },
-                                error: function (XMLHttpRequest, textStatus, errorThrown) { //接続が失敗
-                                        // alert('エラーです！'); //エラーを表示
-                                }
-                        });
+                        if (get.now_password.value == "" && get.new_password1.value == "" && get.new_password2.value == "" && get.name.value == "") {
+                                $("error").empty();
+                                $("error").append("入力情報が不足しています");
+                        } else if (get.now_password.value == "" && get.new_password1.value == "" && get.new_password2.value == "" && get.name.value != "") {
+                                $("error").empty();
+                                flag = 1;
+                        } else if ((get.now_password.value == "" || get.new_password1.value == "" || get.new_password2.value == "") && get.name.value != "") {
+                                $("error").empty();
+                                $("error").append("入力情報が不足しています");
+                        } else if (get.new_password1.value != get.new_password2.value) {
+                                $("error").empty();
+                                $("error").append("新しいパスワードが一致しません");
+                        }
+                        if (flag == 1)
+                                $.ajax({ //非同期通信
+                                        type: "POST",
+                                        url: "http://192.168.0.159/2018grade4/HUG/HUG_Server/profile_updata.php",
+                                        data: {
+                                                mail: window.sessionStorage.getItem(["mail"]),
+                                                name: get.name.value,
+                                                now_pass: get.now_password.value,
+                                                new_pass: get.new_password1.value
+                                        },
+                                        success: function (data) {
+                                                // alert(data);
+                                                window.location.href = "profile.html";
+                                        },
+                                        error: function (XMLHttpRequest, textStatus, errorThrown) { //接続が失敗
+                                                // alert('エラーです！'); //エラーを表示
+                                        }
+                                });
 
                 }
         </script>
