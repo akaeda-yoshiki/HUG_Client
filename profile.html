@@ -351,7 +351,6 @@
                         $content.empty();
                         $content.append("<tr><th>タイトル</th><th>作成日</th><th>カテゴリー</th><th>プレイ回数</th></tr>");
 
-
                         var get = document.forms.search;
                         // console.log(search.search_title);
                         $.ajax({ //非同期通信
@@ -366,10 +365,11 @@
                                         area: search_area.value,
                                         target: search_target.value,
                                         aim: search_aim.value,
-                                        assessment: search_assessment.value
+                                        assessment: search_assessment.value,
+                                        mail: window.sessionStorage.getItem(["mail"])
                                 },
                                 success: function (data) {
-
+                                        // alert(data);
                                         for (var i = 0; i < data.length; i++) {
                                                 var add = "";
                                                 add += "<tr><td><a href='#!' onclick='theme_detail(" + data[i].id + ")' class='square_btn'>" + data[i].title + "</a>";
