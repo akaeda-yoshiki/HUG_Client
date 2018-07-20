@@ -217,6 +217,9 @@
                         <draw_area id="open_text" style="position: relative;left: 50px;"></draw_area>
                 </div>
                 <br>
+                <input type="button" id="play_button1" style="position: relative; left:7%;" value="内容を公開してプレイ" onclick='play("ok")'>
+                <input type="button" id="play_button2" style="position: relative; left:7%;" value="内容を非公開でプレイ" onclick='play("no")'>
+        
         </form>
         <br>
         <script>
@@ -435,6 +438,11 @@
                         document.getElementById("back_button").style.display = "";
                         document.getElementById("table").style.display = "none";
                         document.getElementById("detail").style.display = "";
+                }
+
+                //プレイ
+                function play(open_f){
+
                 }
 
         </script>
