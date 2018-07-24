@@ -219,11 +219,11 @@
                 <br>
                 <input type="button" id="play_button1" style="position: relative; left:7%;" value="内容を公開してプレイ" onclick='play("ok")'>
                 <input type="button" id="play_button2" style="position: relative; left:7%;" value="内容を非公開でプレイ" onclick='play("no")'>
-        
+
         </form>
         <br>
         <script>
-                var now_mode = "day";
+                var now_mode = "day", now_theme_id = null;
 
                 //表示するテーマの数を切り替え
                 function exchange_volume(word, h) {
@@ -235,13 +235,13 @@
                                                 document.getElementById("back_button").style.display = "";
                                         }
                                         else {
-                                                document.getElementById("mytable").style.display = "none";document.getElementById("back_button1").style.display = "";
+                                                document.getElementById("mytable").style.display = "none"; document.getElementById("back_button1").style.display = "";
                                         }
                                         now_mode = "all_" + now_mode;
                                         document.getElementById("get_theme_button").style.display = "none";
                                         document.getElementById("get_theme_button1").style.display = "none";
-                                        
-                                        
+
+
 
 
                                         get_theme();
@@ -373,6 +373,7 @@
                 //テーマの詳細を表示
                 function theme_detail(id) {
 
+                        now_theme_id = id;
                         $.ajax({ //非同期通信
                                 type: "POST",
                                 url: "http://192.168.0.159/2018grade4/HUG/HUG_Server/theme.php",
@@ -438,11 +439,34 @@
                         document.getElementById("back_button").style.display = "";
                         document.getElementById("table").style.display = "none";
                         document.getElementById("detail").style.display = "";
+                        document.getElementById("get_theme_button").style.display = "none";
+                        document.getElementById("get_theme_button1").style.display = "none";
+                        // document.getElementById("back_button").style.display = "none";
+                        document.getElementById("back_button1").style.display = "none";
+                        document.getElementById("table1").style.display = "none";
+                        document.getElementById("mytable").style.display = "none";
                 }
 
                 //プレイ
-                function play(open_f){
+                function play(open_f) {
 
+
+                        $.ajax({ //非同期通信
+                                type: "POST",
+                                url: "http://192.168.0.159/2018grade4/HUG/HUG_Server/eventcode.php",
+                                data: {
+                                        mail: window.sessionStorage.getItem(["mail"]),
+                                        theme_id: now_theme_id,
+                                        open: open_f
+                                },
+                                success: function (data) {
+                                },
+                                error: function (XMLHttpRequest, textStatus, errorThrown) { //接続が失敗
+                                        // alert('エラーです！'); //エラーを表示
+                                }
+                        });
+
+                        //***************************************イベントコード表示
                 }
 
         </script>
