@@ -73,7 +73,9 @@
         </style>
         <script>
                 $(document).ready(function () {
-                        get_theme();
+                        // get_theme();
+                        // document.getElementById("table").style.display = "none";
+
 
                         //マスターテーブルからカテゴリーを受信
                         $.ajax({
@@ -112,13 +114,32 @@
                 write_header(2);
         </script>
         <br>
-        <div class="block3" style="border-bottom: none;">
-                並び順
-                <input type="button" id="sort_day" style="position: relative; left:50px;border: solid 2px #203aff;" value="作成日" onclick='exchange_mode("day")'>
-                <input type="button" id="sort_play" style="position: relative; left:80px;" value="プレイ回数" onclick='exchange_mode("play")'>
-        </div>
-        <div class="block3">
-                <form id="search">
+        <br>
+        <input type="button" id="eventcode_input" style="position: relative; left:25%;" value="イベントコードを入力" onclick='eventcode("input")'>
+        <input type="button" id="eventcode_create" style="position: relative; left:40%;" value="イベントコードを生成" onclick='eventcode("create")'>
+        <br>
+        <br>
+        <form id="eventcode" style="display: none;">
+                <div class="block3">
+                        イベントコード
+                        <input type="text" id="eventcode_text">
+                        <input type="checkbox" name="role" value="PM">PM
+                        <input type="checkbox" name="role" value="PS">PS
+                        <input type="checkbox" name="role" value="J">J
+                        <br><br>
+                        <input type="button" id="eventcode_input" style="position: relative; left:40%;" value="決定" onclick='eventcode("decide")'>
+
+                </div>
+        </form>
+        <form id="search" style="display: none;">
+                <div class="block3" style="border-bottom: none;">
+                        並び順
+                        <input type="button" id="sort_day" style="position: relative; left:50px;border: solid 2px #203aff;" value="作成日" onclick='exchange_mode("day")'>
+                        <input type="button" id="sort_play" style="position: relative; left:80px;" value="プレイ回数" onclick='exchange_mode("play")'>
+                </div>
+
+
+                <div class="block3">
                         絞り込み
                         <!-- <br> -->
                         <a style="position: relative; left:30px;">
@@ -152,23 +173,24 @@
                                 <br>
                                 <input type="button" value="絞り込む" onclick='get_theme()'>
                         </a>
-                </form>
-        </div>
+                </div>
+        </form>
+
         <br>
-        <input type="button" id="get_theme_button" style="position: relative; left:7%;" value="全てのテーマ" onclick='exchange_volume("all", 0)'>
+        <input type="button" id="get_theme_button" style="position: relative; left:7%;display: none;" value="全てのテーマ" onclick='exchange_volume("all", 0)'>
         <input type="button" id="back_button" style="position: relative; left:7%;display: none;" value="戻る" onclick='exchange_volume("not_all")'>
 
 
         <a id="table">
                 <br>
-                <table id='mytable'>
+                <table id='mytable' style="display: none;">
                 </table>
                 <br>
         </a>
-        <input type="button" id="get_theme_button1" style="position: relative; left:7%;" value="全てのテーマ" onclick='exchange_volume("all", 1)'>
+        <input type="button" id="get_theme_button1" style="position: relative; left:7%;display: none;" value="全てのテーマ" onclick='exchange_volume("all", 1)'>
         <input type="button" id="back_button1" style="position: relative; left:7%;display: none;" value="戻る" onclick='exchange_volume("not_all")'>
         <a id="table">
-                <table id='table1'>
+                <table id='table1' style="display: none;">
                 </table>
         </a>
 
@@ -469,6 +491,48 @@
                         //***************************************イベントコード表示
                 }
 
+                //
+                function eventcode(text) {
+                        document.getElementById("eventcode_input").style.border = "";
+                        document.getElementById("eventcode_create").style.border = "";
+
+                        //選択中のボタンの縁を変更
+                        document.getElementById("eventcode_" + text).style.border = "solid 2px";
+                        document.getElementById("eventcode_" + text).style.borderColor = "#203aff";
+                        if (text == "input") {
+                                //ボタンや表の表示・非表示の切り替え
+                                document.getElementById("get_theme_button").style.display = "none";
+                                document.getElementById("back_button").style.display = "none";
+                                document.getElementById("table").style.display = "none";
+                                document.getElementById("detail").style.display = "none";
+                                document.getElementById("get_theme_button").style.display = "none";
+                                document.getElementById("get_theme_button1").style.display = "none";
+                                document.getElementById("back_button1").style.display = "none";
+                                document.getElementById("table1").style.display = "none";
+                                document.getElementById("mytable").style.display = "none";
+                                document.getElementById("search").style.display = "none";
+                                document.getElementById("eventcode").style.display = "";
+
+                        }
+                        else if (text == "create") {
+                                get_theme();
+                                //ボタンや表の表示・非表示の切り替え
+                                document.getElementById("get_theme_button").style.display = "";
+                                document.getElementById("back_button").style.display = "none";
+                                document.getElementById("table").style.display = "";
+                                document.getElementById("detail").style.display = "none";
+                                document.getElementById("get_theme_button").style.display = "";
+                                document.getElementById("get_theme_button1").style.display = "";
+                                document.getElementById("back_button1").style.display = "none";
+                                document.getElementById("table1").style.display = "";
+                                document.getElementById("mytable").style.display = "";
+                                document.getElementById("search").style.display = "";
+                                document.getElementById("eventcode").style.display = "none";
+                        }
+                        else if(text == "decide"){
+                                
+                        }
+                }
         </script>
 </body>
 
