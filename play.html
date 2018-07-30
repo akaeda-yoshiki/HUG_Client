@@ -123,13 +123,18 @@
                 <div class="block3">
                         イベントコード
                         <input type="text" id="eventcode_text">
-                        <input type="checkbox" name="role" value="PM">PM
-                        <input type="checkbox" name="role" value="PS">PS
-                        <input type="checkbox" name="role" value="J">J
-                        <br><br>
-                        <input type="button" id="eventcode_input" style="position: relative; left:40%;" value="決定" onclick='eventcode("decide")'>
+                        <input type="radio" name="role" value="PM">PM
+                        <input type="radio" name="role" value="PS">PS
+                        <input type="radio" name="role" value="J">J
+                        <br>
+                        <br>
+                        <input type="button" id="eventcode_decide" style="position: relative; left:40%;" value="決定" onclick='eventcode("decide")'>
 
                 </div>
+                <br>
+                <center>
+                        <errer_text_eventcode style="color: red;"></errer_text_eventcode>
+                </center>
         </form>
         <form id="search" style="display: none;">
                 <div class="block3" style="border-bottom: none;">
@@ -244,6 +249,11 @@
 
         </form>
         <br>
+
+        <wait id="wait" style="font-size: 30px;display: none;">
+                イベントコード：
+                <wait_eventcode></wait_eventcode>
+        </wait>
         <script>
                 var now_mode = "day", now_theme_id = null;
 
@@ -467,6 +477,7 @@
                         document.getElementById("back_button1").style.display = "none";
                         document.getElementById("table1").style.display = "none";
                         document.getElementById("mytable").style.display = "none";
+                        document.getElementById("wait").style.display = "none";
                 }
 
                 //プレイ
@@ -487,6 +498,7 @@
                                         // alert('エラーです！'); //エラーを表示
                                 }
                         });
+                        eventcode("create");
 
                         //***************************************イベントコード表示
                 }
@@ -495,6 +507,7 @@
                 function eventcode(text) {
                         document.getElementById("eventcode_input").style.border = "";
                         document.getElementById("eventcode_create").style.border = "";
+                        document.getElementById("eventcode_decide").style.border = "";
 
                         //選択中のボタンの縁を変更
                         document.getElementById("eventcode_" + text).style.border = "solid 2px";
@@ -512,7 +525,7 @@
                                 document.getElementById("mytable").style.display = "none";
                                 document.getElementById("search").style.display = "none";
                                 document.getElementById("eventcode").style.display = "";
-
+                                document.getElementById("wait").style.display = "none";
                         }
                         else if (text == "create") {
                                 get_theme();
@@ -528,11 +541,56 @@
                                 document.getElementById("mytable").style.display = "";
                                 document.getElementById("search").style.display = "";
                                 document.getElementById("eventcode").style.display = "none";
+                                document.getElementById("wait").style.display = "none";
                         }
-                        else if(text == "decide"){
-                                
+                        else if (text == "decide") {
+                                // alert(document.getElementById("eventcode").role.value);
+                                var get = document.forms.eventcode;
+                                if (get.eventcode_text.value == "" || document.getElementById("eventcode").role.value == "") {
+                                        $("errer_text_eventcode").empty();
+                                        $("errer_text_eventcode").append("入力情報が不足しています");
+                                } else {
+                                        $.ajax({ //非同期通信
+                                                type: "POST",
+                                                url: "http://192.168.0.159/2018grade4/HUG/HUG_Server/eventcode.php",
+                                                data: {
+                                                        mail: window.sessionStorage.getItem(["mail"]),
+                                                        role: document.getElementById("eventcode").role.value,
+                                                        code: get.eventcode_text.value
+                                                },
+                                                success: function (data) {
+                                                        alert(data);
+                                                        if (data == "ok") {
+                                                                document.getElementById("get_theme_button").style.display = "none";
+                                                                document.getElementById("back_button").style.display = "none";
+                                                                document.getElementById("table").style.display = "none";
+                                                                document.getElementById("detail").style.display = "none";
+                                                                document.getElementById("get_theme_button").style.display = "none";
+                                                                document.getElementById("get_theme_button1").style.display = "none";
+                                                                document.getElementById("back_button1").style.display = "none";
+                                                                document.getElementById("table1").style.display = "none";
+                                                                document.getElementById("mytable").style.display = "none";
+                                                                document.getElementById("search").style.display = "none";
+                                                                document.getElementById("eventcode").style.display = "none";
+                                                                document.getElementById("wait").style.display = "";
+                                                        }
+                                                        else {
+                                                                $("errer_text_eventcode").empty();
+                                                                $("errer_text_eventcode").append("入力情報が不足しています");
+                                                        }
+
+                                                },
+                                                error: function (XMLHttpRequest, textStatus, errorThrown) { //接続が失敗
+                                                        alert('エラーです！'); //エラーを表示
+                                                }
+                                        });
+                                }
+
+
                         }
                 }
+
+
         </script>
 </body>
 
