@@ -561,18 +561,19 @@
                                                 success: function (data) {
                                                         alert(data);
                                                         if (data == "ok") {
-                                                                document.getElementById("get_theme_button").style.display = "none";
-                                                                document.getElementById("back_button").style.display = "none";
-                                                                document.getElementById("table").style.display = "none";
-                                                                document.getElementById("detail").style.display = "none";
-                                                                document.getElementById("get_theme_button").style.display = "none";
-                                                                document.getElementById("get_theme_button1").style.display = "none";
-                                                                document.getElementById("back_button1").style.display = "none";
-                                                                document.getElementById("table1").style.display = "none";
-                                                                document.getElementById("mytable").style.display = "none";
-                                                                document.getElementById("search").style.display = "none";
-                                                                document.getElementById("eventcode").style.display = "none";
-                                                                document.getElementById("wait").style.display = "";
+                                                                window.location.href = "wait.html";
+                                                                // document.getElementById("get_theme_button").style.display = "none";
+                                                                // document.getElementById("back_button").style.display = "none";
+                                                                // document.getElementById("table").style.display = "none";
+                                                                // document.getElementById("detail").style.display = "none";
+                                                                // document.getElementById("get_theme_button").style.display = "none";
+                                                                // document.getElementById("get_theme_button1").style.display = "none";
+                                                                // document.getElementById("back_button1").style.display = "none";
+                                                                // document.getElementById("table1").style.display = "none";
+                                                                // document.getElementById("mytable").style.display = "none";
+                                                                // document.getElementById("search").style.display = "none";
+                                                                // document.getElementById("eventcode").style.display = "none";
+                                                                // document.getElementById("wait").style.display = "";
                                                         }
                                                         else {
                                                                 $("errer_text_eventcode").empty();

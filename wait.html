@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+        <meta charset="UTF-8" />
+        <title>ログイン</title>
+        <script src="https://code.jquery.com/jquery-1.9.0.min.js"></script>
+        <style>
+                .block1 {
+                        background: rgb(209, 231, 255);
+                        width: 60%;
+                        font-size: 20px;
+                        padding: 0.5em 0.5em;
+                        /* position: relative; */
+                        /* left: 7%; */
+                }
+        </style>
+        <script>
+        </script>
+</head>
+
+<body style="font-size: 30px;position: relative;left:10%;">
+        <img src="title.png" width="400">
+        <br>
+        <br> 他のユーザーを待っています . . .
+        <br>
+        <input type="button" id="theme_draw_button" value="テーマの詳細の表示" onclick=''>
+        <input type="button" id="back_button" style="position: relative; left:10%;" value="退出" onclick=''>
+        <br>
+        <div class="block1">
+                メンバー
+                <br>
+
+        </div>
+
+
+        <script>
+                var mail, passward, faze;
+                //サーバーにIDとパスワードを送信
+                function login() {
+                        if (document.forms.login.mail.value != "" && document.forms.login.passward.value != "") {
+                                mail = document.forms.login.mail.value;
+                                passward = document.forms.login.passward.value;
+                                faze = "login";
+                                send();
+                        }
+                        else {
+                                $("error").empty();
+                                $("error").append("入力情報が不足しています");
+                        }
+
+                }
+
+                //新規登録
+                function new_user() {
+                        if (document.forms.new_user.new_mail.value != "" && document.forms.new_user.passward1.value != "" && document.forms.new_user.passward2.value != "") {
+                                if (document.forms.new_user.passward1.value == document.forms.new_user.passward2.value) {
+                                        mail = document.forms.new_user.new_mail.value;
+                                        passward = document.forms.new_user.passward1.value;
+                                        faze = "new";
+                                        send();
+                                }
+                                else {
+                                        $("error").empty();
+                                        $("error").append("パスワードが一致しません");
+                                }
+                        }
+                        else {
+                                $("error").empty();
+                                $("error").append("入力情報が不足しています");
+                        }
+                }
+
+                //パスワード再通知
+                function forget() {
+                        if (document.forms.forget.forget_mail.value != "") {
+                                mail = document.forms.forget.forget_mail.value;
+                                faze = "forget";
+                                // send();
+                                $("error").empty();
+                                $("error").append("パスワードを通知しました");
+                        }
+                        else {
+                                $("error").empty();
+                                $("error").append("入力情報が不足しています");
+                        }
+                }
+
+                //ログイン画面へ切り替え
+                function to_login() {
+                        document.getElementById("login").style.display = "";
+                        document.getElementById("new_user").style.display = "none";
+                        document.getElementById("forget").style.display = "none";
+                        document.getElementById("pass_forget").style.display = "";
+                        document.getElementById("user_button").className = "tag_b";
+                        document.getElementById("login_button").className = "tag_r";
+                        $("error").empty();
+                }
+
+                //新規登録画面へ切り替え
+                function to_new_user() {
+                        document.getElementById("login").style.display = "none";
+                        document.getElementById("new_user").style.display = "";
+                        document.getElementById("forget").style.display = "none";
+                        document.getElementById("pass_forget").style.display = "none";
+                        document.getElementById("user_button").className = "tag_r";
+                        document.getElementById("login_button").className = "tag_b";
+                        $("error").empty();
+                }
+
+                //パスワード通知画面へ切り替え
+                function to_forget() {
+                        document.getElementById("login").style.display = "none";
+                        document.getElementById("new_user").style.display = "none";
+                        document.getElementById("forget").style.display = "";
+                        document.getElementById("pass_forget").style.display = "none";
+                        document.getElementById("user_button").className = "tag_b";
+                        document.getElementById("login_button").className = "tag_b";
+                        $("error").empty();
+                }
+                function send() {
+                        $.ajax({ //ajaxによる非同期通信発生
+                                type: "POST", //POST送信でデータを受け渡す
+                                url: "http://192.168.0.159/2018grade4/HUG/HUG_Server/login.php",
+                                data: {
+                                        mail: mail,
+                                        pass: passward,
+                                        faze: faze
+                                },
+                                success: function (recieve) { //接続が成功
+
+
+                                        //    alert(recieve);
+                                        switch (faze) {
+                                                case 'login':
+                                                        if (recieve != 'null') {
+                                                                window.location.href = "home.html";
+                                                                recieve = recieve.substr(10);
+                                                                recieve = recieve.substr(0, recieve.length - 3);
+                                                                window.sessionStorage.setItem(["mail"], mail);
+                                                                if (recieve == "ul")
+                                                                        window.sessionStorage.setItem(["name"], "名無し");
+                                                                else
+                                                                        window.sessionStorage.setItem(["name"], recieve);
+                                                        }
+                                                        else {
+                                                                $("error").empty();
+                                                                $("error").append("IDとパスワードが一致しません");
+                                                        }
+                                                        break;
+                                                case 'new':
+                                                        if (recieve != 'null') {
+                                                                $("error").empty();
+                                                                $("error").append("そのIDすでに登録されています");
+                                                        }
+                                                        else {
+                                                                window.sessionStorage.setItem(["mail"], mail);
+                                                                window.sessionStorage.setItem(["name"], "名無し");
+                                                                window.location.href = "home.html";
+                                                        }
+                                                        break;
+
+                                                case 'forget':
+
+                                                        break;
+
+                                        }
+                                        // sessionStorage.setItem('mynumber', recieve);
+                                        // sessionStorage.setItem('user_num', 2);
+                                        // window.location.href = "select_role.html";
+                                },
+                                error: function (XMLHttpRequest, textStatus, errorThrown) { //接続が失敗
+                                        // alert('エラーです！'); //エラーを表示
+                                }
+                        });
+                        return false;
+                }
+        </script>
+</body>
+
+</html>
