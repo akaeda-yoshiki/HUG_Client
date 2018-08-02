@@ -559,8 +559,9 @@
                                                         code: get.eventcode_text.value
                                                 },
                                                 success: function (data) {
-                                                        alert(data);
+                                                        // alert(data);
                                                         if (data == "ok") {
+                                                                window.sessionStorage.setItem(["eventcode"], get.eventcode_text.value);
                                                                 window.location.href = "wait.html";
                                                                 // document.getElementById("get_theme_button").style.display = "none";
                                                                 // document.getElementById("back_button").style.display = "none";
@@ -577,7 +578,7 @@
                                                         }
                                                         else {
                                                                 $("errer_text_eventcode").empty();
-                                                                $("errer_text_eventcode").append("入力情報が不足しています");
+                                                                $("errer_text_eventcode").append("入力情報が間違っています");
                                                         }
 
                                                 },

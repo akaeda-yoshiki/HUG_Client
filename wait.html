@@ -8,6 +8,24 @@
         <style>
                 .block1 {
                         background: rgb(209, 231, 255);
+                        width: 85%;
+                        font-size: 20px;
+                        padding: 0.5em 0.5em;
+                        position: relative;
+                        left: 7%;
+                }
+
+                .block2 {
+                        background: rgb(236, 245, 255);
+                        width: 85%;
+                        font-size: 20px;
+                        padding: 0.5em 0.5em;
+                        position: relative;
+                        left: 7%;
+                }
+
+                .block3 {
+                        background: rgb(209, 231, 255);
                         width: 60%;
                         font-size: 20px;
                         padding: 0.5em 0.5em;
@@ -16,165 +34,151 @@
                 }
         </style>
         <script>
+                $("#eventcode_text").append(window.sessionStorage.getItem(["eventcode"]));
         </script>
 </head>
 
-<body style="font-size: 30px;position: relative;left:10%;">
-        <img src="title.png" width="400">
+<body>
+        <text_big style="font-size: 30px;position: relative;left:10%;">
+                <br>
+                <img src="title.png" width="400">
+                <br>
+                <br> イベントコード：
+                <eventcode_text></eventcode_text>
+                <script>
+                        $("eventcode_text").append(window.sessionStorage.getItem(["eventcode"]));
+                </script>
+                <br> 他のユーザーを待っています . . .
+                <br>
+                <br>
+                <div class="block3">
+                        メンバー
+                        <br>
+
+                </div>
+                <input type="button" id="theme_draw_button" value="テーマの詳細の表示" onclick='theme_detail()'>
+                <input type="button" id="theme_not_draw_button" value="テーマの詳細の非表示" style="display: none;" onclick=''>
+                <input type="button" id="back_button" style="position: relative; left:10%;" value="退出" onclick=''>
+        </text_big>
         <br>
-        <br> 他のユーザーを待っています . . .
         <br>
-        <input type="button" id="theme_draw_button" value="テーマの詳細の表示" onclick=''>
-        <input type="button" id="back_button" style="position: relative; left:10%;" value="退出" onclick=''>
-        <br>
-        <div class="block1">
-                メンバー
+        <form id="detail" style="display: none;">
+                <div class="block1" id="title">
+                        タイトル
+                        <draw_area id="title_text" style="position: relative;left: 50px;"></draw_area>
+                </div>
+
+                <div class="block2">
+                        カテゴリー
+                        <draw_area id="category_text" style="position: relative;left: 30px;"></draw_area>
+                </div>
+                <div class="block1">
+                        状況
+                        <draw_area id="situation_text" style="position: relative;left: 90px;"></draw_area>
+                </div>
+                <div class="block2">
+                        評価項目
+                        <draw_area id="assessment_text" style="position: relative;left: 50px;"></draw_area>
+                </div>
+                <div class="block1">
+                        日時/時期
+                        <draw_area id="time_text" style="position: relative;left: 50px;"></draw_area>
+                </div>
+                <div class="block2">
+                        地域
+                        <draw_area id="area_text" style="position: relative;left: 90px;"></draw_area>
+                </div>
+                <div class="block1">
+                        画像
+                        <div id="image_text" style="position: relative;left: 90px;"></div>
+
+                </div>
+                <div class="block2">
+                        対象者
+                        <draw_area id="target_text" style="position: relative;left: 70px;"></draw_area>
+                </div>
+                <div class="block1">
+                        ねらい
+                        <draw_area id="aim_text" style="position: relative;left: 70px;"></draw_area>
+                </div>
+                <div class="block2">
+                        公開可否
+                        <draw_area id="open_text" style="position: relative;left: 50px;"></draw_area>
+                </div>
                 <br>
 
-        </div>
-
+        </form>
 
         <script>
                 var mail, passward, faze;
-                //サーバーにIDとパスワードを送信
-                function login() {
-                        if (document.forms.login.mail.value != "" && document.forms.login.passward.value != "") {
-                                mail = document.forms.login.mail.value;
-                                passward = document.forms.login.passward.value;
-                                faze = "login";
-                                send();
-                        }
-                        else {
-                                $("error").empty();
-                                $("error").append("入力情報が不足しています");
-                        }
 
-                }
+                //テーマの詳細を表示
+                function theme_detail() {
 
-                //新規登録
-                function new_user() {
-                        if (document.forms.new_user.new_mail.value != "" && document.forms.new_user.passward1.value != "" && document.forms.new_user.passward2.value != "") {
-                                if (document.forms.new_user.passward1.value == document.forms.new_user.passward2.value) {
-                                        mail = document.forms.new_user.new_mail.value;
-                                        passward = document.forms.new_user.passward1.value;
-                                        faze = "new";
-                                        send();
-                                }
-                                else {
-                                        $("error").empty();
-                                        $("error").append("パスワードが一致しません");
-                                }
-                        }
-                        else {
-                                $("error").empty();
-                                $("error").append("入力情報が不足しています");
-                        }
-                }
-
-                //パスワード再通知
-                function forget() {
-                        if (document.forms.forget.forget_mail.value != "") {
-                                mail = document.forms.forget.forget_mail.value;
-                                faze = "forget";
-                                // send();
-                                $("error").empty();
-                                $("error").append("パスワードを通知しました");
-                        }
-                        else {
-                                $("error").empty();
-                                $("error").append("入力情報が不足しています");
-                        }
-                }
-
-                //ログイン画面へ切り替え
-                function to_login() {
-                        document.getElementById("login").style.display = "";
-                        document.getElementById("new_user").style.display = "none";
-                        document.getElementById("forget").style.display = "none";
-                        document.getElementById("pass_forget").style.display = "";
-                        document.getElementById("user_button").className = "tag_b";
-                        document.getElementById("login_button").className = "tag_r";
-                        $("error").empty();
-                }
-
-                //新規登録画面へ切り替え
-                function to_new_user() {
-                        document.getElementById("login").style.display = "none";
-                        document.getElementById("new_user").style.display = "";
-                        document.getElementById("forget").style.display = "none";
-                        document.getElementById("pass_forget").style.display = "none";
-                        document.getElementById("user_button").className = "tag_r";
-                        document.getElementById("login_button").className = "tag_b";
-                        $("error").empty();
-                }
-
-                //パスワード通知画面へ切り替え
-                function to_forget() {
-                        document.getElementById("login").style.display = "none";
-                        document.getElementById("new_user").style.display = "none";
-                        document.getElementById("forget").style.display = "";
-                        document.getElementById("pass_forget").style.display = "none";
-                        document.getElementById("user_button").className = "tag_b";
-                        document.getElementById("login_button").className = "tag_b";
-                        $("error").empty();
-                }
-                function send() {
-                        $.ajax({ //ajaxによる非同期通信発生
-                                type: "POST", //POST送信でデータを受け渡す
-                                url: "http://192.168.0.159/2018grade4/HUG/HUG_Server/login.php",
+                        // alert(window.sessionStorage.getItem(["eventcode"]));
+                        document.getElementById("detail").style.display = "";
+                        $.ajax({ //非同期通信
+                                type: "POST",
+                                url: "http://192.168.0.159/2018grade4/HUG/HUG_Server/eventcode.php",
                                 data: {
-                                        mail: mail,
-                                        pass: passward,
-                                        faze: faze
+                                        code: window.sessionStorage.getItem(["eventcode"])
                                 },
-                                success: function (recieve) { //接続が成功
+                                success: function (data) {
+                                        alert(data);
+                                        // タイトル
+                                        $("#title_text").empty();
+                                        $("#title_text").append(data[0].title);
+                                        // カテゴリー
+                                        $("#category_text").empty();
+                                        $("#category_text").append(data[0].category);
 
+                                        //状況
+                                        $("#situation_text").empty();
+                                        $("#situation_text").append(data[0].situation);
+                                        // 評価項目
+                                        $("#assessment_text").empty();
+                                        $("#assessment_text").append(data[0].assessment0);
+                                        $("#assessment_text").append("&nbsp;&nbsp;&nbsp;&nbsp;" + data[0].assessment1);
+                                        $("#assessment_text").append("&nbsp;&nbsp;&nbsp;&nbsp;" + data[0].assessment2);
+                                        $("#assessment_text").append("&nbsp;&nbsp;&nbsp;&nbsp;" + data[0].assessment3);
+                                        $("#assessment_text").append("&nbsp;&nbsp;&nbsp;&nbsp;" + data[0].assessment4);
+                                        $("#assessment_text").append("&nbsp;&nbsp;&nbsp;&nbsp;" + data[0].assessment5);
+                                        $("#assessment_text").append("&nbsp;&nbsp;&nbsp;&nbsp;" + data[0].assessment6);
+                                        $("#assessment_text").append("&nbsp;&nbsp;&nbsp;&nbsp;" + data[0].assessment7);
+                                        $("#assessment_text").append("&nbsp;&nbsp;&nbsp;&nbsp;" + data[0].assessment8);
+                                        $("#assessment_text").append("&nbsp;&nbsp;&nbsp;&nbsp;" + data[0].assessment9);
+                                        // 日時・時期
+                                        $("#time_text").empty();
+                                        $("#time_text").append(data[0].time);
 
-                                        //    alert(recieve);
-                                        switch (faze) {
-                                                case 'login':
-                                                        if (recieve != 'null') {
-                                                                window.location.href = "home.html";
-                                                                recieve = recieve.substr(10);
-                                                                recieve = recieve.substr(0, recieve.length - 3);
-                                                                window.sessionStorage.setItem(["mail"], mail);
-                                                                if (recieve == "ul")
-                                                                        window.sessionStorage.setItem(["name"], "名無し");
-                                                                else
-                                                                        window.sessionStorage.setItem(["name"], recieve);
-                                                        }
-                                                        else {
-                                                                $("error").empty();
-                                                                $("error").append("IDとパスワードが一致しません");
-                                                        }
-                                                        break;
-                                                case 'new':
-                                                        if (recieve != 'null') {
-                                                                $("error").empty();
-                                                                $("error").append("そのIDすでに登録されています");
-                                                        }
-                                                        else {
-                                                                window.sessionStorage.setItem(["mail"], mail);
-                                                                window.sessionStorage.setItem(["name"], "名無し");
-                                                                window.location.href = "home.html";
-                                                        }
-                                                        break;
+                                        // 地域
+                                        $("#area_text").empty();
+                                        $("#area_text").append(data[0].area);
 
-                                                case 'forget':
+                                        // 画像
+                                        $("#image_text").empty();
+                                        // $("#image_text").append(data[0].image);
+                                        if (data[0].image != "" && data[0].image != null)
+                                                $("#image_text").append('<img src="http://192.168.0.159/2018grade4/HUG/HUG_Server/image/' + data[0].id + '.jpeg">');
 
-                                                        break;
+                                        // 対象者
+                                        $("#target_text").empty();
+                                        $("#target_text").append(data[0].target);
 
-                                        }
-                                        // sessionStorage.setItem('mynumber', recieve);
-                                        // sessionStorage.setItem('user_num', 2);
-                                        // window.location.href = "select_role.html";
+                                        // ねらい
+                                        $("#aim_text").empty();
+                                        $("#aim_text").append(data[0].aim);
+
+                                        // 公開の可否
+                                        $("#open_text").empty();
+                                        $("#open_text").append(data[0].open);
                                 },
                                 error: function (XMLHttpRequest, textStatus, errorThrown) { //接続が失敗
-                                        // alert('エラーです！'); //エラーを表示
+                                        alert('エラーです！'); //エラーを表示
                                 }
                         });
-                        return false;
                 }
+
         </script>
 </body>
 
