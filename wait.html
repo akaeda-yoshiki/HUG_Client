@@ -35,6 +35,7 @@
         </style>
         <script>
                 $("#eventcode_text").append(window.sessionStorage.getItem(["eventcode"]));
+
         </script>
 </head>
 
@@ -54,8 +55,37 @@
                 <div class="block3">
                         メンバー
                         <br>
-
+                        <member_text id="member"></member_text>
                 </div>
+                <script>
+                        function get_member() {
+                                $.ajax({ //非同期通信
+                                        type: "POST",
+                                        url: "http://192.168.0.159/2018grade4/HUG/HUG_Server/eventcode.php",
+                                        data: {
+                                                id: '1',
+                                                code: window.sessionStorage.getItem(["eventcode"])
+                                        },
+                                        success: function (data) {
+                                                // alert(data);
+                                                $("#member").empty();
+                                                var add = "";
+                                                for (var i = 0; i < data.length; i++) {
+
+                                                        add += data[i]['data3'];
+                                                        add += "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
+                                                        add += data[i]['data1'];
+                                                        add += "<br>";
+                                                }
+                                                $("#member").append(add);
+                                        },
+                                        error: function (XMLHttpRequest, textStatus, errorThrown) { //接続が失敗
+                                                alert('エラーです！'); //エラーを表示
+                                        }
+                                });
+                        }
+                        get_member();
+                </script>
                 <input type="button" id="theme_draw_button" value="テーマの詳細の表示" onclick='theme_detail()'>
                 <input type="button" id="theme_not_draw_button" value="テーマの詳細の非表示" style="display: none;" onclick='hide_detail()'>
                 <input type="button" id="back_button" style="position: relative; left:10%;" value="退出" onclick=''>
@@ -202,6 +232,8 @@
                         document.getElementById("theme_not_draw_button").style.display = "none";
                         document.getElementById("theme_draw_button").style.display = "";
                 }
+
+
 
         </script>
 </body>
