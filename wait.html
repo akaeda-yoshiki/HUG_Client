@@ -57,7 +57,7 @@
 
                 </div>
                 <input type="button" id="theme_draw_button" value="テーマの詳細の表示" onclick='theme_detail()'>
-                <input type="button" id="theme_not_draw_button" value="テーマの詳細の非表示" style="display: none;" onclick=''>
+                <input type="button" id="theme_not_draw_button" value="テーマの詳細の非表示" style="display: none;" onclick='hide_detail()'>
                 <input type="button" id="back_button" style="position: relative; left:10%;" value="退出" onclick=''>
         </text_big>
         <br>
@@ -111,72 +111,96 @@
 
         <script>
                 var mail, passward, faze;
-
+                var receive_flag = 1;
                 //テーマの詳細を表示
                 function theme_detail() {
 
                         // alert(window.sessionStorage.getItem(["eventcode"]));
                         document.getElementById("detail").style.display = "";
-                        $.ajax({ //非同期通信
-                                type: "POST",
-                                url: "http://192.168.0.159/2018grade4/HUG/HUG_Server/eventcode.php",
-                                data: {
-                                        code: window.sessionStorage.getItem(["eventcode"])
-                                },
-                                success: function (data) {
-                                        alert(data);
-                                        // タイトル
-                                        $("#title_text").empty();
-                                        $("#title_text").append(data[0].title);
-                                        // カテゴリー
-                                        $("#category_text").empty();
-                                        $("#category_text").append(data[0].category);
+                        document.getElementById("theme_not_draw_button").style.display = "";
+                        document.getElementById("theme_draw_button").style.display = "none";
+                        if (receive_flag == 1)
+                                $.ajax({ //非同期通信
+                                        type: "POST",
+                                        url: "http://192.168.0.159/2018grade4/HUG/HUG_Server/eventcode.php",
+                                        data: {
+                                                code: window.sessionStorage.getItem(["eventcode"])
+                                        },
+                                        success: function (data1) {
+                                                // alert(data1);
+                                                $.ajax({ //非同期通信
+                                                        type: "POST",
+                                                        url: "http://192.168.0.159/2018grade4/HUG/HUG_Server/theme.php",
+                                                        data: {
+                                                                id: data1
+                                                        },
+                                                        success: function (data) {
+                                                                // タイトル
+                                                                $("#title_text").empty();
+                                                                $("#title_text").append(data[0].title);
+                                                                // カテゴリー
+                                                                $("#category_text").empty();
+                                                                $("#category_text").append(data[0].category);
 
-                                        //状況
-                                        $("#situation_text").empty();
-                                        $("#situation_text").append(data[0].situation);
-                                        // 評価項目
-                                        $("#assessment_text").empty();
-                                        $("#assessment_text").append(data[0].assessment0);
-                                        $("#assessment_text").append("&nbsp;&nbsp;&nbsp;&nbsp;" + data[0].assessment1);
-                                        $("#assessment_text").append("&nbsp;&nbsp;&nbsp;&nbsp;" + data[0].assessment2);
-                                        $("#assessment_text").append("&nbsp;&nbsp;&nbsp;&nbsp;" + data[0].assessment3);
-                                        $("#assessment_text").append("&nbsp;&nbsp;&nbsp;&nbsp;" + data[0].assessment4);
-                                        $("#assessment_text").append("&nbsp;&nbsp;&nbsp;&nbsp;" + data[0].assessment5);
-                                        $("#assessment_text").append("&nbsp;&nbsp;&nbsp;&nbsp;" + data[0].assessment6);
-                                        $("#assessment_text").append("&nbsp;&nbsp;&nbsp;&nbsp;" + data[0].assessment7);
-                                        $("#assessment_text").append("&nbsp;&nbsp;&nbsp;&nbsp;" + data[0].assessment8);
-                                        $("#assessment_text").append("&nbsp;&nbsp;&nbsp;&nbsp;" + data[0].assessment9);
-                                        // 日時・時期
-                                        $("#time_text").empty();
-                                        $("#time_text").append(data[0].time);
+                                                                //状況
+                                                                $("#situation_text").empty();
+                                                                $("#situation_text").append(data[0].situation);
+                                                                // 評価項目
+                                                                $("#assessment_text").empty();
+                                                                $("#assessment_text").append(data[0].assessment0);
+                                                                $("#assessment_text").append("&nbsp;&nbsp;&nbsp;&nbsp;" + data[0].assessment1);
+                                                                $("#assessment_text").append("&nbsp;&nbsp;&nbsp;&nbsp;" + data[0].assessment2);
+                                                                $("#assessment_text").append("&nbsp;&nbsp;&nbsp;&nbsp;" + data[0].assessment3);
+                                                                $("#assessment_text").append("&nbsp;&nbsp;&nbsp;&nbsp;" + data[0].assessment4);
+                                                                $("#assessment_text").append("&nbsp;&nbsp;&nbsp;&nbsp;" + data[0].assessment5);
+                                                                $("#assessment_text").append("&nbsp;&nbsp;&nbsp;&nbsp;" + data[0].assessment6);
+                                                                $("#assessment_text").append("&nbsp;&nbsp;&nbsp;&nbsp;" + data[0].assessment7);
+                                                                $("#assessment_text").append("&nbsp;&nbsp;&nbsp;&nbsp;" + data[0].assessment8);
+                                                                $("#assessment_text").append("&nbsp;&nbsp;&nbsp;&nbsp;" + data[0].assessment9);
+                                                                // 日時・時期
+                                                                $("#time_text").empty();
+                                                                $("#time_text").append(data[0].time);
 
-                                        // 地域
-                                        $("#area_text").empty();
-                                        $("#area_text").append(data[0].area);
+                                                                // 地域
+                                                                $("#area_text").empty();
+                                                                $("#area_text").append(data[0].area);
 
-                                        // 画像
-                                        $("#image_text").empty();
-                                        // $("#image_text").append(data[0].image);
-                                        if (data[0].image != "" && data[0].image != null)
-                                                $("#image_text").append('<img src="http://192.168.0.159/2018grade4/HUG/HUG_Server/image/' + data[0].id + '.jpeg">');
+                                                                // 画像
+                                                                $("#image_text").empty();
+                                                                // $("#image_text").append(data[0].image);
+                                                                if (data[0].image != "" && data[0].image != null)
+                                                                        $("#image_text").append('<img src="http://192.168.0.159/2018grade4/HUG/HUG_Server/image/' + data[0].id + '.jpeg">');
 
-                                        // 対象者
-                                        $("#target_text").empty();
-                                        $("#target_text").append(data[0].target);
+                                                                // 対象者
+                                                                $("#target_text").empty();
+                                                                $("#target_text").append(data[0].target);
 
-                                        // ねらい
-                                        $("#aim_text").empty();
-                                        $("#aim_text").append(data[0].aim);
+                                                                // ねらい
+                                                                $("#aim_text").empty();
+                                                                $("#aim_text").append(data[0].aim);
 
-                                        // 公開の可否
-                                        $("#open_text").empty();
-                                        $("#open_text").append(data[0].open);
-                                },
-                                error: function (XMLHttpRequest, textStatus, errorThrown) { //接続が失敗
-                                        alert('エラーです！'); //エラーを表示
-                                }
-                        });
+                                                                // 公開の可否
+                                                                $("#open_text").empty();
+                                                                $("#open_text").append(data[0].open);
+
+                                                                receive_flag = 0;
+                                                        },
+                                                        error: function (XMLHttpRequest, textStatus, errorThrown) { //接続が失敗
+                                                                // alert('エラーです！'); //エラーを表示
+                                                        }
+                                                });
+                                        },
+                                        error: function (XMLHttpRequest, textStatus, errorThrown) { //接続が失敗
+                                                alert('エラーです！'); //エラーを表示
+                                        }
+                                });
+                }
+
+                //詳細を非表示に
+                function hide_detail() {
+                        document.getElementById("detail").style.display = "none";
+                        document.getElementById("theme_not_draw_button").style.display = "none";
+                        document.getElementById("theme_draw_button").style.display = "";
                 }
 
         </script>
