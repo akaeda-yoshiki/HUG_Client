@@ -222,7 +222,7 @@
                                                 });
                                         },
                                         error: function (XMLHttpRequest, textStatus, errorThrown) { //接続が失敗
-                                                alert('エラーです！'); //エラーを表示
+                                                // alert('エラーです！'); //エラーを表示
                                         }
                                 });
                 }
@@ -236,7 +236,24 @@
 
                 //退出
                 function exit() {
-
+                        $.ajax({ //非同期通信
+                                type: "POST",
+                                url: "http://192.168.0.159/2018grade4/HUG/HUG_Server/eventcode.php",
+                                data: {
+                                        data: window.sessionStorage.getItem(["mail"]),
+                                        data1: window.sessionStorage.getItem(["role"]),
+                                        code: window.sessionStorage.getItem(["eventcode"]),
+                                        mode: "delete",
+                                        id: 1
+                                },
+                                success: function (data) {
+                                        // alert(data);
+                                        window.location.href = "play.html";
+                                },
+                                error: function (XMLHttpRequest, textStatus, errorThrown) { //接続が失敗
+                                        // alert('エラーです！'); //エラーを表示
+                                }
+                        });
                 }
 
         </script>
