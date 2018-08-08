@@ -85,10 +85,11 @@
                                 });
                         }
                         get_member();
+                        setInterval(get_member, 500);
                 </script>
                 <input type="button" id="theme_draw_button" value="テーマの詳細の表示" onclick='theme_detail()'>
                 <input type="button" id="theme_not_draw_button" value="テーマの詳細の非表示" style="display: none;" onclick='hide_detail()'>
-                <input type="button" id="back_button" style="position: relative; left:10%;" value="退出" onclick=''>
+                <input type="button" id="back_button" style="position: relative; left:10%;" value="退出" onclick='exit()'>
         </text_big>
         <br>
         <br>
@@ -233,7 +234,10 @@
                         document.getElementById("theme_draw_button").style.display = "";
                 }
 
+                //退出
+                function exit() {
 
+                }
 
         </script>
 </body>

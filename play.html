@@ -554,13 +554,16 @@
                                                 type: "POST",
                                                 url: "http://192.168.0.159/2018grade4/HUG/HUG_Server/eventcode.php",
                                                 data: {
-                                                        mail: window.sessionStorage.getItem(["mail"]),
-                                                        role: document.getElementById("eventcode").role.value,
-                                                        code: get.eventcode_text.value
+                                                        data2: window.sessionStorage.getItem(["mail"]),
+                                                        data1: document.getElementById("eventcode").role.value,
+                                                        code: get.eventcode_text.value,
+                                                        mode: "insert",
+                                                        id: 1
                                                 },
                                                 success: function (data) {
                                                         // alert(data);
                                                         if (data == "ok") {
+                                                                $("errer_text_eventcode").empty();
                                                                 window.sessionStorage.setItem(["eventcode"], get.eventcode_text.value);
                                                                 window.location.href = "wait.html";
                                                                 // document.getElementById("get_theme_button").style.display = "none";
