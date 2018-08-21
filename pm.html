@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+        <meta charset="UTF-8" />
+        <title>ホーム</title>
+        <script type="text/javascript" src="define.js"> </script>
+        <script src="https://code.jquery.com/jquery-1.9.0.min.js"></script>
+        <script type="text/javascript" src="jquery.balloon.js"></script>
+        <style>
+                .block1 {
+                        background: rgb(209, 231, 255);
+                        width: 85%;
+                        font-size: 20px;
+                        padding: 0.5em 0.5em;
+                        position: relative;
+                        left: 7%;
+                }
+
+                .block2 {
+                        background: rgb(236, 245, 255);
+                        width: 85%;
+                        font-size: 20px;
+                        padding: 0.5em 0.5em;
+                        position: relative;
+                        left: 7%;
+                }
+
+
+                textarea {
+                        width: 70%;
+                        resize: none;
+                        position: relative;
+                        left: 70px;
+                }
+
+                .textarea_smoll {
+                        width: 70%;
+                        height: 60px;
+                        position: relative;
+                        left: 55px;
+                }
+
+                draw_area {
+                        width: 70%;
+                        height: 20px;
+                        position: relative;
+                        left: 30px;
+                }
+        </style>
+        <script>
+
+
+                $('texi_and_pop').balloon();//マウスオーバーの割り当て
+
+                //受信
+                $(document).ready(function () {
+
+                        //評価項目を受信
+                        $.ajax({
+                                type: "POST",
+                                url: "http://192.168.0.159/2018grade4/HUG/HUG_Server/assessment.php",
+                                dataType: "json",
+                        }).done(function (data, dataType) {
+                                // //評価項目のチェックリストに追加
+                                // var cnt = 0;
+                                // for (var i = 0; i < data.length; i++) {
+                                //         cnt += 2 + data[i].word.length;
+                                //         if (cnt >= 30) {
+                                //                 $("#assessment_checkbox").append('<br>');
+                                //                 cnt = 2 + data[i].word.length;
+                                //         }
+
+                                //         $("#assessment_checkbox").append('<input type="checkbox" name="assessment" value="' + data[i].word + '">' + data[i].word + "&nbsp;&nbsp;");
+                                // }
+                                // console.log(cnt);
+                        }).fail(function (XMLHttpRequest, textStatus, errorThrown) {
+                                // alert('Error : ' + errorThrown);
+                        });
+                });
+        </script>
+</head>
+
+<body>
+        <br>
+        <br>
+        <!-- 入力画面 *************************************************************-->
+        <form id="input1">
+                <!-- 状況 -->
+                <div class="block1">
+                        <text_and_pop id="situation_input_text" title="発生した状況の詳細を入力してください">状況*</text_and_pop>
+                        <input type="text" id="situation" class="textarea_smoll" required>
+                </div>
+                <!-- 評価項目 -->
+                <div class="block2">
+                        <text_and_pop id="assessment_input_text" title="評価項目についてどれくらい関連度があるか入力して下さい">評価項目*</text_and_pop>
+                        <select id="assessment_list"  style="position: relative;width: 30%;left: 15px;" onchange="assessment_update()">
+                                <option value=""></option>
+                        </select>
+                        <input type="text" id="category"  style="width: 34%;display: none;" required>
+                </div>
+                <script>
+                        // カテゴリーのプルダウンが更新
+                        function assessment_update() {
+                                // var get = document.forms.input1;
+
+                                // if (get.category_list.value == "入力")//「入力」を選択時は入力画面を表示
+                                //         document.getElementById("category").style.display = "";
+                                // else
+                                //         document.getElementById("category").style.display = "none";
+                        }
+                </script>
+        </form>
+
+        <!-- 画像 -->
+        <div class="block1" id="input0">
+                <text_and_pop title="施設内の地図など避難所に関する画像を選択してください">画像</text_and_pop>
+
+                <form id="file_input" action="http://192.168.0.159/2018grade4/HUG/HUG_Server/file_upload.php" method="post" enctype="multipart/form-data">
+                        <!-- <br> -->
+                        <input type="file" name="pic" id="image_file" style="position: relative; left:128px;top:-20px;" onchange="image_update()">
+                        <!-- <br> -->
+                </form>
+                <div id="image_input_draw"></div>
+        </div>
+        <script>
+                // 画像が選択されたら表示
+                function image_update() {
+                        var file = document.getElementById("image_file").files;
+                        var reader = new FileReader();
+                        reader.readAsDataURL(file[0]); //dataURL形式でファイルを読み込む
+
+                        reader.onload = function () {//ファイルの読込が終了した時の処理
+                                var dataUrl = reader.result;
+
+                                //読み込んだ画像の表示（入力画面、確認画面）
+                                document.getElementById("image_input_draw").innerHTML = "<br><center><img src='" + dataUrl + "'></center>";
+                                document.getElementById("image_draw").innerHTML = "<br><center><img src='" + dataUrl + "'></center>";
+
+                                // ファイル名のみ取得して表示します
+                                var selectFileSample4 = document.getElementById("image_file").value;
+                                var regex = /\\|\\/;
+                                var array = selectFileSample4.split(regex);
+
+                                image_send = array[array.length - 1];
+                                image_send = image_send.split(".")[1];
+                        }
+                };
+        </script>
+        <form id="input2">
+                <center>
+                        <!-- エラーメッセージ -->
+                        <a id="required_error" style="color: red;display: none;">入力内容に不備があります。
+                                <br>
+                                <br>
+                        </a>
+
+                        <input type="button" value="次へ" onclick="next()">
+                </center>
+        </form>
+        <!-- 確認画面 *************************************************************-->
+        <form id="draw" style="display: none;">
+                <div class="block1" id="title">
+                        タイトル*
+                        <draw_area id="title_text"></draw_area>
+                </div>
+
+                <div class="block2">
+                        カテゴリー*
+                        <draw_area id="category_text"></draw_area>
+                </div>
+                <div class="block1">
+                        状況*
+                        <draw_area id="situation_text"></draw_area>
+                </div>
+                <div class="block2">
+                        評価項目*
+                        <draw_area id="assessment_text"></draw_area>
+                </div>
+                <div class="block1">
+                        日時/時期
+                        <draw_area id="time_text"></draw_area>
+
+                </div>
+                <div class="block2">
+                        地域
+                        <draw_area id="area_text"></draw_area>
+                </div>
+                <div class="block1">
+                        画像
+                        <div id="image_draw"></div>
+
+                </div>
+                <div class="block2">
+                        対象者
+                        <draw_area id="target_text"></draw_area>
+                </div>
+                <div class="block1">
+                        ねらい
+                        <draw_area id="aim_text"></draw_area>
+                </div>
+                <div class="block2">
+                        公開可否*
+                        <draw_area id="open_text"></draw_area>
+                </div>
+                <br>
+                <center>
+                        <!-- ボタン -->
+                        <input type="button" value="訂正" onclick="back()"> &nbsp; &nbsp; &nbsp; &nbsp;
+                        <input type="button" value="内容確定" onclick="decide()">
+                </center>
+        </form>
+        <script>
+                var assessment_send = [], category_send, time_send = "", image_send = "";//登録時に送信する用
+                //次へボタンが押された時
+                function next() {
+                        // var required_flag = true;//入力必須事項の確認用
+                        // var get1 = document.forms.input1;
+                        // var get2 = document.forms.input2;
+
+                        // // タイトル
+                        // $("#title_text").empty();
+                        // $("#title_text").append(get1.title.value);
+                        // document.getElementById("title_input_text").style.color = "";
+                        // if (get1.title.value == "") {
+                        //         required_flag = false;
+                        //         document.getElementById("title_input_text").style.color = "red";
+                        // }
+
+                        // // カテゴリー
+                        // $("#category_text").empty();
+                        // document.getElementById("category_input_text").style.color = "";
+                        // if (get1.category_list.value == "入力") {//「入力」を選択時
+                        //         $("#category_text").append(get1.category.value);
+                        //         category_send = get1.category.value;
+                        //         if (get1.category.value == "") {
+                        //                 required_flag = false;
+                        //                 document.getElementById("category_input_text").style.color = "red";
+                        //         }
+                        // }
+                        // else if (get1.category_list.value == "") {//未選択時
+                        //         required_flag = false;
+                        //         document.getElementById("category_input_text").style.color = "red";
+                        // }
+                        // else {
+                        //         category_send = get1.category_list.value;
+                        //         $("#category_text").append(get1.category_list.value);
+                        // }
+
+                        // //状況
+                        // $("#situation_text").empty();
+                        // $("#situation_text").append(get1.situation.value);
+                        // document.getElementById("situation_input_text").style.color = "";
+                        // if (get1.situation.value == "") {
+                        //         required_flag = false;
+                        //         document.getElementById("situation_input_text").style.color = "red";
+                        // }
+
+                        // // 評価項目
+                        // $("#assessment_text").empty();
+                        // var check = get1.assessment;
+                        // var cnt = 0;
+                        // //マスターテーブルからのものをチェック
+                        // for (var i = 0; i < check.length; i++)
+                        //         if (check[i].checked) {
+                        //                 $("#assessment_text").append(check[i].value + "&nbsp;&nbsp;&nbsp;&nbsp;");
+                        //                 assessment_send.push(check[i].value);
+                        //                 cnt++;
+                        //         }
+                        // // 入力可能なもの
+                        // for (var i = 0; i < ASSESSENT_INPUT_TEXT_NUM; i++)
+                        //         if (document.getElementById("assessment_input" + i).value != "") {
+                        //                 $("#assessment_text").append(document.getElementById("assessment_input" + i).value + "&nbsp;&nbsp;&nbsp;&nbsp;");
+                        //                 assessment_send.push(document.getElementById("assessment_input" + i).value);
+                        //                 cnt++;
+                        //         }
+                        // document.getElementById("assessment_input_text").style.color = "";
+                        // if (cnt == 0 || cnt >= 10) {//選択している数が1~10かどうか確認
+                        //         required_flag = false;
+                        //         document.getElementById("assessment_input_text").style.color = "red";
+
+                        // }
+
+                        // // 日時・時期
+                        // var f = 0;
+                        // $("#time_text").empty();
+                        // time_send = "";
+                        // if (get1.month_list.value != "") {
+                        //         time_send += get1.month_list.value + "月"
+                        //         f = 1;
+                        // }
+                        // if (get1.day_list.value != "") {
+                        //         time_send += get1.day_list.value + "日"
+                        //         f = 1;
+                        // }
+                        // if (get1.hour_list.value != "") {
+                        //         time_send += get1.hour_list.value + "時"
+                        //         f = 1;
+                        // }
+                        // if (get1.minute_list.value != "") {
+                        //         time_send += get1.minute_list.value + "分"
+                        //         f = 1;
+                        // }
+                        // if (get1.season_list.value != "") {
+                        //         if (f == 1)
+                        //                 time_send += "　　";
+                        //         time_send += get1.season_list.value;
+                        //         time_send += "　　";
+                        // }
+                        // if (get1.timezone_list.value != "")
+                        //         time_send += get1.timezone_list.value;
+                        // $("#time_text").append(time_send);
+
+                        // // 地域
+                        // $("#area_text").empty();
+                        // $("#area_text").append(get1.area.value);
+
+                        // // 対象者
+                        // $("#target_text").empty();
+                        // $("#target_text").append(get2.target.value);
+
+                        // // ねらい
+                        // $("#aim_text").empty();
+                        // $("#aim_text").append(get2.aim.value);
+
+                        // // 公開の可否
+                        // $("#open_text").empty();
+                        // $("#open_text").append(get2.open_radio.value);
+                        // document.getElementById("open_input_text").style.color = "";
+                        // if (get2.open_radio.value == "") {
+                        //         required_flag = false;
+                        //         document.getElementById("open_input_text").style.color = "red";
+                        // }
+
+
+                        // // 入力必須事項の確認
+                        // if (required_flag == true) {
+                        //         document.getElementById("input1").style.display = "none";
+                        //         document.getElementById("input2").style.display = "none";
+                        //         document.getElementById("input0").style.display = "none";
+                        //         document.getElementById("draw").style.display = "";
+
+                        //         document.getElementById("required_error").style.display = "none";
+
+                        // }
+                        // else {
+                        //         document.getElementById("required_error").style.display = "";
+
+                        // }
+                }
+
+
+                //内容確定ボタンが押された
+                function decide() {
+                }
+                function file() {
+                        // var form = document.getElementById("file_input");
+                        // var formdata = new FormData(form);
+                        // $.ajax({
+                        //         type: 'POST',
+                        //         url: 'http://192.168.0.159/2018grade4/HUG/HUG_Server/file_upload.php',
+                        //         data: formdata,
+                        //         processData: false,	// jQueryがデータを処理しないように設定
+                        //         contentType: false,	// jQueryがcontentTypeを設定しないように設定
+                        //         success: function (data) {
+                        //                 // alert("success::" + data)
+                        //         },
+                        //         error: function (data) {
+                        //                 // alert("error:" + data.statusText);
+                        //         }
+                        // });
+                }
+        </script>
+
+</body>
+
+</html>
