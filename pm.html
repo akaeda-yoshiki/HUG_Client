@@ -3,7 +3,7 @@
 
 <head>
         <meta charset="UTF-8" />
-        <title>ホーム</title>
+        <title>プレイ画面</title>
         <script type="text/javascript" src="define.js"> </script>
         <script src="https://code.jquery.com/jquery-1.9.0.min.js"></script>
         <script type="text/javascript" src="jquery.balloon.js"></script>
@@ -56,27 +56,33 @@
                 //受信
                 $(document).ready(function () {
 
-                        //評価項目を受信
-                        $.ajax({
-                                type: "POST",
-                                url: "http://192.168.0.159/2018grade4/HUG/HUG_Server/assessment.php",
-                                dataType: "json",
-                        }).done(function (data, dataType) {
-                                // //評価項目のチェックリストに追加
-                                // var cnt = 0;
-                                // for (var i = 0; i < data.length; i++) {
-                                //         cnt += 2 + data[i].word.length;
-                                //         if (cnt >= 30) {
-                                //                 $("#assessment_checkbox").append('<br>');
-                                //                 cnt = 2 + data[i].word.length;
-                                //         }
+                        // $("#assessment_list").append();
+                        // <select id="assessment_list" style="position: relative;width: 30%;left: 15px;" >
+                        //         <option value=""></option>
+                        // </select>
 
-                                //         $("#assessment_checkbox").append('<input type="checkbox" name="assessment" value="' + data[i].word + '">' + data[i].word + "&nbsp;&nbsp;");
-                                // }
-                                // console.log(cnt);
-                        }).fail(function (XMLHttpRequest, textStatus, errorThrown) {
-                                // alert('Error : ' + errorThrown);
-                        });
+
+                        //評価項目を受信
+                        // $.ajax({
+                        //         type: "POST",
+                        //         url: "http://192.168.0.159/2018grade4/HUG/HUG_Server/assessment.php",
+                        //         dataType: "json",
+                        // }).done(function (data, dataType) {
+                        //         // //評価項目のチェックリストに追加
+                        //         // var cnt = 0;
+                        //         // for (var i = 0; i < data.length; i++) {
+                        //         //         cnt += 2 + data[i].word.length;
+                        //         //         if (cnt >= 30) {
+                        //         //                 $("#assessment_checkbox").append('<br>');
+                        //         //                 cnt = 2 + data[i].word.length;
+                        //         //         }
+
+                        //         //         $("#assessment_checkbox").append('<input type="checkbox" name="assessment" value="' + data[i].word + '">' + data[i].word + "&nbsp;&nbsp;");
+                        //         // }
+                        //         // console.log(cnt);
+                        // }).fail(function (XMLHttpRequest, textStatus, errorThrown) {
+                        //         // alert('Error : ' + errorThrown);
+                        // });
                 });
         </script>
 </head>
@@ -94,22 +100,8 @@
                 <!-- 評価項目 -->
                 <div class="block2">
                         <text_and_pop id="assessment_input_text" title="評価項目についてどれくらい関連度があるか入力して下さい">評価項目*</text_and_pop>
-                        <select id="assessment_list"  style="position: relative;width: 30%;left: 15px;" onchange="assessment_update()">
-                                <option value=""></option>
-                        </select>
-                        <input type="text" id="category"  style="width: 34%;display: none;" required>
+                        <assessment_list id="assessment_list"></assessment_list>
                 </div>
-                <script>
-                        // カテゴリーのプルダウンが更新
-                        function assessment_update() {
-                                // var get = document.forms.input1;
-
-                                // if (get.category_list.value == "入力")//「入力」を選択時は入力画面を表示
-                                //         document.getElementById("category").style.display = "";
-                                // else
-                                //         document.getElementById("category").style.display = "none";
-                        }
-                </script>
         </form>
 
         <!-- 画像 -->
@@ -160,48 +152,19 @@
         </form>
         <!-- 確認画面 *************************************************************-->
         <form id="draw" style="display: none;">
-                <div class="block1" id="title">
-                        タイトル*
-                        <draw_area id="title_text"></draw_area>
-                </div>
-
-                <div class="block2">
-                        カテゴリー*
-                        <draw_area id="category_text"></draw_area>
-                </div>
-                <div class="block1">
+                <div class="block1" id="situation">
                         状況*
                         <draw_area id="situation_text"></draw_area>
                 </div>
+
                 <div class="block2">
                         評価項目*
                         <draw_area id="assessment_text"></draw_area>
                 </div>
                 <div class="block1">
-                        日時/時期
-                        <draw_area id="time_text"></draw_area>
-
-                </div>
-                <div class="block2">
-                        地域
-                        <draw_area id="area_text"></draw_area>
-                </div>
-                <div class="block1">
                         画像
                         <div id="image_draw"></div>
 
-                </div>
-                <div class="block2">
-                        対象者
-                        <draw_area id="target_text"></draw_area>
-                </div>
-                <div class="block1">
-                        ねらい
-                        <draw_area id="aim_text"></draw_area>
-                </div>
-                <div class="block2">
-                        公開可否*
-                        <draw_area id="open_text"></draw_area>
                 </div>
                 <br>
                 <center>
@@ -214,18 +177,18 @@
                 var assessment_send = [], category_send, time_send = "", image_send = "";//登録時に送信する用
                 //次へボタンが押された時
                 function next() {
-                        // var required_flag = true;//入力必須事項の確認用
-                        // var get1 = document.forms.input1;
-                        // var get2 = document.forms.input2;
+                        var required_flag = true;//入力必須事項の確認用
+                        var get1 = document.forms.input1;
+                        var get2 = document.forms.input2;
 
-                        // // タイトル
-                        // $("#title_text").empty();
-                        // $("#title_text").append(get1.title.value);
-                        // document.getElementById("title_input_text").style.color = "";
-                        // if (get1.title.value == "") {
-                        //         required_flag = false;
-                        //         document.getElementById("title_input_text").style.color = "red";
-                        // }
+                        // 状況
+                        $("#situation_text").empty();
+                        $("#situation_text").append(get1.situation.value);
+                        document.getElementById("situation_input_text").style.color = "";
+                        if (get1.situation.value == "") {
+                                required_flag = false;
+                                document.getElementById("situation_input_text").style.color = "red";
+                        }
 
                         // // カテゴリー
                         // $("#category_text").empty();
@@ -333,20 +296,20 @@
                         // }
 
 
-                        // // 入力必須事項の確認
-                        // if (required_flag == true) {
-                        //         document.getElementById("input1").style.display = "none";
-                        //         document.getElementById("input2").style.display = "none";
-                        //         document.getElementById("input0").style.display = "none";
-                        //         document.getElementById("draw").style.display = "";
+                        // 入力必須事項の確認
+                        if (required_flag == true) {
+                                document.getElementById("input1").style.display = "none";
+                                document.getElementById("input2").style.display = "none";
+                                document.getElementById("input0").style.display = "none";
+                                document.getElementById("draw").style.display = "";
 
-                        //         document.getElementById("required_error").style.display = "none";
+                                document.getElementById("required_error").style.display = "none";
 
-                        // }
-                        // else {
-                        //         document.getElementById("required_error").style.display = "";
+                        }
+                        else {
+                                document.getElementById("required_error").style.display = "";
 
-                        // }
+                        }
                 }
 
 
