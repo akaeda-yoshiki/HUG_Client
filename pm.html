@@ -53,10 +53,28 @@
 
                 $('texi_and_pop').balloon();//マウスオーバーの割り当て
 
+
+                var assessment_num = -1;
                 //受信
                 $(document).ready(function () {
 
-                        // $("#assessment_list").append();
+                        var list = '<option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5" selected>5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option><option value="10">10</option>';
+                        for (var i = 0; i < 10; i++) {
+                                var add = "";
+                                if (i != 0) {
+                                        add += '<br>';
+                                        add += '<a style="position: relative;left: 135px;">' + i + '：</a>';
+                                        add += '<select id="assessment_list' + i + '" style="position: relative;width: 50px;left: 155px;">';
+                                }
+                                else {
+                                        add += '<a style="position: relative;left: 40px;">' + i + '：</a>';
+                                        add += '<select id="assessment_list' + i + '" style="position: relative;width: 50px;left: 60px;">';
+                                }
+                                add += list;
+                                
+                                $("#assessment_list").append(add);
+                        }
+                        assessment_num = i;
                         // <select id="assessment_list" style="position: relative;width: 30%;left: 15px;" >
                         //         <option value=""></option>
                         // </select>
@@ -69,16 +87,12 @@
                         //         dataType: "json",
                         // }).done(function (data, dataType) {
                         //         // //評価項目のチェックリストに追加
-                        //         // var cnt = 0;
-                        //         // for (var i = 0; i < data.length; i++) {
-                        //         //         cnt += 2 + data[i].word.length;
-                        //         //         if (cnt >= 30) {
-                        //         //                 $("#assessment_checkbox").append('<br>');
-                        //         //                 cnt = 2 + data[i].word.length;
-                        //         //         }
+                        // for (var i = 0; i < data.length; i++) {
+                        //         $("#assessment_checkbox").append('<br>');
 
-                        //         //         $("#assessment_checkbox").append('<input type="checkbox" name="assessment" value="' + data[i].word + '">' + data[i].word + "&nbsp;&nbsp;");
-                        //         // }
+
+                        //         $("#assessment_checkbox").append('<input type="checkbox" name="assessment" value="' + data[i].word + '">' + data[i].word + "&nbsp;&nbsp;");
+                        // }
                         //         // console.log(cnt);
                         // }).fail(function (XMLHttpRequest, textStatus, errorThrown) {
                         //         // alert('Error : ' + errorThrown);
@@ -190,110 +204,18 @@
                                 document.getElementById("situation_input_text").style.color = "red";
                         }
 
-                        // // カテゴリー
-                        // $("#category_text").empty();
-                        // document.getElementById("category_input_text").style.color = "";
-                        // if (get1.category_list.value == "入力") {//「入力」を選択時
-                        //         $("#category_text").append(get1.category.value);
-                        //         category_send = get1.category.value;
-                        //         if (get1.category.value == "") {
-                        //                 required_flag = false;
-                        //                 document.getElementById("category_input_text").style.color = "red";
-                        //         }
-                        // }
-                        // else if (get1.category_list.value == "") {//未選択時
-                        //         required_flag = false;
-                        //         document.getElementById("category_input_text").style.color = "red";
-                        // }
-                        // else {
-                        //         category_send = get1.category_list.value;
-                        //         $("#category_text").append(get1.category_list.value);
-                        // }
+                        // 評価項目
+                        $("#assessment_text").empty();
+                        for (var i = 0; i < assessment_num; i++) {
+                                document.getElementById("assessment_input_text").style.color = "";
+                                // $("#assessment_text").append(get1.assessment_list.value);
+                                if (i != 0)
+                                        $("#assessment_text").append('<a style="position: relative;left: 135px;">' + i + "：" + document.getElementById("assessment_list" + i).value + '</a>');
+                                else
+                                        $("#assessment_text").append('<a style="position: relative;left: 42px;">' + i + "：" + document.getElementById("assessment_list" + i).value + '</a>');
+                                $("#assessment_text").append("<br>");
+                        }
 
-                        // //状況
-                        // $("#situation_text").empty();
-                        // $("#situation_text").append(get1.situation.value);
-                        // document.getElementById("situation_input_text").style.color = "";
-                        // if (get1.situation.value == "") {
-                        //         required_flag = false;
-                        //         document.getElementById("situation_input_text").style.color = "red";
-                        // }
-
-                        // // 評価項目
-                        // $("#assessment_text").empty();
-                        // var check = get1.assessment;
-                        // var cnt = 0;
-                        // //マスターテーブルからのものをチェック
-                        // for (var i = 0; i < check.length; i++)
-                        //         if (check[i].checked) {
-                        //                 $("#assessment_text").append(check[i].value + "&nbsp;&nbsp;&nbsp;&nbsp;");
-                        //                 assessment_send.push(check[i].value);
-                        //                 cnt++;
-                        //         }
-                        // // 入力可能なもの
-                        // for (var i = 0; i < ASSESSENT_INPUT_TEXT_NUM; i++)
-                        //         if (document.getElementById("assessment_input" + i).value != "") {
-                        //                 $("#assessment_text").append(document.getElementById("assessment_input" + i).value + "&nbsp;&nbsp;&nbsp;&nbsp;");
-                        //                 assessment_send.push(document.getElementById("assessment_input" + i).value);
-                        //                 cnt++;
-                        //         }
-                        // document.getElementById("assessment_input_text").style.color = "";
-                        // if (cnt == 0 || cnt >= 10) {//選択している数が1~10かどうか確認
-                        //         required_flag = false;
-                        //         document.getElementById("assessment_input_text").style.color = "red";
-
-                        // }
-
-                        // // 日時・時期
-                        // var f = 0;
-                        // $("#time_text").empty();
-                        // time_send = "";
-                        // if (get1.month_list.value != "") {
-                        //         time_send += get1.month_list.value + "月"
-                        //         f = 1;
-                        // }
-                        // if (get1.day_list.value != "") {
-                        //         time_send += get1.day_list.value + "日"
-                        //         f = 1;
-                        // }
-                        // if (get1.hour_list.value != "") {
-                        //         time_send += get1.hour_list.value + "時"
-                        //         f = 1;
-                        // }
-                        // if (get1.minute_list.value != "") {
-                        //         time_send += get1.minute_list.value + "分"
-                        //         f = 1;
-                        // }
-                        // if (get1.season_list.value != "") {
-                        //         if (f == 1)
-                        //                 time_send += "　　";
-                        //         time_send += get1.season_list.value;
-                        //         time_send += "　　";
-                        // }
-                        // if (get1.timezone_list.value != "")
-                        //         time_send += get1.timezone_list.value;
-                        // $("#time_text").append(time_send);
-
-                        // // 地域
-                        // $("#area_text").empty();
-                        // $("#area_text").append(get1.area.value);
-
-                        // // 対象者
-                        // $("#target_text").empty();
-                        // $("#target_text").append(get2.target.value);
-
-                        // // ねらい
-                        // $("#aim_text").empty();
-                        // $("#aim_text").append(get2.aim.value);
-
-                        // // 公開の可否
-                        // $("#open_text").empty();
-                        // $("#open_text").append(get2.open_radio.value);
-                        // document.getElementById("open_input_text").style.color = "";
-                        // if (get2.open_radio.value == "") {
-                        //         required_flag = false;
-                        //         document.getElementById("open_input_text").style.color = "red";
-                        // }
 
 
                         // 入力必須事項の確認
@@ -310,6 +232,14 @@
                                 document.getElementById("required_error").style.display = "";
 
                         }
+                }
+
+                //訂正ボタンが押された
+                function back() {
+                        document.getElementById("input1").style.display = "";
+                        document.getElementById("input2").style.display = "";
+                        document.getElementById("input0").style.display = "";
+                        document.getElementById("draw").style.display = "none";
                 }
 
 
