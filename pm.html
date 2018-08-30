@@ -54,50 +54,77 @@
                 $('texi_and_pop').balloon();//マウスオーバーの割り当て
 
 
-                var assessment_num = -1;
+                var assessment_data = [];
                 //受信
                 $(document).ready(function () {
 
                         var list = '<option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5" selected>5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option><option value="10">10</option>';
-                        for (var i = 0; i < 10; i++) {
-                                var add = "";
-                                if (i != 0) {
-                                        add += '<br>';
-                                        add += '<a style="position: relative;left: 135px;">' + i + '：</a>';
-                                        add += '<select id="assessment_list' + i + '" style="position: relative;width: 50px;left: 155px;">';
-                                }
-                                else {
-                                        add += '<a style="position: relative;left: 40px;">' + i + '：</a>';
-                                        add += '<select id="assessment_list' + i + '" style="position: relative;width: 50px;left: 60px;">';
-                                }
-                                add += list;
-                                
-                                $("#assessment_list").append(add);
-                        }
-                        assessment_num = i;
+                        // for (var i = 0; i < 10; i++) {
+                        //         var add = "";
+                        //         if (i != 0) {
+                        //                 add += '<br>';
+                        //                 add += '<a style="position: relative;left: 140px;">' + i + '：</a>';
+                        //                 add += '<select id="assessment_list' + i + '" style="position: relative;width: 50px;left: 155px;">';
+                        //         }
+                        //         else {
+                        //                 add += '<a style="position: relative;left: 40px;">' + i + '：</a>';
+                        //                 add += '<select id="assessment_list' + i + '" style="position: relative;width: 50px;left: 60px;">';
+                        //         }
+                        //         add += list;
+
+                        //         $("#assessment_list").append(add);
+                        // }
+                        // assessment_num = i;
                         // <select id="assessment_list" style="position: relative;width: 30%;left: 15px;" >
                         //         <option value=""></option>
                         // </select>
 
+                        $.ajax({ //非同期通信
+                                type: "POST",
+                                url: "http://192.168.0.159/2018grade4/HUG/HUG_Server/eventcode.php",
+                                data: {
+                                        code: window.sessionStorage.getItem(["eventcode"])
+                                },
+                                success: function (data1) {
+                                        // alert(data1);
+                                        $.ajax({ //非同期通信
+                                                type: "POST",
+                                                url: "http://192.168.0.159/2018grade4/HUG/HUG_Server/theme.php",
+                                                data: {
+                                                        id: data1
+                                                },
+                                                success: function (data) {
+                                                        var text1 = '<br><a style="position: relative;left: 140px;">';
+                                                        var text2 = '：</a><select id="assessment_list';
+                                                        var text3 = '" style="position: relative;width: 50px;left: 158px;">';
 
-                        //評価項目を受信
-                        // $.ajax({
-                        //         type: "POST",
-                        //         url: "http://192.168.0.159/2018grade4/HUG/HUG_Server/assessment.php",
-                        //         dataType: "json",
-                        // }).done(function (data, dataType) {
-                        //         // //評価項目のチェックリストに追加
-                        // for (var i = 0; i < data.length; i++) {
-                        //         $("#assessment_checkbox").append('<br>');
+                                                        var add = "";
+                                                        add += '<a style="position: relative;left: 40px;">' + data[0].assessment0 + '：</a>';
+                                                        add += '<select id="assessment_list' + 0 + '" style="position: relative;width: 50px;left: 60px;">';
+                                                        $("#assessment_list").append(add + list);
+                                                        assessment_data.push(data[0].assessment0);
+                                                        if (data[0].assessment1 != "") { $("#assessment_list").append(text1 + data[0].assessment1 + text2 + 1 + text3 + list); assessment_data.push(data[0].assessment1); }
+                                                        if (data[0].assessment2 != "") { $("#assessment_list").append(text1 + data[0].assessment2 + text2 + 2 + text3 + list); assessment_data.push(data[0].assessment2); }
+                                                        if (data[0].assessment3 != "") { $("#assessment_list").append(text1 + data[0].assessment3 + text2 + 3 + text3 + list); assessment_data.push(data[0].assessment3); }
+                                                        if (data[0].assessment4 != "") { $("#assessment_list").append(text1 + data[0].assessment4 + text2 + 4 + text3 + list); assessment_data.push(data[0].assessment4); }
+                                                        if (data[0].assessment5 != "") { $("#assessment_list").append(text1 + data[0].assessment5 + text2 + 5 + text3 + list); assessment_data.push(data[0].assessment5); }
+                                                        if (data[0].assessment6 != "") { $("#assessment_list").append(text1 + data[0].assessment6 + text2 + 6 + text3 + list); assessment_data.push(data[0].assessment6); }
+                                                        if (data[0].assessment7 != "") { $("#assessment_list").append(text1 + data[0].assessment7 + text2 + 7 + text3 + list); assessment_data.push(data[0].assessment7); }
+                                                        if (data[0].assessment8 != "") { $("#assessment_list").append(text1 + data[0].assessment8 + text2 + 8 + text3 + list); assessment_data.push(data[0].assessment8); }
+                                                        if (data[0].assessment9 != "") { $("#assessment_list").append(text1 + data[0].assessment9 + text2 + 9 + text3 + list); assessment_data.push(data[0].assessment9); }
 
-
-                        //         $("#assessment_checkbox").append('<input type="checkbox" name="assessment" value="' + data[i].word + '">' + data[i].word + "&nbsp;&nbsp;");
-                        // }
-                        //         // console.log(cnt);
-                        // }).fail(function (XMLHttpRequest, textStatus, errorThrown) {
-                        //         // alert('Error : ' + errorThrown);
-                        // });
+                                                },
+                                                error: function (XMLHttpRequest, textStatus, errorThrown) { //接続が失敗
+                                                        // alert('エラーです！'); //エラーを表示
+                                                }
+                                        });
+                                },
+                                error: function (XMLHttpRequest, textStatus, errorThrown) { //接続が失敗
+                                        // alert('エラーです！'); //エラーを表示
+                                }
+                        });
                 });
+
         </script>
 </head>
 
@@ -206,13 +233,13 @@
 
                         // 評価項目
                         $("#assessment_text").empty();
-                        for (var i = 0; i < assessment_num; i++) {
+                        for (var i = 0; i < assessment_data.length; i++) {
                                 document.getElementById("assessment_input_text").style.color = "";
                                 // $("#assessment_text").append(get1.assessment_list.value);
                                 if (i != 0)
-                                        $("#assessment_text").append('<a style="position: relative;left: 135px;">' + i + "：" + document.getElementById("assessment_list" + i).value + '</a>');
+                                        $("#assessment_text").append('<a style="position: relative;left: 135px;">' + assessment_data[i] + "：" + document.getElementById("assessment_list" + i).value + '</a>');
                                 else
-                                        $("#assessment_text").append('<a style="position: relative;left: 42px;">' + i + "：" + document.getElementById("assessment_list" + i).value + '</a>');
+                                        $("#assessment_text").append('<a style="position: relative;left: 36px;">' + assessment_data[i] + "：" + document.getElementById("assessment_list" + i).value + '</a>');
                                 $("#assessment_text").append("<br>");
                         }
 
