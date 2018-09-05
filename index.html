@@ -244,18 +244,14 @@
                 success: function (recieve) { //接続が成功
 
 
-                    //    alert(recieve);
+                    // alert(recieve[0].name);
+                    // alert(recieve);
                     switch (faze) {
                         case 'login':
                             if (recieve != 'null') {
-                                window.location.href = "home.html";
-                                recieve = recieve.substr(10);
-                                recieve = recieve.substr(0, recieve.length - 3);
                                 window.sessionStorage.setItem(["mail"], mail);
-                                if (recieve == "ul")
-                                    window.sessionStorage.setItem(["name"], "名無し");
-                                else
-                                    window.sessionStorage.setItem(["name"], recieve);
+                                window.sessionStorage.setItem(["name"], recieve[0].name);
+                                window.location.href = "home.html";
                             }
                             else {
                                 $("error").empty();
@@ -263,7 +259,7 @@
                             }
                             break;
                         case 'new':
-                            if (recieve != 'null') {
+                            if (recieve != 'ok') {
                                 $("error").empty();
                                 $("error").append("そのIDすでに登録されています");
                             }
@@ -279,9 +275,6 @@
                             break;
 
                     }
-                    // sessionStorage.setItem('mynumber', recieve);
-                    // sessionStorage.setItem('user_num', 2);
-                    // window.location.href = "select_role.html";
                 },
                 error: function (XMLHttpRequest, textStatus, errorThrown) { //接続が失敗
                     // alert('エラーです！'); //エラーを表示

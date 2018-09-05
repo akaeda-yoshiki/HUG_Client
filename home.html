@@ -105,7 +105,7 @@
                                 // alert('Error : ' + errorThrown);
                         });
                 });
-                </script>
+        </script>
 </head>
 
 <body>
@@ -208,6 +208,10 @@
                         <draw_area id="aim_text" style="position: relative;left: 70px;"></draw_area>
                 </div>
                 <div class="block2">
+                        作成者
+                        <draw_area id="name_text" style="position: relative;left: 70px;"></draw_area>
+                </div>
+                <div class="block2">
                         公開可否
                         <draw_area id="open_text" style="position: relative;left: 50px;"></draw_area>
                 </div>
@@ -271,8 +275,8 @@
                         var $content = $('#mytable');
                         $content.empty();
                         $content.append("<tr><th>タイトル</th><th>作成日</th><th>カテゴリー</th><th>プレイ回数</th></tr>");
-                        
-                        
+
+
                         var get = document.forms.search;
                         // console.log(search.search_title);
                         $.ajax({ //非同期通信
@@ -280,14 +284,14 @@
                                 url: "http://192.168.0.159/2018grade4/HUG/HUG_Server/theme.php",
                                 data: {
                                         mode: now_mode,
-                                        title:search.search_title.value,
-                                        category:search_category.value,
-                                        situation:search_situation.value,
-                                        time:search_time.value,
-                                        area:search_area.value,
-                                        target:search_target.value,
-                                        aim:search_aim.value,
-                                        assessment:search_assessment.value
+                                        title: search.search_title.value,
+                                        category: search_category.value,
+                                        situation: search_situation.value,
+                                        time: search_time.value,
+                                        area: search_area.value,
+                                        target: search_target.value,
+                                        aim: search_aim.value,
+                                        assessment: search_assessment.value
                                 },
                                 success: function (data) {
 
@@ -360,6 +364,10 @@
                                         // ねらい
                                         $("#aim_text").empty();
                                         $("#aim_text").append(data[0].aim);
+
+                                        //作成者
+                                        $("#name_text").empty();
+                                        $("#name_text").append(data[0].name);
 
                                         // 公開の可否
                                         $("#open_text").empty();

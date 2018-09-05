@@ -240,6 +240,10 @@
                         <draw_area id="aim_text" style="position: relative;left: 70px;"></draw_area>
                 </div>
                 <div class="block2">
+                        作成者
+                        <draw_area id="name_text" style="position: relative;left: 70px;"></draw_area>
+                </div>
+                <div class="block1">
                         公開可否
                         <draw_area id="open_text" style="position: relative;left: 50px;"></draw_area>
                 </div>
@@ -413,6 +417,8 @@
                                         id: id
                                 },
                                 success: function (data) {
+                                        // console.log(data);
+                                        // alert(data);
                                         // タイトル
                                         $("#title_text").empty();
                                         $("#title_text").append(data[0].title);
@@ -456,6 +462,10 @@
                                         // ねらい
                                         $("#aim_text").empty();
                                         $("#aim_text").append(data[0].aim);
+
+                                        //作成者
+                                        $("#name_text").empty();
+                                        $("#name_text").append(data[0].name);
 
                                         // 公開の可否
                                         $("#open_text").empty();
