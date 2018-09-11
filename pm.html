@@ -71,6 +71,48 @@
                         left: 0px;
                         z-index: 1;
                 }
+
+                .tag_b {
+                        color: #364e96;
+                        /*文字色*/
+                        padding: 0.5em 1em;
+                        /*上下の余白*/
+                        border-top: solid 3px #364e96;
+                        /*上線*/
+                        border-bottom: solid 3px #364e96;
+                        /*下線*/
+                        width: 200px;
+                        font-size: 20px;
+                        text-decoration: none;
+                }
+
+                .tag_b:hover {
+                        color: #364e96;
+                        /*文字色*/
+                        padding: 0.5em 1em;
+                        /*上下の余白*/
+                        border-top: solid 3px #364e96;
+                        /*上線*/
+                        border-bottom: solid 3px #364e96;
+                        /*下線*/
+                        width: 200px;
+                        font-size: 25px;
+                        text-decoration: none;
+                }
+
+                .tag_r {
+                        color: #af2626;
+                        /*文字色*/
+                        padding: 0.5em 1em;
+                        /*上下の余白*/
+                        border-top: solid 3px #af2626;
+                        /*上線*/
+                        border-bottom: solid 3px #af2626;
+                        /*下線*/
+                        width: 200px;
+                        font-size: 20px;
+                        text-decoration: none;
+                }
         </style>
         <script>
 
@@ -217,12 +259,28 @@
 
 <body>
         <br>
-        <br> <br>
-        <div class="theme_box" style="height:20px;width: 100px;">
+        <br>
+        <br>
+        <!-- 新規・再利用 -->
+        <b style="position: relative;left:8%;">
+                <a href="#!" class="tag_r" onclick="to_login()" id="login_button">新規</a>
+                &nbsp;&nbsp;&nbsp;&nbsp;
+                <a href="#!" class="tag_b" onclick="to_new_user()" id="user_button">再利用</a>
+        </b>
+        &nbsp;&nbsp;&nbsp;
+        <!-- カード切り替え -->
+        <input type="button" id="new_situation" style="position: relative; left:50px;border: solid 2px #203aff;" value="状況" onclick='exchange_mode("situation")'>
+        <input type="button" id="new_human" style="position: relative; left:80px;" value="人間カード" onclick='exchange_mode("human")'>
+
+        <br>
+        <br>
+        <!-- テーマボタン -->
+        <div class="theme_box" style="height:20px;width: 100px;top:80px">
                 <center>
                         <a href='#!' onclick='overview("on", "1")' class='square_btn'>テーマ確認</a>
                 </center>
         </div>
+        <!-- 概要一部 -->
         <div class="theme_box" style="top: 130px;">
                 【概要】<br> 現在時刻
                 <br> 経過時間
@@ -230,7 +288,7 @@
                 <center>
                         <a href='#!' onclick='overview("on", "2")' class='square_btn'>詳細</a></center>
         </div>
-
+        <!-- 履歴一部 -->
         <div class="theme_box" style="top:270px;height:55%;">
                 <br>
                 <div class="block1" style="width:100%;left:-3.5%;font-size: 13px;background: #f7fdc4;">
@@ -242,7 +300,7 @@
                         <br>
                 </div>
                 <div class="block1" style="width:100%;left:-3.5%;font-size: 13px;background: #f7fdc4;">
-                        <br> 
+                        <br>
                         <br><br>
                 </div>
                 <div class="block2" style="width:100%;left:-3.5%;font-size: 13px;background: #fff8ef;">
@@ -285,9 +343,7 @@
                 対象者
                 <draw_area id="target_text" style="position: relative;left: 70px;"></draw_area>
                 <br> ねらい
-                <draw_area id="aim_text" style="position: relative;le
-                
-                file:///Users/akaedayoshiki/Desktop/github/HUG_Client/pm.html#!ft: 70px;"></draw_area>
+                <draw_area id="aim_text" style="position: relative;left: 70px;"></draw_area>
                 <br>
         </div>
         <!-- 概要詳細 -->
@@ -295,44 +351,66 @@
                 <center> <a href='#!' onclick='overview("off")' class='square_btn'>閉じる</a></center>
 
         </div>
-        <!-- 状況リスト -->
+        <!-- 履歴詳細 -->
         <div class="theme_box" id="situation_detail_box" style="display: none;width: 80%;height: 80%;position: absolute;top: 8%;left: 8%;z-index: 1;">
                 <br>
                 <div class="block1" style="width:100%;left:-1%;font-size: 13px;background: #f7fdc4;">
                         時間<br> 文
                         <br>章
                 </div>
-                <div class="block2" style="width:100%;left:;font-size: 13px;background: #fff8ef;">
+                <div class="block2" style="width:100%;left:-1%;font-size: 13px;background: #fff8ef;">
                         時間<br> 文
                         <br>章
                 </div>
                 <center> <a href='#!' onclick='overview("off")' class='square_btn'>閉じる</a></center>
 
         </div>
-        <form id="input1">
-                <!-- 状況 -->
-                <div class="block1">
-                        <text_and_pop id="situation_input_text" title="発生した状況の詳細を入力してください">状況*</text_and_pop>
-                        <input type="text" id="situation" class="textarea_smoll" required>
-                </div>
-                <!-- 評価項目 -->
-                <div class="block2">
-                        <text_and_pop id="assessment_input_text" title="評価項目についてどれくらい関連度があるか入力して下さい">評価項目*</text_and_pop>
-                        <assessment_list id="assessment_list"></assessment_list>
-                </div>
-        </form>
-
-        <!-- 画像 -->
-        <div class="block1" id="input0">
-                <text_and_pop title="施設内の地図など避難所に関する画像を選択してください">画像</text_and_pop>
-
-                <form id="file_input" action="http://192.168.0.159/2018grade4/HUG/HUG_Server/file_upload.php" method="post" enctype="multipart/form-data">
-                        <!-- <br> -->
-                        <input type="file" name="pic" id="image_file" style="position: relative; left:128px;top:-20px;" onchange="image_update()">
-                        <!-- <br> -->
+        <!-- 状況カード -->
+        <a>
+                <form id="input1">
+                        <!-- 状況 -->
+                        <div class="block1">
+                                <text_and_pop id="situation_input_text" title="発生した状況の詳細を入力してください">状況*</text_and_pop>
+                                <input type="text" id="situation" class="textarea_smoll" required>
+                        </div>
+                        <!-- 評価項目 -->
+                        <div class="block2">
+                                <text_and_pop id="assessment_input_text" title="評価項目についてどれくらい関連度があるか入力して下さい">評価項目*</text_and_pop>
+                                <assessment_list id="assessment_list"></assessment_list>
+                        </div>
                 </form>
-                <div id="image_input_draw"></div>
-        </div>
+
+                <!-- 画像 -->
+                <div class="block1" id="input0">
+                        <text_and_pop title="施設内の地図など避難所に関する画像を選択してください">画像</text_and_pop>
+
+                        <form id="file_input" action="http://192.168.0.159/2018grade4/HUG/HUG_Server/file_upload.php" method="post" enctype="multipart/form-data">
+                                <!-- <br> -->
+                                <input type="file" name="pic" id="image_file" style="position: relative; left:128px;top:-20px;" onchange="image_update()">
+                                <!-- <br> -->
+                        </form>
+                        <div id="image_input_draw"></div>
+                </div>
+        </a>
+        <!-- 人間カード -->
+        <a>
+                <form id="input_human">
+                        <!-- 特徴 -->
+                        <div class="block1">
+                                <text_and_pop id="situation_input_text" title="けがや体調などわかることを記入してください">特徴*</text_and_pop>
+                                <input type="text" id="situation" class="textarea_smoll" required>
+                        </div>
+                        <!-- 年 -->
+                        <div class="block2">
+                                年齢*
+                                <input type="text" id="situation" class="textarea_smoll" style="height:20px;" required>
+                        </div>
+                        <div class="block1">
+                                性別*
+                                
+                        </div>
+                </form>
+        </a>
         <script>
                 // 画像が選択されたら表示
                 function image_update() {
@@ -518,6 +596,15 @@
                                 document.getElementById("situation_detail_box").style.display = "none";
                         }
 
+                }
+
+                //作成する種類の変更
+                function exchange_mode(h) {
+                        switch (h) {
+                                case "human":
+
+                                        break;
+                        }
                 }
         </script>
 
