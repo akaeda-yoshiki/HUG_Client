@@ -113,6 +113,63 @@
                         font-size: 20px;
                         text-decoration: none;
                 }
+
+                .cp_ipradio {
+                        width: 90%;
+                        margin: 2em auto;
+                        text-align: left;
+                }
+
+                .cp_ipradio input[type='radio'] {
+                        position: absolute;
+                        z-index: -1;
+                        opacity: 0;
+                }
+
+                .cp_ipradio label {
+                        position: relative;
+                        display: inline-block;
+                        margin-right: 30px;
+                        padding-right: 10px;
+                        padding-left: 35px;
+                        cursor: pointer;
+                }
+
+                .cp_ipradio label::before {
+                        position: absolute;
+                        z-index: -1;
+                        top: 0;
+                        left: 0;
+                        display: block;
+                        width: 24px;
+                        height: 24px;
+                        content: ' ';
+                        border: 2px solid #da3c41;
+                        /* border-radius: 4px; */
+                }
+
+                .cp_ipradio input[type='radio']+label::before {
+                        border-radius: 18px;
+                }
+
+                .cp_ipradio input[type='radio']:checked+label {
+                        padding-left: 10px;
+                        color: #ffffff;
+                }
+
+                .cp_ipradio input[type='radio']:checked+label::before {
+                        top: 0;
+                        width: 100%;
+                        height: 100%;
+                        background: #da3c41;
+                }
+
+                /* Transition */
+                .cp_ipradio label,
+                .cp_ipradio label::before {
+                        -webkit-transition: 0.25s all ease;
+                        transition: 0.25s all ease;
+                }
         </style>
         <script>
 
@@ -267,13 +324,20 @@
                 &nbsp;&nbsp;&nbsp;&nbsp;
                 <a href="#!" class="tag_b" onclick="to_new_user()" id="user_button">再利用</a>
         </b>
-        &nbsp;&nbsp;&nbsp;
-        <!-- カード切り替え -->
-        <input type="button" id="new_situation" style="position: relative; left:50px;border: solid 2px #203aff;" value="状況" onclick='exchange_mode("situation")'>
-        <input type="button" id="new_human" style="position: relative; left:80px;" value="人間カード" onclick='exchange_mode("human")'>
+        <b style="position: relative;left:8%;">
 
-        <br>
-        <br>
+                <!-- カード切り替え -->
+                <!-- <input type="button" id="new_situation" style="position: relative; left:50px;border: 1px solid;" value="状況" onclick='exchange_mode("situation")'>
+                <input type="button" id="new_human" style="position: relative; left:80px;border: 1px solid;" value="人間カード" onclick='exchange_mode("human")'> -->
+                <div class="cp_ipradio">
+                        <input type="radio" name="cpipr03" id="new_situation" onclick='exchange_mode("situation")' checked/>
+                        <label for="new_situation">状況カード</label>
+                        <input type="radio" name="cpipr03" id="new_human" onclick='exchange_mode("human")'/>
+                        <label for="new_human">人間カード</label>
+                </div>
+        </b>
+        <!-- <br>
+        <br> -->
         <!-- テーマボタン -->
         <div class="theme_box" style="height:20px;width: 100px;top:80px">
                 <center>
@@ -394,7 +458,7 @@
         </a>
         <!-- 人間カード -->
         <a>
-                <form id="input_human">
+                <form id="input_human" style="display: none;">
                         <!-- 特徴 -->
                         <div class="block1">
                                 <text_and_pop id="situation_input_text" title="けがや体調などわかることを記入してください">特徴*</text_and_pop>
@@ -407,7 +471,7 @@
                         </div>
                         <div class="block1">
                                 性別*
-                                
+
                         </div>
                 </form>
         </a>
@@ -436,15 +500,16 @@
                 };
         </script>
         <form id="input2">
-                <center>
+                <b style="position: relative; left:26%;">
                         <!-- エラーメッセージ -->
                         <a id="required_error" style="color: red;display: none;">入力内容に不備があります。
                                 <br>
                                 <br>
                         </a>
-
+                </b>
+                <b style="position: relative; left:36%;">
                         <input type="button" value="次へ" onclick="next()">
-                </center>
+                </b>
         </form>
         <!-- 確認画面 *************************************************************-->
         <form id="draw" style="display: none;">
@@ -600,9 +665,23 @@
 
                 //作成する種類の変更
                 function exchange_mode(h) {
+
+                        // document.getElementById("new_human").style.border = "";
+                        // document.getElementById("new_situation").style.border = "";
+                        // document.getElementById("new_" + h).style.border = "solid 2px #203aff";
+                        // document.getElementById("new_" + h).style.borderColor = "#203aff";
                         switch (h) {
                                 case "human":
+                                        document.getElementById("input1").style.display = "none";
+                                        document.getElementById("input0").style.display = "none";
+                                        document.getElementById("input_human").style.display = "";
 
+
+                                        break;
+                                case "situation":
+                                        document.getElementById("input1").style.display = "";
+                                        document.getElementById("input0").style.display = "";
+                                        document.getElementById("input_human").style.display = "none";
                                         break;
                         }
                 }
