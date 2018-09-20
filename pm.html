@@ -250,52 +250,52 @@
                                                         },
                                                         success: function (data) {
                                                                 // タイトル
-                                                                $("#title_text").empty();
-                                                                $("#title_text").append(data[0].title);
+                                                                $("#theme_title_text").empty();
+                                                                $("#theme_title_text").append(data[0].title);
                                                                 // カテゴリー
-                                                                $("#category_text").empty();
-                                                                $("#category_text").append(data[0].category);
+                                                                $("#theme_category_text").empty();
+                                                                $("#theme_category_text").append(data[0].category);
 
                                                                 //状況
-                                                                $("#situation_text").empty();
-                                                                $("#situation_text").append(data[0].situation);
+                                                                $("#theme_situation_text").empty();
+                                                                $("#theme_situation_text").append(data[0].situation);
                                                                 // 評価項目
-                                                                $("#assessment_text").empty();
-                                                                $("#assessment_text").append(data[0].assessment0);
-                                                                $("#assessment_text").append("&nbsp;&nbsp;&nbsp;&nbsp;" + data[0].assessment1);
-                                                                $("#assessment_text").append("&nbsp;&nbsp;&nbsp;&nbsp;" + data[0].assessment2);
-                                                                $("#assessment_text").append("&nbsp;&nbsp;&nbsp;&nbsp;" + data[0].assessment3);
-                                                                $("#assessment_text").append("&nbsp;&nbsp;&nbsp;&nbsp;" + data[0].assessment4);
-                                                                $("#assessment_text").append("&nbsp;&nbsp;&nbsp;&nbsp;" + data[0].assessment5);
-                                                                $("#assessment_text").append("&nbsp;&nbsp;&nbsp;&nbsp;" + data[0].assessment6);
-                                                                $("#assessment_text").append("&nbsp;&nbsp;&nbsp;&nbsp;" + data[0].assessment7);
-                                                                $("#assessment_text").append("&nbsp;&nbsp;&nbsp;&nbsp;" + data[0].assessment8);
-                                                                $("#assessment_text").append("&nbsp;&nbsp;&nbsp;&nbsp;" + data[0].assessment9);
+                                                                $("#theme_assessment_text").empty();
+                                                                $("#theme_assessment_text").append(data[0].assessment0);
+                                                                $("#theme_assessment_text").append("&nbsp;&nbsp;&nbsp;&nbsp;" + data[0].assessment1);
+                                                                $("#theme_assessment_text").append("&nbsp;&nbsp;&nbsp;&nbsp;" + data[0].assessment2);
+                                                                $("#theme_assessment_text").append("&nbsp;&nbsp;&nbsp;&nbsp;" + data[0].assessment3);
+                                                                $("#theme_assessment_text").append("&nbsp;&nbsp;&nbsp;&nbsp;" + data[0].assessment4);
+                                                                $("#theme_assessment_text").append("&nbsp;&nbsp;&nbsp;&nbsp;" + data[0].assessment5);
+                                                                $("#theme_assessment_text").append("&nbsp;&nbsp;&nbsp;&nbsp;" + data[0].assessment6);
+                                                                $("#theme_assessment_text").append("&nbsp;&nbsp;&nbsp;&nbsp;" + data[0].assessment7);
+                                                                $("#theme_assessment_text").append("&nbsp;&nbsp;&nbsp;&nbsp;" + data[0].assessment8);
+                                                                $("#theme_assessment_text").append("&nbsp;&nbsp;&nbsp;&nbsp;" + data[0].assessment9);
                                                                 // 日時・時期
-                                                                $("#time_text").empty();
-                                                                $("#time_text").append(data[0].time);
+                                                                $("#theme_time_text").empty();
+                                                                $("#theme_time_text").append(data[0].time);
 
                                                                 // 地域
-                                                                $("#area_text").empty();
-                                                                $("#area_text").append(data[0].area);
+                                                                $("#theme_area_text").empty();
+                                                                $("#theme_area_text").append(data[0].area);
 
                                                                 // 画像
-                                                                $("#image_text").empty();
+                                                                $("#theme_image_text").empty();
                                                                 // $("#image_text").append(data[0].image);
                                                                 if (data[0].image != "" && data[0].image != null)
-                                                                        $("#image_text").append('<img src="http://192.168.0.159/2018grade4/HUG/HUG_Server/image/' + data[0].id + '.jpeg">');
+                                                                        $("#theme_image_text").append('<img src="http://192.168.0.159/2018grade4/HUG/HUG_Server/image/' + data[0].id + '.jpeg">');
 
                                                                 // 対象者
-                                                                $("#target_text").empty();
-                                                                $("#target_text").append(data[0].target);
+                                                                $("#theme_target_text").empty();
+                                                                $("#theme_target_text").append(data[0].target);
 
                                                                 // ねらい
-                                                                $("#aim_text").empty();
-                                                                $("#aim_text").append(data[0].aim);
+                                                                $("#theme_aim_text").empty();
+                                                                $("#theme_aim_text").append(data[0].aim);
 
                                                                 // 公開の可否
-                                                                $("#open_text").empty();
-                                                                $("#open_text").append(data[0].open);
+                                                                $("#theme_open_text").empty();
+                                                                $("#theme_open_text").append(data[0].open);
 
                                                                 receive_flag = 0;
                                                         },
@@ -332,7 +332,7 @@
                 <div class="cp_ipradio">
                         <input type="radio" name="cpipr03" id="new_situation" onclick='exchange_mode("situation")' checked/>
                         <label for="new_situation">状況カード</label>
-                        <input type="radio" name="cpipr03" id="new_human" onclick='exchange_mode("human")'/>
+                        <input type="radio" name="cpipr03" id="new_human" onclick='exchange_mode("human")' />
                         <label for="new_human">人間カード</label>
                 </div>
         </b>
@@ -389,25 +389,25 @@
 
                 <center> <a href='#!' onclick='overview("off")' class='square_btn'>閉じる</a></center>
                 タイトル
-                <draw_area id="title_text" style="position: relative;left: 50px;"></draw_area>
+                <draw_area id="theme_title_text" style="position: relative;left: 50px;"></draw_area>
 
                 <br> カテゴリー
-                <draw_area id="category_text" style="position: relative;left: 35px;"></draw_area>
+                <draw_area id="theme_category_text" style="position: relative;left: 35px;"></draw_area>
                 <br> 状況
-                <draw_area id="situation_text" style="position: relative;left: 83px;"></draw_area>
+                <draw_area id="theme_situation_text" style="position: relative;left: 83px;"></draw_area>
                 <br> 評価項目
-                <draw_area id="assessment_text" style="position: relative;left: 50px;"></draw_area>
+                <draw_area id="theme_assessment_text" style="position: relative;left: 50px;"></draw_area>
                 <br> 日時/時期
-                <draw_area id="time_text" style="position: relative;left: 50px;"></draw_area>
+                <draw_area id="theme_time_text" style="position: relative;left: 50px;"></draw_area>
                 <br> 地域
-                <draw_area id="area_text" style="position: relative;left: 90px;"></draw_area>
+                <draw_area id="theme_area_text" style="position: relative;left: 90px;"></draw_area>
                 <br> 画像
-                <div id="image_text" style="position: relative;left: 90px;"></div>
+                <div id="theme_image_text" style="position: relative;left: 90px;"></div>
 
                 対象者
-                <draw_area id="target_text" style="position: relative;left: 70px;"></draw_area>
+                <draw_area id="theme_target_text" style="position: relative;left: 70px;"></draw_area>
                 <br> ねらい
-                <draw_area id="aim_text" style="position: relative;left: 70px;"></draw_area>
+                <draw_area id="theme_aim_text" style="position: relative;left: 70px;"></draw_area>
                 <br>
         </div>
         <!-- 概要詳細 -->
@@ -430,7 +430,7 @@
 
         </div>
         <!-- 状況カード -->
-        <a>
+        <a id="situation_card">
                 <form id="input1">
                         <!-- 状況 -->
                         <div class="block1">
@@ -455,25 +455,35 @@
                         </form>
                         <div id="image_input_draw"></div>
                 </div>
+                <b style="position: relative; left:36%;">
+                        <input type="button" value="次へ" onclick='next("situation")'>
+                </b>
         </a>
         <!-- 人間カード -->
-        <a>
-                <form id="input_human" style="display: none;">
+        <a id="human_card" style="display: none;">
+                <form id="input_human">
                         <!-- 特徴 -->
                         <div class="block1">
-                                <text_and_pop id="situation_input_text" title="けがや体調などわかることを記入してください">特徴*</text_and_pop>
-                                <input type="text" id="situation" class="textarea_smoll" required>
+                                <text_and_pop id="feature_input_text" title="けがや体調などわかることを記入してください">特徴*</text_and_pop>
+                                <input type="text" id="feature" class="textarea_smoll" required>
                         </div>
                         <!-- 年 -->
                         <div class="block2">
-                                年齢*
-                                <input type="text" id="situation" class="textarea_smoll" style="height:20px;" required>
+                                <text_and_pop id="age_input_text" title="年齢がわからない場合はおよそを記入して下さい">年齢*</text_and_pop>
+                                <input type="text" id="age" class="textarea_smoll" style="height:20px;" required>
                         </div>
                         <div class="block1">
-                                性別*
+                                <text_and_pop id="sex_input_text">性別*</text_and_pop>
 
+                                <b style="position: relative; left:60px;">
+                                        <input type="radio" name="sex" value="男性">男性
+                                        <input type="radio" name="sex" value="女性">女性
+                                </b>
                         </div>
                 </form>
+                <b style="position: relative; left:36%;">
+                        <input type="button" value="次へ" onclick='next("human")'>
+                </b>
         </a>
         <script>
                 // 画像が選択されたら表示
@@ -499,20 +509,21 @@
                         }
                 };
         </script>
-        <form id="input2">
-                <b style="position: relative; left:26%;">
-                        <!-- エラーメッセージ -->
-                        <a id="required_error" style="color: red;display: none;">入力内容に不備があります。
-                                <br>
-                                <br>
-                        </a>
-                </b>
-                <b style="position: relative; left:36%;">
+        <!-- <form id="error"> -->
+        <!-- <b style="position: relative; left:26%;"> -->
+        <!-- エラーメッセージ -->
+        <a id="required_error" style="position: relative; left:26%;color: red;display: none;">
+                <br>入力内容に不備があります。
+                <br>
+                <br>
+        </a>
+        <!-- </b> -->
+        <!-- <b style="position: relative; left:36%;">
                         <input type="button" value="次へ" onclick="next()">
-                </b>
-        </form>
+                </b> -->
+        <!-- </form> -->
         <!-- 確認画面 *************************************************************-->
-        <form id="draw" style="display: none;">
+        <form id="confirm_situation" style="display: none;">
                 <div class="block1" id="situation">
                         状況*
                         <draw_area id="situation_text"></draw_area>
@@ -528,73 +539,134 @@
 
                 </div>
                 <br>
-                <center>
+                <a style="position: relative; left:27%;">
                         <!-- ボタン -->
-                        <input type="button" value="訂正" onclick="back()"> &nbsp; &nbsp; &nbsp; &nbsp;
-                        <input type="button" value="内容確定" onclick="decide()">
-                </center>
+                        <input type="button" value="訂正" onclick='back("situation")'> &nbsp; &nbsp; &nbsp; &nbsp;
+                        <input type="button" value="内容確定" onclick='decides("situation")'>
+                </a>
+        </form>
+        <!-- 確認画面 *************************************************************-->
+        <form id="confirm_human" style="display: none;">
+                <div class="block1" id="feature">
+                        特徴*
+                        <draw_area id="feature_text"></draw_area>
+                </div>
+
+                <div class="block2">
+                        年齢*
+                        <draw_area id="age_text"></draw_area>
+                </div>
+                <div class="block1">
+                        性別*
+                        <draw_area id="sex_text"></draw_area>
+
+                </div>
+                <br>
+                <a style="position: relative; left:27%;">
+                        <!-- ボタン -->
+                        <input type="button" value="訂正" onclick='back("human")'> &nbsp; &nbsp; &nbsp; &nbsp;
+                        <input type="button" value="内容確定" onclick='decide("human")'>
+                </a>
         </form>
         <script>
                 var assessment_send = [], category_send, time_send = "", image_send = "";//登録時に送信する用
                 //次へボタンが押された時
-                function next() {
+                function next(h) {
                         var required_flag = true;//入力必須事項の確認用
-                        var get1 = document.forms.input1;
-                        var get2 = document.forms.input2;
 
-                        // 状況
-                        $("#situation_text").empty();
-                        $("#situation_text").append(get1.situation.value);
-                        document.getElementById("situation_input_text").style.color = "";
-                        if (get1.situation.value == "") {
-                                required_flag = false;
-                                document.getElementById("situation_input_text").style.color = "red";
+                        if (h == "situation") {
+                                var get1 = document.forms.input1;
+
+                                error_reset();
+                                // 状況
+                                $("#situation_text").empty();
+                                $("#situation_text").append(get1.situation.value);
+                                if (get1.situation.value == "") {
+                                        required_flag = false;
+                                        document.getElementById("situation_input_text").style.color = "red";
+                                }
+
+                                // 評価項目
+                                $("#assessment_text").empty();
+                                for (var i = 0; i < assessment_data.length; i++) {
+                                        if (i != 0)
+                                                $("#assessment_text").append('<a style="position: relative;left: 135px;">' + assessment_data[i] + "：" + document.getElementById("assessment_list" + i).value + '</a>');
+                                        else
+                                                $("#assessment_text").append('<a style="position: relative;left: 36px;">' + assessment_data[i] + "：" + document.getElementById("assessment_list" + i).value + '</a>');
+                                        $("#assessment_text").append("<br>");
+                                        assessment_send.push(document.getElementById("assessment_list" + i).value);
+                                }
+
+
+
+                                // 入力必須事項の確認
+                                if (required_flag == true) {
+                                        document.getElementById("required_error").style.display = "none";
+                                        document.getElementById("situation_card").style.display = "none";
+                                        document.getElementById("confirm_situation").style.display = "";
+                                        document.getElementById("required_error").style.display = "none";
+
+                                }
+                                else {
+                                        document.getElementById("required_error").style.display = "";
+
+                                }
                         }
+                        else if (h == "human") {
+                                var get1 = document.forms.input_human;
+                                $("#feature_text").empty();
+                                $("#feature_text").append(get1.feature.value);
+                                if (get1.feature.value == "") {
+                                        required_flag = false;
+                                        document.getElementById("feature_input_text").style.color = "red";
+                                }
+                                $("#age_text").empty();
+                                $("#age_text").append(get1.age.value);
+                                if (get1.age.value == "") {
+                                        required_flag = false;
+                                        document.getElementById("age_input_text").style.color = "red";
+                                }
 
-                        // 評価項目
-                        $("#assessment_text").empty();
-                        for (var i = 0; i < assessment_data.length; i++) {
-                                document.getElementById("assessment_input_text").style.color = "";
-                                // $("#assessment_text").append(get1.assessment_list.value);
-                                if (i != 0)
-                                        $("#assessment_text").append('<a style="position: relative;left: 135px;">' + assessment_data[i] + "：" + document.getElementById("assessment_list" + i).value + '</a>');
-                                else
-                                        $("#assessment_text").append('<a style="position: relative;left: 36px;">' + assessment_data[i] + "：" + document.getElementById("assessment_list" + i).value + '</a>');
-                                $("#assessment_text").append("<br>");
-                                assessment_send.push(document.getElementById("assessment_list" + i).value);
-                        }
+
+                                $("#sex_text").empty();
+                                $("#sex_text").append(get1.sex.value);
+                                if (get1.sex.value == "") {
+                                        required_flag = false;
+                                        document.getElementById("sex_input_text").style.color = "red";
+                                }
 
 
-
-                        // 入力必須事項の確認
-                        if (required_flag == true) {
-                                document.getElementById("input1").style.display = "none";
-                                document.getElementById("input2").style.display = "none";
-                                document.getElementById("input0").style.display = "none";
-                                document.getElementById("draw").style.display = "";
-
-                                document.getElementById("required_error").style.display = "none";
-
-                        }
-                        else {
-                                document.getElementById("required_error").style.display = "";
-
+                                // 入力必須事項の確認
+                                if (required_flag == true) {
+                                        document.getElementById("required_error").style.display = "none";
+                                        document.getElementById("human_card").style.display = "none";
+                                        document.getElementById("confirm_human").style.display = "";
+                                        document.getElementById("required_error").style.display = "none";
+                                }
+                                else {
+                                        document.getElementById("required_error").style.display = "";
+                                }
                         }
                 }
 
                 //訂正ボタンが押された
-                function back() {
-                        document.getElementById("input1").style.display = "";
-                        document.getElementById("input2").style.display = "";
-                        document.getElementById("input0").style.display = "";
-                        document.getElementById("draw").style.display = "none";
+                function back(h) {
+                        if (h == "situation") {
+                                document.getElementById("situation_card").style.display = "";
+                        }
+                        else if (h == "human") {
+                                document.getElementById("human_card").style.display = "";
+                        }
+                        document.getElementById("required_error").style.display = "";
+                        document.getElementById("confirm_situation").style.display = "none";
+                        document.getElementById("confirm_human").style.display = "none";
+                        document.getElementById("required_error").style.display = "none";
                 }
-                var send_f = 1;
 
+                var send_f = 1;
                 //内容確定ボタンが押された
                 function decide() {
                         var get1 = document.forms.input1;
-                        var get2 = document.forms.input2;
                         if (send_f == 1) {
                                 send_f = 0;
                                 $.ajax({ //非同期通信
@@ -663,25 +735,28 @@
 
                 }
 
+                //エラー系のリセット
+                function error_reset() {
+                        document.getElementById("required_error").style.display = "none";
+                        document.getElementById("situation_input_text").style.color = "";
+                        document.getElementById("feature_input_text").style.color = "";
+                        document.getElementById("age_input_text").style.color = "";
+                        document.getElementById("sex_input_text").style.color = "";
+                }
+
                 //作成する種類の変更
                 function exchange_mode(h) {
-
-                        // document.getElementById("new_human").style.border = "";
-                        // document.getElementById("new_situation").style.border = "";
-                        // document.getElementById("new_" + h).style.border = "solid 2px #203aff";
-                        // document.getElementById("new_" + h).style.borderColor = "#203aff";
+                        error_reset();
+                        document.getElementById("confirm_situation").style.display = "none";
+                        document.getElementById("confirm_human").style.display = "none";
                         switch (h) {
                                 case "human":
-                                        document.getElementById("input1").style.display = "none";
-                                        document.getElementById("input0").style.display = "none";
-                                        document.getElementById("input_human").style.display = "";
-
-
+                                        document.getElementById("situation_card").style.display = "none";
+                                        document.getElementById("human_card").style.display = "";
                                         break;
                                 case "situation":
-                                        document.getElementById("input1").style.display = "";
-                                        document.getElementById("input0").style.display = "";
-                                        document.getElementById("input_human").style.display = "none";
+                                        document.getElementById("situation_card").style.display = "";
+                                        document.getElementById("human_card").style.display = "none";
                                         break;
                         }
                 }

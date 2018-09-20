@@ -1,5 +1,5 @@
-var DEBUG = false;
-// var DEBUG = true;
+// var DEBUG = false;
+var DEBUG = true;
 
 var LAVEL_SIZE_MAX_Y = 50;//ラベルの縦幅の上限
 var RECT_MARKER_RANGE = 8;//拡大縮小可能マーカーの輪郭からの反応幅
