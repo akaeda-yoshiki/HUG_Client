@@ -677,6 +677,7 @@
                                                         data1: get1.situation.value,
                                                         data2: assessment_send.join("/"),
                                                         data3: "",
+                                                        data4: "21:20",
                                                         code: window.sessionStorage.getItem(["eventcode"]),
                                                         mode: "insert",
                                                         id: 2
@@ -700,7 +701,7 @@
                         }
                         else if (h == "human") {
                                 if (send_f == 1) {
-                                var get2 = document.forms.input_human;
+                                        var get2 = document.forms.input_human;
 
                                         send_f = 0;
                                         $.ajax({ //非同期通信
@@ -710,6 +711,7 @@
                                                         data1: get2.feature.value,
                                                         data2: get2.age.value,
                                                         data3: get2.sex.value,
+                                                        data4: "21:20",
                                                         code: window.sessionStorage.getItem(["eventcode"]),
                                                         mode: "insert",
                                                         id: 3
