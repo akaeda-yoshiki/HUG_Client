@@ -229,6 +229,58 @@
                                                 // alert('エラーです！'); //エラーを表示
                                         }
                                 });
+
+                        if (DEBUG)
+                                $.ajax({ //非同期通信
+                                        type: "POST",
+                                        url: "http://192.168.0.159/2018grade4/HUG/HUG_Server/eventcode.php",
+                                        data: {
+                                                code: window.sessionStorage.getItem(["eventcode"]),
+                                                id: "2"
+                                        },
+                                        success: function (data) {
+                                                $.ajax({ //非同期通信
+                                                        type: "POST",
+                                                        url: "http://192.168.0.159/2018grade4/HUG/HUG_Server/eventcode.php",
+                                                        data: {
+                                                                code: window.sessionStorage.getItem(["eventcode"]),
+                                                                id: "3"
+                                                        },
+                                                        success: function (data1) {
+                                                               
+                                                                data = data.concat(data1);
+                                                                data.sort();
+                                                                console.log(data);
+                                                                var add = "", class_name, color;
+                                                                for (let i = 0; i < data.length; i++) {
+                                                                        if (data[i].id == "2") {
+                                                                                class_name = "block1";
+                                                                                color = "#f7fdc4";
+                                                                        }
+                                                                        else if (data[i].id == "3") {
+                                                                                class_name = "block2";
+                                                                                color = "#fff8ef";
+                                                                        }
+
+                                                                        if (i != 0)
+                                                                                add = "<div class='" + class_name + "' style='width:100%;left:-1%;font-size: 13px;border:1px solid green;border-top:0px solid green;background: " + color + ";'>";
+                                                                        else
+                                                                                add = "<div class='" + class_name + "' style='width:100%;left:-1%;font-size: 13px;border:1px solid green;background: " + color + ";'>";
+                                                                        add += data[i].data3 + " <br> " + data[i].data1 + "</div > ";
+                                                                        $("#situation_detail_box_add").append(add);
+                                                                }
+                                                        },
+                                                        error: function (XMLHttpRequest, textStatus, errorThrown) { //接続が失敗
+                                                                // alert('エラーです！'); //エラーを表示
+                                                                console.log("data");
+                                                        }
+                                                });
+                                        },
+                                        error: function (XMLHttpRequest, textStatus, errorThrown) { //接続が失敗
+                                                // alert('エラーです！'); //エラーを表示
+                                                console.log("data");
+                                        }
+                                });
                 });
 
                 //テーマの詳細を受信
@@ -330,7 +382,8 @@
                 <!-- <input type="button" id="new_situation" style="position: relative; left:50px;border: 1px solid;" value="状況" onclick='exchange_mode("situation")'>
                 <input type="button" id="new_human" style="position: relative; left:80px;border: 1px solid;" value="人間カード" onclick='exchange_mode("human")'> -->
                 <div class="cp_ipradio">
-                        <input type="radio" name="cpipr03" id="new_situation" onclick='exchange_mode("situation")' checked/>
+                        <input type="radio" name="cpipr03" id="new_situation" onclick='exchange_mode("situation")'
+                                checked />
                         <label for="new_situation">状況カード</label>
                         <input type="radio" name="cpipr03" id="new_human" onclick='exchange_mode("human")' />
                         <label for="new_human">人間カード</label>
@@ -418,14 +471,15 @@
         <!-- 履歴詳細 -->
         <div class="theme_box" id="situation_detail_box" style="display: none;width: 80%;height: 80%;position: absolute;top: 8%;left: 8%;z-index: 1;">
                 <br>
-                <div class="block1" style="width:100%;left:-1%;font-size: 13px;background: #f7fdc4;">
+                <a id="situation_detail_box_add"></a>
+                <!-- <div class="block1" style="width:100%;left:-1%;font-size: 13px;background: #f7fdc4;">
                         時間<br> 文
                         <br>章
                 </div>
                 <div class="block2" style="width:100%;left:-1%;font-size: 13px;background: #fff8ef;">
                         時間<br> 文
                         <br>章
-                </div>
+                </div> -->
                 <center> <a href='#!' onclick='overview("off")' class='square_btn'>閉じる</a></center>
 
         </div>
@@ -448,9 +502,11 @@
                 <div class="block1" id="input0">
                         <text_and_pop title="施設内の地図など避難所に関する画像を選択してください">画像</text_and_pop>
 
-                        <form id="file_input" action="http://192.168.0.159/2018grade4/HUG/HUG_Server/file_upload.php" method="post" enctype="multipart/form-data">
+                        <form id="file_input" action="http://192.168.0.159/2018grade4/HUG/HUG_Server/file_upload.php"
+                                method="post" enctype="multipart/form-data">
                                 <!-- <br> -->
-                                <input type="file" name="pic" id="image_file" style="position: relative; left:128px;top:-20px;" onchange="image_update()">
+                                <input type="file" name="pic" id="image_file" style="position: relative; left:128px;top:-20px;"
+                                        onchange="image_update()">
                                 <!-- <br> -->
                         </form>
                         <div id="image_input_draw"></div>
