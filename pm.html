@@ -247,12 +247,16 @@
                                                                 id: "3"
                                                         },
                                                         success: function (data1) {
-                                                               
+
                                                                 data = data.concat(data1);
-                                                                data.sort();
+                                                                data.sort(function (a, b) {
+                                                                        if (a.num < b.num) return -1;
+                                                                        if (a.num > b.num) return 1;
+                                                                        return 0;
+                                                                });
                                                                 console.log(data);
                                                                 var add = "", class_name, color;
-                                                                for (let i = 0; i < data.length; i++) {
+                                                                for (var i = 0; i < data.length; i++) {
                                                                         if (data[i].id == "2") {
                                                                                 class_name = "block1";
                                                                                 color = "#f7fdc4";
@@ -268,6 +272,29 @@
                                                                                 add = "<div class='" + class_name + "' style='width:100%;left:-1%;font-size: 13px;border:1px solid green;background: " + color + ";'>";
                                                                         add += data[i].data3 + " <br> " + data[i].data1 + "</div > ";
                                                                         $("#situation_detail_box_add").append(add);
+
+                                                                }
+                                                                for (var i = data.length - 1; i > data.length - 6; i--) {
+                                                                        if (data[i].id == "2") {
+                                                                                class_name = "block1";
+                                                                                color = "#f7fdc4";
+                                                                        }
+                                                                        else if (data[i].id == "3") {
+                                                                                class_name = "block2";
+                                                                                color = "#fff8ef";
+                                                                        }
+
+
+
+                                                                        if (i == data.length - 1) {
+                                                                                add = "<div class='" + class_name + "' style='width:100%;height:15%;left:-3.5%;font-size: 13px;border:1px solid green;background: " + color + ";'>";
+                                                                                add += data[i].data3 + " <br> " + data[i].data1 + "</div > ";
+                                                                                $("#situation_box_add").append(add);
+                                                                        } else {
+                                                                                add = "<div class='" + class_name + "' style='width:100%;height:15%;left:-3.5%;font-size: 13px;border:1px solid green;border-top:0px solid green;background: " + color + ";'>";
+                                                                                add += data[i].data3 + " <br> " + data[i].data1 + "</div > ";
+                                                                                $("#situation_box_add").append(add);
+                                                                        }
                                                                 }
                                                         },
                                                         error: function (XMLHttpRequest, textStatus, errorThrown) { //接続が失敗
@@ -408,7 +435,8 @@
         <!-- 履歴一部 -->
         <div class="theme_box" style="top:270px;height:55%;">
                 <br>
-                <div class="block1" style="width:100%;left:-3.5%;font-size: 13px;background: #f7fdc4;">
+                <a id="situation_box_add"></a>
+                <!-- <div class="block1" style="width:100%;left:-3.5%;font-size: 13px;background: #f7fdc4;">
                         <br> <br>
                         <br>
                 </div>
@@ -427,7 +455,7 @@
                 <div class="block1" style="width:100%;left:-3.5%;font-size: 13px;background: #f7fdc4;">
                         <br> <br>
                         <br>
-                </div>
+                </div> -->
                 <center>
                         <a href='#!' onclick='overview("on", "3")' class='square_btn'>すべて表示</a>
                 </center>
