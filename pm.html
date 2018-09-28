@@ -256,7 +256,7 @@
                                                                 });
                                                                 console.log(data);
                                                                 var add = "", class_name, color;
-                                                                for (var i = 0; i < data.length; i++) {
+                                                                for (var i = data.length - 1; i > -1; i--) {
                                                                         if (data[i].id == "2") {
                                                                                 class_name = "block1";
                                                                                 color = "#f7fdc4";
@@ -266,31 +266,18 @@
                                                                                 color = "#fff8ef";
                                                                         }
 
-                                                                        if (i != 0)
+                                                                        if (i != data.length - 1)
                                                                                 add = "<div class='" + class_name + "' style='width:100%;left:-1%;font-size: 13px;border:1px solid green;border-top:0px solid green;background: " + color + ";'>";
                                                                         else
                                                                                 add = "<div class='" + class_name + "' style='width:100%;left:-1%;font-size: 13px;border:1px solid green;background: " + color + ";'>";
                                                                         add += data[i].data3 + " <br> " + data[i].data1 + "</div > ";
                                                                         $("#situation_detail_box_add").append(add);
 
-                                                                }
-                                                                for (var i = data.length - 1; i > data.length - 6; i--) {
-                                                                        if (data[i].id == "2") {
-                                                                                class_name = "block1";
-                                                                                color = "#f7fdc4";
-                                                                        }
-                                                                        else if (data[i].id == "3") {
-                                                                                class_name = "block2";
-                                                                                color = "#fff8ef";
-                                                                        }
-
-
-
                                                                         if (i == data.length - 1) {
                                                                                 add = "<div class='" + class_name + "' style='width:100%;height:15%;left:-3.5%;font-size: 13px;border:1px solid green;background: " + color + ";'>";
                                                                                 add += data[i].data3 + " <br> " + data[i].data1 + "</div > ";
                                                                                 $("#situation_box_add").append(add);
-                                                                        } else {
+                                                                        } else if(i > data.length - 6){
                                                                                 add = "<div class='" + class_name + "' style='width:100%;height:15%;left:-3.5%;font-size: 13px;border:1px solid green;border-top:0px solid green;background: " + color + ";'>";
                                                                                 add += data[i].data3 + " <br> " + data[i].data1 + "</div > ";
                                                                                 $("#situation_box_add").append(add);
@@ -389,7 +376,25 @@
                                 });
                 }
 
-
+                //再利用データの受信
+                function get_id_data(get_id) {
+                        $.ajax({ //非同期通信
+                                type: "POST",
+                                url: "http://192.168.0.159/2018grade4/HUG/HUG_Server/eventcode.php",
+                                data: {
+                                        code: window.sessionStorage.getItem(["eventcode"]),
+                                        id: get_id
+                                },
+                                success: function (data) {
+                                        return data;
+                                },
+                                error: function (XMLHttpRequest, textStatus, errorThrown) { //接続が失敗
+                                        // alert('エラーです！'); //エラーを表示
+                                        console.log("data");
+                                }
+                        });
+                        return null;
+                }
         </script>
 </head>
 
@@ -397,22 +402,21 @@
         <br>
         <br>
         <br>
-        <!-- 新規・再利用 -->
-        <b style="position: relative;left:8%;">
-                <a href="#!" class="tag_r" onclick="to_login()" id="login_button">新規</a>
-                &nbsp;&nbsp;&nbsp;&nbsp;
-                <a href="#!" class="tag_b" onclick="to_new_user()" id="user_button">再利用</a>
+        <!-- 新規・再利用 切り替えボタン-->
+        <a href="#!" class="tag_r" onclick="exchange_mode('new')" id="login_button">新規</a>
+        &nbsp;&nbsp;&nbsp;&nbsp;
+        <a href="#!" class="tag_b" onclick="exchange_mode('reuse')" id="user_button">再利用</a>
         </b>
         <b style="position: relative;left:8%;">
 
                 <!-- カード切り替え -->
-                <!-- <input type="button" id="new_situation" style="position: relative; left:50px;border: 1px solid;" value="状況" onclick='exchange_mode("situation")'>
-                <input type="button" id="new_human" style="position: relative; left:80px;border: 1px solid;" value="人間カード" onclick='exchange_mode("human")'> -->
+                <!-- <input type="button" id="new_situation" style="position: relative; left:50px;border: 1px solid;" value="状況" onclick='exchange_card("situation")'>
+                <input type="button" id="new_human" style="position: relative; left:80px;border: 1px solid;" value="人間カード" onclick='exchange_card("human")'> -->
                 <div class="cp_ipradio">
-                        <input type="radio" name="cpipr03" id="new_situation" onclick='exchange_mode("situation")'
+                        <input type="radio" name="cpipr03" id="new_situation" onclick='exchange_card("situation")'
                                 checked />
                         <label for="new_situation">状況カード</label>
-                        <input type="radio" name="cpipr03" id="new_human" onclick='exchange_mode("human")' />
+                        <input type="radio" name="cpipr03" id="new_human" onclick='exchange_card("human")' />
                         <label for="new_human">人間カード</label>
                 </div>
         </b>
@@ -866,7 +870,7 @@
                 }
 
                 //作成する種類の変更
-                function exchange_mode(h) {
+                function exchange_card(h) {
                         error_reset();
                         document.getElementById("confirm_situation").style.display = "none";
                         document.getElementById("confirm_human").style.display = "none";
@@ -877,6 +881,25 @@
                                         break;
                                 case "situation":
                                         document.getElementById("situation_card").style.display = "";
+                                        document.getElementById("human_card").style.display = "none";
+                                        break;
+                        }
+                }
+
+                //新規・再利用の切り替え
+                function exchange_mode(h) {
+                        error_reset();
+                        document.getElementById("confirm_situation").style.display = "none";
+                        document.getElementById("confirm_human").style.display = "none";
+                        document.getElementById("situation_card").style.display = "none";
+                        document.getElementById("human_card").style.display = "none";
+                        switch (h) {
+                                case "new":
+                                        document.getElementById("situation_card").style.display = "";
+                                        document.getElementById("human_card").style.display = "none";
+                                        break;
+                                case "reuse":
+                                        document.getElementById("situation_card").style.display = "none";
                                         document.getElementById("human_card").style.display = "none";
                                         break;
                         }
