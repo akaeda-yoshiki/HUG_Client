@@ -360,11 +360,11 @@
                                                                 $("#situation_detail_box_add").append(add);
 
                                                                 //再利用
-                                                                if (first_human_card_data == 1) {
+                                                                if (first_human_card_data == 1 && data[i].id == "3") {
                                                                         add = "<div class='" + class_name + "' style='width:60%;left:7%;font-size: 13px;border:1px solid green;background: " + color + ";'>";
                                                                         first_human_card_data = 0;
                                                                 }
-                                                                else if (first_situation_card_data == 1) {
+                                                                else if (first_situation_card_data == 1 && data[i].id == "2") {
                                                                         add = "<div class='" + class_name + "' style='width:60%;left:7%;font-size: 13px;border:1px solid green;background: " + color + ";'>";
                                                                         first_situation_card_data = 0;
                                                                 }
@@ -635,7 +635,7 @@
                 <a style="position: relative; left:27%;">
                         <!-- ボタン -->
                         <input type="button" value="訂正" onclick='back("situation")'> &nbsp; &nbsp; &nbsp; &nbsp;
-                        <input type="button" value="内容確定" onclick='decides("situation")'>
+                        <input type="button" value="内容確定" onclick='decide("situation")'>
                 </a>
         </form>
         <!-- 人間カード作成時の確認画面 *************************************************************-->
@@ -918,44 +918,63 @@
 
                 //新規・再利用の切り替え
                 function exchange_mode(h) {
-                        error_reset();
-                        document.getElementById("confirm_situation").style.display = "none";
-                        document.getElementById("confirm_human").style.display = "none";
                         document.getElementById("situation_card").style.display = "none";
                         document.getElementById("human_card").style.display = "none";
+                        document.getElementById("reuse_situation_card").style.display = "none";
+                        document.getElementById("reuse_human_card").style.display = "none";
                         var element = document.getElementById("target");
-
+                        mode = h;
+                        if (element.cpipr03[0].checked == true) {
+                                exchange_card("situation");
+                        } else if (element.cpipr03[1].checked == true) {
+                                exchange_card("human");
+                        }
                         switch (h) {
                                 case "new":
-                                        if (element.cpipr03[0].checked == true) {
-                                                document.getElementById("situation_card").style.display = "";
-                                                document.getElementById("human_card").style.display = "none";
-                                        } else if (element.cpipr03[1].checked == true) {
-                                                document.getElementById("situation_card").style.display = "none";
-                                                document.getElementById("human_card").style.display = "";
-                                        }
-
-                                        document.getElementById("reuse_situation_card").style.display = "none";
-                                        document.getElementById("reuse_human_card").style.display = "none";
+                                        document.getElementById("new_button").className = "tag_r";
+                                        document.getElementById("reuse_button").className = "tag_b";
                                         break;
                                 case "reuse":
-                                        if (element.cpipr03[0].checked == true) {
-                                                document.getElementById("reuse_situation_card").style.display = "";
-                                                document.getElementById("reuse_human_card").style.display = "none";
-                                        } else if (element.cpipr03[1].checked == true) {
-                                                document.getElementById("reuse_situation_card").style.display = "none";
-                                                document.getElementById("reuse_human_card").style.display = "";
-                                        }
-                                        document.getElementById("situation_card").style.display = "none";
-                                        document.getElementById("human_card").style.display = "none";
-
+                                        document.getElementById("new_button").className = "tag_b";
+                                        document.getElementById("reuse_button").className = "tag_r";
                                         break;
                         }
-                        mode = h;
+
                 }
 
-                function reuse_select(num) {
-                        console.log(num);
+                function reuse_select(select_num) {
+
+                        $.ajax({ //非同期通信
+                                type: "POST",
+                                url: "http://192.168.0.159/2018grade4/HUG/HUG_Server/eventcode.php",
+                                data: {
+                                        code: window.sessionStorage.getItem(["eventcode"]),
+                                        num: select_num
+                                },
+                                success: function (data) {
+                                        console.log(data);
+                                        if (data[0].id == "2") {
+                                                var get1 = document.forms.input1;
+                                                get1.situation.value = data[0].data1;
+                                                data[0].data2 = data[0].data2.split("/");
+                                                for (var i = 0; i < assessment_data[0].length; i++) {
+                                                        document.getElementById("assessment_list" + i).value = data[0].data2[i];
+                                                }
+                                                exchange_mode("new");
+                                        }
+                                        else if (data[0].id == "3") {
+                                                var get1 = document.forms.input_human;
+                                                get1.feature.value = data[0].data1;
+                                                get1.age.value = data[0].data2;
+                                                get1.sex.value = data[0].data3;
+                                                exchange_mode("new");
+                                        }
+                                },
+                                error: function (XMLHttpRequest, textStatus, errorThrown) { //接続が失敗
+                                        // alert('エラーです！'); //エラーを表示
+                                        console.log("data");
+                                }
+                        });
                 }
         </script>
 
