@@ -313,7 +313,9 @@
                                 });
                 }
 
+                //履歴データの受信と表示
                 function get_history() {
+                        var first_human_card_data = 1, first_situation_card_data = 1;
                         $.ajax({ //非同期通信
                                 type: "POST",
                                 url: "http://192.168.0.159/2018grade4/HUG/HUG_Server/eventcode.php",
@@ -349,6 +351,7 @@
                                                                         color = "#fff8ef";
                                                                 }
 
+                                                                //全ての履歴
                                                                 if (i != data.length - 1)
                                                                         add = "<div class='" + class_name + "' style='width:100%;left:-1%;font-size: 13px;border:1px solid green;border-top:0px solid green;background: " + color + ";'>";
                                                                 else
@@ -356,11 +359,17 @@
                                                                 add += data[i].data3 + " <br> " + data[i].data1 + "</div > ";
                                                                 $("#situation_detail_box_add").append(add);
 
-
-                                                                if (i != data.length - 1)
-                                                                        add = "<div class='" + class_name + "' style='width:60%;left:7%;font-size: 13px;border:1px solid green;border-top:0px solid green;background: " + color + ";'>";
-                                                                else
+                                                                //再利用
+                                                                if (first_human_card_data == 1) {
                                                                         add = "<div class='" + class_name + "' style='width:60%;left:7%;font-size: 13px;border:1px solid green;background: " + color + ";'>";
+                                                                        first_human_card_data = 0;
+                                                                }
+                                                                else if (first_situation_card_data == 1) {
+                                                                        add = "<div class='" + class_name + "' style='width:60%;left:7%;font-size: 13px;border:1px solid green;background: " + color + ";'>";
+                                                                        first_situation_card_data = 0;
+                                                                }
+                                                                else
+                                                                        add = "<div class='" + class_name + "' style='width:60%;left:7%;font-size: 13px;border:1px solid green;border-top:0px solid green;background: " + color + ";'>";
 
                                                                 add += data[i].data3 + " <br> " + data[i].data1 + " ";
                                                                 add += '<br><center><input type="button" value="再利用" onclick="reuse_select(' + data[i].num + ')"></center></div >';
@@ -370,7 +379,7 @@
                                                                         $("#reuse_human_select_add").append(add);
 
 
-
+                                                                //履歴の一部
                                                                 if (i == data.length - 1) {
                                                                         add = "<div class='" + class_name + "' style='width:100%;height:15%;left:-3.5%;font-size: 13px;border:1px solid green;background: " + color + ";'>";
                                                                         add += data[i].data3 + " <br> " + data[i].data1 + "</div > ";
@@ -422,22 +431,19 @@
         <br>
         <br>
         <!-- 新規・再利用 切り替えボタン-->
-        <a href="#!" class="tag_r" onclick="exchange_mode('new')" id="login_button">新規</a>
+        <a href="#!" class="tag_r" onclick="exchange_mode('new')" id="new_button">新規</a>
         &nbsp;&nbsp;&nbsp;&nbsp;
-        <a href="#!" class="tag_b" onclick="exchange_mode('reuse')" id="user_button">再利用</a>
+        <a href="#!" class="tag_b" onclick="exchange_mode('reuse')" id="reuse_button">再利用</a>
         </b>
         <b style="position: relative;left:8%;">
 
                 <!-- カード切り替え -->
-                <!-- <input type="button" id="new_situation" style="position: relative; left:50px;border: 1px solid;" value="状況" onclick='exchange_card("situation")'>
-                <input type="button" id="new_human" style="position: relative; left:80px;border: 1px solid;" value="人間カード" onclick='exchange_card("human")'> -->
-                <div class="cp_ipradio">
-                        <input type="radio" name="cpipr03" id="new_situation" onclick='exchange_card("situation")'
-                                checked />
-                        <label for="new_situation">状況カード</label>
-                        <input type="radio" name="cpipr03" id="new_human" onclick='exchange_card("human")' />
+                <form id="target" class="cp_ipradio">
+                        <input name="cpipr03" id="new_situation" type="radio" value="a" onclick='exchange_card("situation")'
+                                checked> <label for="new_situation">状況カード</label>
+                        <input name="cpipr03" id="new_human" type="radio" value="b" onclick='exchange_card("human")'>
                         <label for="new_human">人間カード</label>
-                </div>
+                </form>
         </b>
         <!-- <br>
         <br> -->
@@ -917,19 +923,31 @@
                         document.getElementById("confirm_human").style.display = "none";
                         document.getElementById("situation_card").style.display = "none";
                         document.getElementById("human_card").style.display = "none";
+                        var element = document.getElementById("target");
+
                         switch (h) {
                                 case "new":
-                                        document.getElementById("situation_card").style.display = "";
-                                        document.getElementById("human_card").style.display = "none";
+                                        if (element.cpipr03[0].checked == true) {
+                                                document.getElementById("situation_card").style.display = "";
+                                                document.getElementById("human_card").style.display = "none";
+                                        } else if (element.cpipr03[1].checked == true) {
+                                                document.getElementById("situation_card").style.display = "none";
+                                                document.getElementById("human_card").style.display = "";
+                                        }
+
                                         document.getElementById("reuse_situation_card").style.display = "none";
                                         document.getElementById("reuse_human_card").style.display = "none";
-
                                         break;
                                 case "reuse":
+                                        if (element.cpipr03[0].checked == true) {
+                                                document.getElementById("reuse_situation_card").style.display = "";
+                                                document.getElementById("reuse_human_card").style.display = "none";
+                                        } else if (element.cpipr03[1].checked == true) {
+                                                document.getElementById("reuse_situation_card").style.display = "none";
+                                                document.getElementById("reuse_human_card").style.display = "";
+                                        }
                                         document.getElementById("situation_card").style.display = "none";
                                         document.getElementById("human_card").style.display = "none";
-                                        document.getElementById("reuse_situation_card").style.display = "";
-                                        document.getElementById("reuse_human_card").style.display = "none";
 
                                         break;
                         }
