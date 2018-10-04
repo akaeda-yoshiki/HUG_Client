@@ -222,6 +222,7 @@
                                                         },
                                                         error: function (XMLHttpRequest, textStatus, errorThrown) { //接続が失敗
                                                                 // alert('エラーです！'); //エラーを表示
+                                                                console.log("えらー:" + textStatus);
                                                         }
                                                 });
                                         },
@@ -304,11 +305,15 @@
                                                         },
                                                         error: function (XMLHttpRequest, textStatus, errorThrown) { //接続が失敗
                                                                 // alert('エラーです！'); //エラーを表示
+                                                                console.log("えらー:" + textStatus);
+
                                                         }
                                                 });
                                         },
                                         error: function (XMLHttpRequest, textStatus, errorThrown) { //接続が失敗
                                                 // alert('エラーです！'); //エラーを表示
+                                                console.log("えらー:" + textStatus);
+
                                         }
                                 });
                 }
@@ -393,13 +398,13 @@
                                                 },
                                                 error: function (XMLHttpRequest, textStatus, errorThrown) { //接続が失敗
                                                         // alert('エラーです！'); //エラーを表示
-                                                        console.log("data");
+                                                        console.log("えらー:" + textStatus);
                                                 }
                                         });
                                 },
                                 error: function (XMLHttpRequest, textStatus, errorThrown) { //接続が失敗
                                         // alert('エラーです！'); //エラーを表示
-                                        console.log("data");
+                                        console.log("えらー:" + textStatus);
                                 }
                         });
                 }
@@ -418,7 +423,7 @@
                                 },
                                 error: function (XMLHttpRequest, textStatus, errorThrown) { //接続が失敗
                                         // alert('エラーです！'); //エラーを表示
-                                        // console.log("data");
+                                        console.log("えらー:" + textStatus);
                                 }
                         });
                         return null;
@@ -774,6 +779,12 @@
                 function decide(h) {
                         if (h == "situation") {
                                 var get1 = document.forms.input1;
+                                var file_name;
+                                var form = document.getElementById("file_input");
+                                if (form != "")
+                                        file_name = window.sessionStorage.getItem(["eventcode"]);
+                                else
+                                        file_name = "";
                                 if (send_f == 1) {
                                         send_f = 0;
                                         $.ajax({ //非同期通信
@@ -782,7 +793,7 @@
                                                 data: {
                                                         data1: get1.situation.value,
                                                         data2: assessment_send.join("/"),
-                                                        data3: "",
+                                                        data3: file_name,
                                                         data4: "21:20",
                                                         code: window.sessionStorage.getItem(["eventcode"]),
                                                         mode: "insert",
@@ -790,7 +801,9 @@
                                                 },
                                                 success: function (data) {
                                                         // alert(data);
-                                                        if (data == "ok") {
+                                                        data = data.split("/");
+                                                        file(data[1]);
+                                                        if (data[0] == "ok") {
                                                                 window.location.href = "pm.html";
                                                         }
                                                         else {
@@ -801,6 +814,7 @@
                                                 error: function (XMLHttpRequest, textStatus, errorThrown) { //接続が失敗
                                                         // alert('エラーです！'); //エラーを表示
                                                         send_f = 1;
+                                                        console.log("えらー:" + textStatus);
                                                 }
                                         });
                                 }
@@ -823,9 +837,8 @@
                                                         id: 3
                                                 },
                                                 success: function (data) {
-                                                        // alert(data);
                                                         if (data == "ok") {
-                                                                window.location.href = "pm.html";
+                                                                // window.location.href = "pm.html";
                                                         }
                                                         else {
                                                                 alert("ok以外");
@@ -834,28 +847,29 @@
                                                 },
                                                 error: function (XMLHttpRequest, textStatus, errorThrown) { //接続が失敗
                                                         // alert('エラーです！'); //エラーを表示
+                                                        console.log("えらー:" + textStatus);
                                                         send_f = 1;
                                                 }
                                         });
                                 }
                         }
                 }
-                function file() {
-                        // var form = document.getElementById("file_input");
-                        // var formdata = new FormData(form);
-                        // $.ajax({
-                        //         type: 'POST',
-                        //         url: 'http://192.168.0.159/2018grade4/HUG/HUG_Server/file_upload.php',
-                        //         data: formdata,
-                        //         processData: false,	// jQueryがデータを処理しないように設定
-                        //         contentType: false,	// jQueryがcontentTypeを設定しないように設定
-                        //         success: function (data) {
-                        //                 // alert("success::" + data)
-                        //         },
-                        //         error: function (data) {
-                        //                 // alert("error:" + data.statusText);
-                        //         }
-                        // });
+                function file(num) {
+                        var form = document.getElementById("file_input");
+                        var formdata = new FormData(form);
+                        // console.log();
+                        if (form != "")
+                                $.ajax({
+                                        type: 'POST',
+                                        url: 'http://192.168.0.159/2018grade4/HUG/HUG_Server/file_upload.php?code=' + window.sessionStorage.getItem(["eventcode"]) + '&&num=' + num,
+                                        data: formdata,
+                                        processData: false,	// jQueryがデータを処理しないように設定
+                                        contentType: false,	// jQueryがcontentTypeを設定しないように設定
+                                        error: function (data) {
+                                                // console.log("error:" + data);
+                                                // alert("error:" + data);
+                                        }
+                                });
                 }
 
 

@@ -115,7 +115,8 @@
                         <select id="category_list" class="textarea_smoll" style="width: 30%;left: 10px;" onchange="category_update()">
                                 <option value=""></option>
                         </select>
-                        <input type="text" id="category" class="textarea_smoll" style="width: 34%;display: none;" required>
+                        <input type="text" id="category" class="textarea_smoll" style="width: 34%;display: none;"
+                                required>
                 </div>
                 <script>
                         // カテゴリーのプルダウンが更新
@@ -212,9 +213,11 @@
         <div class="block1" id="input0">
                 <text_and_pop title="施設内の地図など避難所に関する画像を選択してください">画像</text_and_pop>
 
-                <form id="file_input" action="http://192.168.0.159/2018grade4/HUG/HUG_Server/file_upload.php" method="post" enctype="multipart/form-data">
+                <form id="file_input" action="http://192.168.0.159/2018grade4/HUG/HUG_Server/file_upload.php" method="post"
+                        enctype="multipart/form-data">
                         <!-- <br> -->
-                        <input type="file" name="pic" id="image_file" style="position: relative; left:128px;top:-20px;" onchange="image_update()">
+                        <input type="file" name="pic" id="image_file" style="position: relative; left:128px;top:-20px;"
+                                onchange="image_update()">
                         <!-- <br> -->
                 </form>
                 <div id="image_input_draw"></div>
@@ -478,6 +481,7 @@
                 function decide() {
                         var get1 = document.forms.input1;
                         var get2 = document.forms.input2;
+                        file();
                         $.ajax({ //非同期通信
                                 type: "POST",
                                 url: "http://192.168.0.159/2018grade4/HUG/HUG_Server/theme.php",
@@ -501,13 +505,10 @@
                                         assessment7: assessment_send[7],
                                         assessment8: assessment_send[8],
                                         assessment9: assessment_send[9],
-                                        mail:window.sessionStorage.getItem(["mail"])
-                                },
-                                success: function (data) {
-                                        file();
+                                        mail: window.sessionStorage.getItem(["mail"])
                                 },
                                 error: function (XMLHttpRequest, textStatus, errorThrown) { //接続が失敗
-                                        // alert('エラーです！'); //エラーを表示
+                                        alert('エラーです！::' + textStatus); //エラーを表示
                                 }
                         });
 
@@ -555,19 +556,17 @@
                 function file() {
                         var form = document.getElementById("file_input");
                         var formdata = new FormData(form);
-                        $.ajax({
-                                type: 'POST',
-                                url: 'http://192.168.0.159/2018grade4/HUG/HUG_Server/file_upload.php',
-                                data: formdata,
-                                processData: false,	// jQueryがデータを処理しないように設定
-                                contentType: false,	// jQueryがcontentTypeを設定しないように設定
-                                success: function (data) {
-                                        // alert("success::" + data)
-                                },
-                                error: function (data) {
-                                        // alert("error:" + data.statusText);
-                                }
-                        });
+                        if (form != "")
+                                $.ajax({
+                                        type: 'POST',
+                                        url: 'http://192.168.0.159/2018grade4/HUG/HUG_Server/file_upload.php',
+                                        data: formdata,
+                                        processData: false,	// jQueryがデータを処理しないように設定
+                                        contentType: false,	// jQueryがcontentTypeを設定しないように設定
+                                        error: function (data) {
+                                                alert("error:" + data.statusText);
+                                        }
+                                });
                 }
         </script>
 
