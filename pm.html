@@ -416,7 +416,9 @@
                                 case "2":
                                         sentence += "【状況カード】" + data.data4 + " <br> " + data.data1;
                                         if (data.data3 != "") {
-                                                sentence += "<br>" + "<a href='#!' onclick='overview(" + data.data3 + ")' class='square_btn'>画像を表示</a>";
+                                                var image = '"' + data.data3 + '"';
+                                                sentence += "<br>" + "<a href='#!' onclick='exchange_history_image_view(" + image + ")' id='" + data.data3 + "_view' class='square_btn'>画像を表示</a>";
+                                                sentence += "<a href='#!' onclick='exchange_history_image_not_view(" + image + ")' id='" + data.data3 + "_not_view' style='display: none;'class='square_btn'>画像を非表示</a>";
                                                 sentence += '<img src="http://192.168.0.159/2018grade4/HUG/HUG_Server/image/' + data.data3 + '.jpeg" id="' + data.data3 + '" style="display: none;">';
                                         }
                                         break;
@@ -446,6 +448,20 @@
                                 }
                         });
                         return null;
+                }
+
+                //履歴上にある画像の表示
+                function exchange_history_image_view(image_id) {
+                        document.getElementById(image_id).style.display = "";
+                        document.getElementById(image_id + "_view").style.display = "none";
+                        document.getElementById(image_id + "_not_view").style.display = "";
+                }
+
+                //履歴上にある画像の非表を切り替え
+                function exchange_history_image_not_view(image_id) {
+                        document.getElementById(image_id).style.display = "none";
+                        document.getElementById(image_id + "_view").style.display = "";
+                        document.getElementById(image_id + "_not_view").style.display = "none";
                 }
         </script>
 </head>
