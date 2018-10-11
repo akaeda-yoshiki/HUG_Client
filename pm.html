@@ -15,6 +15,7 @@
                         padding: 0.5em 0.5em;
                         position: relative;
                         left: 7%;
+                        word-break: break-all;
                 }
 
                 .block2 {
@@ -24,6 +25,7 @@
                         padding: 0.5em 0.5em;
                         position: relative;
                         left: 7%;
+                        word-break: break-all;
                 }
 
 
@@ -43,9 +45,9 @@
 
                 draw_area {
                         width: 70%;
-                        height: 20px;
+                        height: auto;
                         position: relative;
-                        left: 30px;
+                        left: 0px;
                 }
 
                 .theme_box {
@@ -253,6 +255,7 @@
                                                                 id: data1
                                                         },
                                                         success: function (data) {
+                                                                console.log(data);
                                                                 // タイトル
                                                                 $("#theme_title_text").empty();
                                                                 $("#theme_title_text").append(data[0].title);
@@ -283,11 +286,7 @@
                                                                 $("#theme_area_text").empty();
                                                                 $("#theme_area_text").append(data[0].area);
 
-                                                                // 画像
-                                                                $("#theme_image_text").empty();
-                                                                // $("#image_text").append(data[0].image);
-                                                                if (data[0].image != "" && data[0].image != null)
-                                                                        $("#theme_image_text").append('<img src="http://192.168.0.159/2018grade4/HUG/HUG_Server/image/' + data[0].id + '.jpeg">');
+
 
                                                                 // 対象者
                                                                 $("#theme_target_text").empty();
@@ -300,7 +299,11 @@
                                                                 // 公開の可否
                                                                 $("#theme_open_text").empty();
                                                                 $("#theme_open_text").append(data[0].open);
-
+                                                                // 画像
+                                                                $("#theme_image_text").empty();
+                                                                // $("#image_text").append(data[0].image);
+                                                                if (data[0].image != "" && data[0].image != null)
+                                                                        $("#theme_image_text").append('<img src="http://192.168.0.159/2018grade4/HUG/HUG_Server/image/' + data[0].image + '">');
                                                                 receive_flag = 0;
                                                         },
                                                         error: function (XMLHttpRequest, textStatus, errorThrown) { //接続が失敗
@@ -420,10 +423,10 @@
                                                 var image = '"' + data.data3 + '"';
                                                 if (h == "all") {
                                                         sentence += "<br>" + "<a href='#!' onclick='exchange_history_image_not_view(" + image + ")' id='" + data.data3 + "_not_view' style='display: none;'class='square_btn'>画像を非表示</a>";
-                                                        sentence += "<a href='#!' onclick='exchange_history_image_view(" + image + ")' id='" + data.data3 + "_view' class='square_btn'>画像を表示</a>";
+                                                        sentence += "<a href='#!' onclick='exchange_history_image_view(" + image + ")' id='" + data.data3 + "_view_all' class='square_btn'>画像を表示</a>";
                                                         sentence += '<img src="http://192.168.0.159/2018grade4/HUG/HUG_Server/image/' + data.data3 + '.jpeg" id="' + data.data3 + '" style="display: none;">';
                                                 } else if (h == "part") {
-                                                        sentence += "<br>" + "<a href='#!' onclick='exchange_part_history_image_view(" + image + ")' id='" + data.data3 + "_view' class='square_btn'>画像を表示</a>";
+                                                        sentence += "<br>" + "<a href='#!' onclick='exchange_part_history_image_view(" + image + ")' id='" + data.data3 + "_view_part' class='square_btn'>画像を表示</a>";
                                                         document.getElementById("history_image_detail_box_img").src = "http://192.168.0.159/2018grade4/HUG/HUG_Server/image/" + data.data3 + ".jpeg";
                                                 }
                                         }
@@ -459,12 +462,12 @@
                 //履歴上にある画像の表示
                 function exchange_history_image_view(image_id) {
 
-                        document.getElementById(image_id + "_view").style.display = "none";
+                        document.getElementById(image_id + "_view_all").style.display = "none";
                         document.getElementById(image_id + "_not_view").style.display = "";
                         document.getElementById(image_id).style.display = "";
                 }
 
-                //履歴上にある画像の表示
+                //一部の履歴上にある画像の表示
                 function exchange_part_history_image_view() {
                         overview("on", "4")
                         // document.getElementById("black_box").style.display = "";
@@ -474,7 +477,7 @@
                 //履歴上にある画像の非表を切り替え
                 function exchange_history_image_not_view(image_id) {
                         document.getElementById(image_id).style.display = "none";
-                        document.getElementById(image_id + "_view").style.display = "";
+                        document.getElementById(image_id + "_view_all").style.display = "";
                         document.getElementById(image_id + "_not_view").style.display = "none";
                 }
         </script>
@@ -533,7 +536,7 @@
                 <img src="" id="history_image_detail_box_img">
         </div>
         <!-- テーマ内容 -->
-        <div class="theme_box" id="theme_detail_box" style="display: none;width: 60%;height: 50%;position: absolute;top: 20%;left: 17%;z-index: 1;">
+        <div class="theme_box" id="theme_detail_box" style="display: none;width: auto;height: auto;position: absolute;top: 20%;left: 17%;z-index: 1;">
 
                 <center> <a href='#!' onclick='overview("off")' class='square_btn'>閉じる</a></center>
                 タイトル
@@ -548,14 +551,14 @@
                 <draw_area id="theme_time_text" style="position: relative;left: 50px;"></draw_area>
                 <br> 地域
                 <draw_area id="theme_area_text" style="position: relative;left: 90px;"></draw_area>
-                <br> 画像
-                <div id="theme_image_text" style="position: relative;left: 90px;"></div>
 
+                <br>
                 対象者
                 <draw_area id="theme_target_text" style="position: relative;left: 70px;"></draw_area>
                 <br> ねらい
                 <draw_area id="theme_aim_text" style="position: relative;left: 70px;"></draw_area>
-                <br>
+                <br> 画像<br>
+                <div id="theme_image_text" style="position: relative;left: 0px;"></div>
         </div>
         <!-- 概要詳細 -->
         <div class="theme_box" id="overview_detail_box" style="display: none;width: 60%;height: 50%;position: absolute;top: 20%;left: 17%;z-index: 1;">
@@ -676,7 +679,7 @@
         <!-- 状況作成時の確認画面 *************************************************************-->
         <form id="confirm_situation" style="display: none;">
                 <div class="block1" id="situation">
-                        状況*
+                        状況*<br>
                         <draw_area id="situation_text"></draw_area>
                 </div>
 
