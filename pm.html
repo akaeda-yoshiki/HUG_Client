@@ -587,7 +587,7 @@
                         <!-- 状況 -->
                         <div class="block1">
                                 <text_and_pop id="situation_input_text" title="発生した状況の詳細を入力してください">状況*</text_and_pop>
-                                <input type="text" id="situation" class="textarea_smoll" required>
+                                <textarea id="situation" maxlength='100' class="textarea_smoll" wrap="soft" value=""  required></textarea>
                         </div>
                         <!-- 評価項目 -->
                         <div class="block2">
@@ -619,7 +619,8 @@
                         <!-- 特徴 -->
                         <div class="block1">
                                 <text_and_pop id="feature_input_text" title="けがや体調などわかることを記入してください">特徴*</text_and_pop>
-                                <input type="text" id="feature" class="textarea_smoll" required>
+                                <textarea id="feature" maxlength='100' class="textarea_smoll" wrap="soft" value=""  required></textarea>
+                                <!-- <input type="text" id="feature" class="textarea_smoll" required> -->
                         </div>
                         <!-- 年 -->
                         <div class="block2">
@@ -835,12 +836,12 @@
                 function decide(h) {
                         if (h == "situation") {
                                 var get1 = document.forms.input1;
-                                var file_name;
+                                var file_name = "";
                                 var form = document.getElementById("file_input");
-                                if (form != "")
+                                var a = document.getElementById("image_file");
+                                alert(a.value);
+                                if (a.value != "")
                                         file_name = window.sessionStorage.getItem(["eventcode"]);
-                                else
-                                        file_name = "";
                                 if (send_f == 1) {
                                         send_f = 0;
                                         $.ajax({ //非同期通信
@@ -856,7 +857,8 @@
                                                         id: 2
                                                 },
                                                 success: function (data) {
-                                                        // alert(data);
+                                                        console.log(data);
+                                                        alert(data);
                                                         data = data.split("/");
                                                         if (data[1] != "")
                                                                 file(data[1]);
@@ -896,6 +898,7 @@
                                                 success: function (data) {
                                                         if (data == "ok") {
                                                                 // window.location.href = "pm.html";
+                                                                exchange_mode("new");
                                                         }
                                                         else {
                                                                 alert("ok以外");
@@ -915,18 +918,18 @@
                         var form = document.getElementById("file_input");
                         var formdata = new FormData(form);
                         // console.log();
-                        if (form != "")
-                                $.ajax({
-                                        type: 'POST',
-                                        url: 'http://192.168.0.159/2018grade4/HUG/HUG_Server/file_upload.php?code=' + window.sessionStorage.getItem(["eventcode"]) + '&&num=' + num,
-                                        data: formdata,
-                                        processData: false,	// jQueryがデータを処理しないように設定
-                                        contentType: false,	// jQueryがcontentTypeを設定しないように設定
-                                        error: function (data) {
-                                                // console.log("error:" + data);
-                                                // alert("error:" + data);
-                                        }
-                                });
+                        // if (form != "")
+                        $.ajax({
+                                type: 'POST',
+                                url: 'http://192.168.0.159/2018grade4/HUG/HUG_Server/file_upload.php?code=' + window.sessionStorage.getItem(["eventcode"]) + '&&num=' + num,
+                                data: formdata,
+                                processData: false,	// jQueryがデータを処理しないように設定
+                                contentType: false,	// jQueryがcontentTypeを設定しないように設定
+                                error: function (data) {
+                                        // console.log("error:" + data);
+                                        // alert("error:" + data);
+                                }
+                        });
                 }
 
 
