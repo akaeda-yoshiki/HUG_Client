@@ -441,21 +441,22 @@
 
                 //ID指定のデータの受信
                 function get_id_data(get_id) {
-                        $.ajax({ //非同期通信
-                                type: "POST",
-                                url: "http://192.168.0.159/2018grade4/HUG/HUG_Server/eventcode.php",
-                                data: {
-                                        code: window.sessionStorage.getItem(["eventcode"]),
-                                        id: get_id
-                                },
-                                success: function (data) {
-                                        return data;
-                                },
-                                error: function (XMLHttpRequest, textStatus, errorThrown) { //接続が失敗
-                                        // alert('エラーです！'); //エラーを表示
-                                        console.log("えらー:" + textStatus);
-                                }
-                        });
+                        if (DEBUG)
+                                $.ajax({ //非同期通信
+                                        type: "POST",
+                                        url: "http://192.168.0.159/2018grade4/HUG/HUG_Server/eventcode.php",
+                                        data: {
+                                                code: window.sessionStorage.getItem(["eventcode"]),
+                                                id: get_id
+                                        },
+                                        success: function (data) {
+                                                return data;
+                                        },
+                                        error: function (XMLHttpRequest, textStatus, errorThrown) { //接続が失敗
+                                                // alert('エラーです！'); //エラーを表示
+                                                console.log("えらー:" + textStatus);
+                                        }
+                                });
                         return null;
                 }
 
@@ -520,6 +521,7 @@
         </div>
         <!-- 履歴一部 -->
         <div class="theme_box" style="top:270px;height:55%;">
+                【履歴】
                 <br>
                 <a id="situation_box_add"></a>
                 <center>
@@ -562,11 +564,13 @@
         </div>
         <!-- 概要詳細 -->
         <div class="theme_box" id="overview_detail_box" style="display: none;width: 60%;height: 50%;position: absolute;top: 20%;left: 17%;z-index: 1;">
+                【概要詳細】
                 <center> <a href='#!' onclick='overview("off")' class='square_btn'>閉じる</a></center>
 
         </div>
         <!-- 履歴詳細 -->
         <div class="theme_box" id="situation_detail_box" style="display: none;width: 80%;height: auto;position: absolute;top: 8%;left: 8%;z-index: 1;">
+                【履歴詳細】
                 <br>
                 <center> <a href='#!' onclick='overview("off")' class='square_btn'>閉じる</a></center>
                 <br><a id="situation_detail_box_add"></a>
@@ -586,8 +590,11 @@
                 <form id="input1">
                         <!-- 状況 -->
                         <div class="block1">
-                                <text_and_pop id="situation_input_text" title="発生した状況の詳細を入力してください">状況*</text_and_pop>
-                                <textarea id="situation" maxlength='100' class="textarea_smoll" wrap="soft" value=""  required></textarea>
+                                <text_and_pop id="situation_input_text" title="発生した状況の詳細を入力してください" style="position: relative;top:-30px;">状況*
+                                        <b style="font-size: 10px;">(100字以内)</b>
+                                </text_and_pop>
+                                <textarea id="situation" maxlength='100' class="textarea_smoll" style="position: relative; left:0px;top:-30%;"
+                                        wrap="soft" required></textarea>
                         </div>
                         <!-- 評価項目 -->
                         <div class="block2">
@@ -618,8 +625,11 @@
                 <form id="input_human">
                         <!-- 特徴 -->
                         <div class="block1">
-                                <text_and_pop id="feature_input_text" title="けがや体調などわかることを記入してください">特徴*</text_and_pop>
-                                <textarea id="feature" maxlength='100' class="textarea_smoll" wrap="soft" value=""  required></textarea>
+                                <text_and_pop id="feature_input_text" title="けがや体調などわかることを記入してください" style="position: relative;top:-30px;">特徴*
+                                        <b style="font-size: 10px;">(100字以内)</b>
+                                </text_and_pop>
+                                <textarea id="feature" maxlength='100' class="textarea_smoll" wrap="soft" style="position: relative; left:0px;top:-30%;"
+                                        required></textarea>
                                 <!-- <input type="text" id="feature" class="textarea_smoll" required> -->
                         </div>
                         <!-- 年 -->
