@@ -1,0 +1,164 @@
+.block1 {
+        background: rgb(209, 231, 255);
+        width: 60%;
+        font-size: 20px;
+        padding: 0.5em 0.5em;
+        position: relative;
+        left: 7%;
+        word-break: break-all;
+}
+
+.block2 {
+        background: rgb(236, 245, 255);
+        width: 60%;
+        font-size: 20px;
+        padding: 0.5em 0.5em;
+        position: relative;
+        left: 7%;
+        word-break: break-all;
+}
+
+
+textarea {
+        width: 70%;
+        resize: none;
+        position: relative;
+        left: 70px;
+}
+
+.textarea_smoll {
+        width: 70%;
+        height: 60px;
+        position: relative;
+        left: 55px;
+}
+
+draw_area {
+        width: 70%;
+        height: auto;
+        position: relative;
+        left: 0px;
+}
+
+.theme_box {
+        padding: 0.5em 1em;
+        color: #000000;
+        background: #9ee7a8;
+        border-bottom: solid 6px #7cf090;
+        border-radius: 9px;
+        width: 25%;
+        height: 100px;
+        position: absolute;
+        left: 70%;
+}
+
+
+.hide_black {
+        background: #000000;
+        opacity: 0.7;
+        width: 100%;
+        height: 100%;
+        position: fixed;
+        top: 0px;
+        left: 0px;
+        z-index: 1;
+}
+
+.tag_b {
+        color: #364e96;
+        /*文字色*/
+        padding: 0.5em 1em;
+        /*上下の余白*/
+        border-top: solid 3px #364e96;
+        /*上線*/
+        border-bottom: solid 3px #364e96;
+        /*下線*/
+        width: 200px;
+        font-size: 20px;
+        text-decoration: none;
+}
+
+.tag_b:hover {
+        color: #364e96;
+        /*文字色*/
+        padding: 0.5em 1em;
+        /*上下の余白*/
+        border-top: solid 3px #364e96;
+        /*上線*/
+        border-bottom: solid 3px #364e96;
+        /*下線*/
+        width: 200px;
+        font-size: 25px;
+        text-decoration: none;
+}
+
+.tag_r {
+        color: #af2626;
+        /*文字色*/
+        padding: 0.5em 1em;
+        /*上下の余白*/
+        border-top: solid 3px #af2626;
+        /*上線*/
+        border-bottom: solid 3px #af2626;
+        /*下線*/
+        width: 200px;
+        font-size: 20px;
+        text-decoration: none;
+}
+
+.cp_ipradio {
+        width: 90%;
+        margin: 2em auto;
+        text-align: left;
+}
+
+.cp_ipradio input[type='radio'] {
+        position: absolute;
+        z-index: -1;
+        opacity: 0;
+}
+
+.cp_ipradio label {
+        position: relative;
+        display: inline-block;
+        margin-right: 30px;
+        padding-right: 10px;
+        padding-left: 35px;
+        cursor: pointer;
+}
+
+.cp_ipradio label::before {
+        position: absolute;
+        z-index: -1;
+        top: 0;
+        left: 0;
+        display: block;
+        width: 24px;
+        height: 24px;
+        content: ' ';
+        border: 2px solid #da3c41;
+        /* border-radius: 4px; */
+}
+
+.cp_ipradio input[type='radio']+label::before {
+        border-radius: 18px;
+}
+
+.cp_ipradio input[type='radio']:checked+label {
+        padding-left: 10px;
+        color: #ffffff;
+}
+
+.cp_ipradio input[type='radio']:checked+label::before {
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background: #da3c41;
+}
+
+/* Transition */
+.cp_ipradio label,
+.cp_ipradio label::before {
+        -webkit-transition: 0.25s all ease;
+        transition: 0.25s all ease;
+}

@@ -1,0 +1,90 @@
+<br>
+<br>
+<br>
+<!-- 新規・再利用 切り替えボタン-->
+<a href="#!" class="tag_r" onclick="exchange_mode('new')" id="new_button">新規</a>
+&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="#!" class="tag_b" onclick="exchange_mode('reuse')" id="reuse_button">再利用</a>
+</b>
+<b style="position: relative;left:8%;">
+
+        <!-- カード切り替え -->
+        <form id="target" class="cp_ipradio">
+                <input name="cpipr03" id="new_situation" type="radio" value="a" onclick='exchange_card("situation")'
+                        checked> <label for="new_situation">状況カード</label>
+                <input name="cpipr03" id="new_human" type="radio" value="b" onclick='exchange_card("human")'>
+                <label for="new_human">人間カード</label>
+        </form>
+</b>
+<!-- <br>
+<br> -->
+<!-- テーマボタン -->
+<div class="theme_box" style="height:20px;width: 100px;top:80px">
+        <center>
+                <a href='#!' onclick='overview("on", "1")' class='square_btn'>テーマ確認</a>
+        </center>
+</div>
+<!-- 概要一部 -->
+<div class="theme_box" style="top: 130px;">
+        【概要】<br> 現在時刻
+        <br> 経過時間
+        <br>
+        <center>
+                <a href='#!' onclick='overview("on", "2")' class='square_btn'>詳細</a></center>
+</div>
+<!-- 履歴一部 -->
+<div class="theme_box" style="top:270px;height:55%;">
+        【履歴】
+        <br>
+        <a id="situation_box_add"></a>
+        <center>
+                <a href='#!' onclick='overview("on", "3")' class='square_btn'>すべて表示</a>
+        </center>
+</div>
+
+
+<!-- 半透明の黒 -->
+<div class="hide_black" id="black_box" style="display: none;" onclick='overview("off")'></div>
+<!-- 履歴一部上の画像表示 -->
+<div class="theme_box" id="history_image_detail_box" style="display: none;width: auto;height: auto;position: absolute;top: 20%;left: 17%;z-index: 1;">
+        <center> <a href='#!' onclick='overview("off")' class='square_btn'>閉じる</a></center>
+        <img src="" id="history_image_detail_box_img">
+</div>
+<!-- テーマ内容 -->
+<div class="theme_box" id="theme_detail_box" style="display: none;width: auto;height: auto;position: absolute;top: 20%;left: 17%;z-index: 1;">
+
+        <center> <a href='#!' onclick='overview("off")' class='square_btn'>閉じる</a></center>
+        タイトル
+        <draw_area id="theme_title_text" style="position: relative;left: 50px;"></draw_area>
+        <br> カテゴリー
+        <draw_area id="theme_category_text" style="position: relative;left: 35px;"></draw_area>
+        <br> 状況
+        <draw_area id="theme_situation_text" style="position: relative;left: 83px;"></draw_area>
+        <br> 評価項目
+        <draw_area id="theme_assessment_text" style="position: relative;left: 50px;"></draw_area>
+        <br> 日時/時期
+        <draw_area id="theme_time_text" style="position: relative;left: 50px;"></draw_area>
+        <br> 地域
+        <draw_area id="theme_area_text" style="position: relative;left: 90px;"></draw_area>
+
+        <br>
+        対象者
+        <draw_area id="theme_target_text" style="position: relative;left: 70px;"></draw_area>
+        <br> ねらい
+        <draw_area id="theme_aim_text" style="position: relative;left: 70px;"></draw_area>
+        <br> 画像<br>
+        <div id="theme_image_text" style="position: relative;left: 0px;"></div>
+</div>
+<!-- 概要詳細 -->
+<div class="theme_box" id="overview_detail_box" style="display: none;width: 60%;height: 50%;position: absolute;top: 20%;left: 17%;z-index: 1;">
+        【概要詳細】
+        <center> <a href='#!' onclick='overview("off")' class='square_btn'>閉じる</a></center>
+
+</div>
+<!-- 履歴詳細 -->
+<div class="theme_box" id="situation_detail_box" style="display: none;width: 80%;height: auto;position: absolute;top: 8%;left: 8%;z-index: 1;">
+        【全ての履歴】
+        <br>
+        <center> <a href='#!' onclick='overview("off")' class='square_btn'>閉じる</a></center>
+        <br><a id="situation_detail_box_add"></a>
+</div>

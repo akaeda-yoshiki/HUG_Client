@@ -73,6 +73,7 @@
                                 get_history();
                 });
 
+
                 //ID指定のデータの受信
                 function get_id_data(get_id) {
                         if (DEBUG)
@@ -93,6 +94,7 @@
                                 });
                         return null;
                 }
+
         </script>
 </head>
 
@@ -103,159 +105,6 @@
 
         <div id="include_common">
         </div>
-        <!-- 状況カード -->
-        <a id="situation_card">
-                <form id="input1">
-                        <!-- 状況 -->
-                        <div class="block1">
-                                <text_and_pop id="situation_input_text" title="発生した状況の詳細を入力してください" style="position: relative;top:-30px;">状況*
-                                        <b style="font-size: 10px;">(100字以内)</b>
-                                </text_and_pop>
-                                <textarea id="situation" maxlength='100' class="textarea_smoll" style="position: relative; left:0px;top:-30%;"
-                                        wrap="soft" required></textarea>
-                        </div>
-                        <!-- 評価項目 -->
-                        <div class="block2">
-                                <text_and_pop id="assessment_input_text" title="評価項目についてどれくらい関連度があるか入力して下さい">評価項目*</text_and_pop>
-                                <assessment_list id="assessment_list"></assessment_list>
-                        </div>
-                </form>
-
-                <!-- 画像 -->
-                <div class="block1" id="input0">
-                        <text_and_pop title="施設内の地図など避難所に関する画像を選択してください">画像</text_and_pop>
-
-                        <form id="file_input" action="http://192.168.0.159/2018grade4/HUG/HUG_Server/file_upload.php"
-                                method="post" enctype="multipart/form-data">
-                                <!-- <br> -->
-                                <input type="file" name="pic" id="image_file" style="position: relative; left:128px;top:-20px;"
-                                        onchange="image_update()">
-                                <!-- <br> -->
-                        </form>
-                        <div id="image_input_draw"></div>
-                </div>
-                <b style="position: relative; left:36%;">
-                        <input type="button" value="次へ" onclick='next("situation")'>
-                </b>
-        </a>
-        <!-- 人間カード -->
-        <a id="human_card" style="display: none;">
-                <form id="input_human">
-                        <!-- 特徴 -->
-                        <div class="block1">
-                                <text_and_pop id="feature_input_text" title="けがや体調などわかることを記入してください" style="position: relative;top:-30px;">特徴*
-                                        <b style="font-size: 10px;">(100字以内)</b>
-                                </text_and_pop>
-                                <textarea id="feature" maxlength='100' class="textarea_smoll" wrap="soft" style="position: relative; left:0px;top:-30%;"
-                                        required></textarea>
-                                <!-- <input type="text" id="feature" class="textarea_smoll" required> -->
-                        </div>
-                        <!-- 年 -->
-                        <div class="block2">
-                                <text_and_pop id="age_input_text" title="年齢がわからない場合はおよそを記入して下さい">年齢*</text_and_pop>
-                                <input type="text" id="age" class="textarea_smoll" style="height:20px;" required>
-                        </div>
-                        <div class="block1">
-                                <text_and_pop id="sex_input_text">性別*</text_and_pop>
-
-                                <b style="position: relative; left:60px;">
-                                        <input type="radio" name="sex" value="男性">男性
-                                        <input type="radio" name="sex" value="女性">女性
-                                </b>
-                        </div>
-                </form>
-                <b style="position: relative; left:36%;">
-                        <input type="button" value="次へ" onclick='next("human")'>
-                </b>
-        </a>
-        <script>
-                // 画像が選択されたら表示
-                function image_update() {
-                        var file = document.getElementById("image_file").files;
-                        var reader = new FileReader();
-                        reader.readAsDataURL(file[0]); //dataURL形式でファイルを読み込む
-
-                        reader.onload = function () {//ファイルの読込が終了した時の処理
-                                var dataUrl = reader.result;
-
-                                //読み込んだ画像の表示（入力画面、確認画面）
-                                document.getElementById("image_input_draw").innerHTML = "<br><center><img src='" + dataUrl + "'></center>";
-                                document.getElementById("image_draw").innerHTML = "<br><center><img src='" + dataUrl + "'></center>";
-
-                                // ファイル名のみ取得して表示します
-                                var selectFileSample4 = document.getElementById("image_file").value;
-                                var regex = /\\|\\/;
-                                var array = selectFileSample4.split(regex);
-
-                                image_send = array[array.length - 1];
-                                image_send = image_send.split(".")[1];
-                        }
-                };
-        </script>
-        <!-- エラーメッセージ -->
-        <a id="required_error" style="position: relative; left:26%;color: red;display: none;">
-                <br>入力内容に不備があります。
-                <br>
-                <br>
-        </a>
-        <!-- 状況作成時の確認画面 *************************************************************-->
-        <form id="confirm_situation" style="display: none;">
-                <div class="block1" id="situation">
-                        状況*<br>
-                        <draw_area id="situation_text"></draw_area>
-                </div>
-
-                <div class="block2">
-                        評価項目*
-                        <draw_area id="assessment_text"></draw_area>
-                </div>
-                <div class="block1">
-                        画像
-                        <div id="image_draw"></div>
-
-                </div>
-                <br>
-                <a style="position: relative; left:27%;">
-                        <!-- ボタン -->
-                        <input type="button" value="訂正" onclick='back("situation")'> &nbsp; &nbsp; &nbsp; &nbsp;
-                        <input type="button" value="内容確定" onclick='decide("situation")'>
-                </a>
-        </form>
-        <!-- 人間カード作成時の確認画面 *************************************************************-->
-        <form id="confirm_human" style="display: none;">
-                <div class="block1" id="feature">
-                        特徴*
-                        <draw_area id="feature_text"></draw_area>
-                </div>
-
-                <div class="block2">
-                        年齢*
-                        <draw_area id="age_text"></draw_area>
-                </div>
-                <div class="block1">
-                        性別*
-                        <draw_area id="sex_text"></draw_area>
-
-                </div>
-                <br>
-                <a style="position: relative; left:27%;">
-                        <!-- ボタン -->
-                        <input type="button" value="訂正" onclick='back("human")'> &nbsp; &nbsp; &nbsp; &nbsp;
-                        <input type="button" value="内容確定" onclick='decide("human")'>
-                </a>
-        </form>
-        <!-- 状況カード再利用****************************************************************************** -->
-        <reuse_situation_card id="reuse_situation_card" style="display:none;">
-                <reuse_situation_select_add id="reuse_situation_select_add">
-
-                </reuse_situation_select_add>
-        </reuse_situation_card>
-        <!-- 人間カード再利用****************************************************************************** -->
-        <reuse_human_card id="reuse_human_card" style="display:none;">
-                <reuse_human_select_add id="reuse_human_select_add">
-
-                </reuse_human_select_add>
-        </reuse_human_card>
         <script>
                 var assessment_send = [], category_send, time_send = "", image_send = "";//登録時に送信する用
                 var mode = "new";//新規作成か再利用の識別変数
