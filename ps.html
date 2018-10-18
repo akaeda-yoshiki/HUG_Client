@@ -127,8 +127,7 @@
                 <br>
                 <a style="position: relative; left:27%;">
                         <!-- ボタン -->
-                        <input type="button" value="訂正" onclick='back("situation")'> &nbsp; &nbsp; &nbsp; &nbsp;
-                        <input type="button" value="内容確定" onclick='decide("situation")'>
+                        <input type="button" value="次へ" onclick='next("situation")'>
                 </a>
         </form>
         <!-- 確認画面 *************************************************************-->
@@ -158,68 +157,16 @@
                 var assessment_send = [], category_send, time_send = "", image_send = "";//登録時に送信する用
                 var mode = "new";//新規作成か再利用の識別変数
                 //次へボタンが押された時
-                function next(h) {
+                function next() {
                         var required_flag = true;//入力必須事項の確認用
 
-                        if (h == "situation") {
-                                var get1 = document.forms.input1;
-
-                                error_reset();
-                                // 状況
-                                $("#situation_text").empty();
-                                $("#situation_text").append(get1.situation.value);
-                                if (get1.situation.value == "") {
-                                        required_flag = false;
-                                        document.getElementById("situation_input_text").style.color = "red";
-                                }
-
-                                // 評価項目
-                                $("#assessment_text").empty();
-                                for (var i = 0; i < assessment_data.length; i++) {
-                                        if (i != 0)
-                                                $("#assessment_text").append('<a style="position: relative;left: 135px;">' + assessment_data[i] + "：" + document.getElementById("assessment_list" + i).value + '</a>');
-                                        else
-                                                $("#assessment_text").append('<a style="position: relative;left: 36px;">' + assessment_data[i] + "：" + document.getElementById("assessment_list" + i).value + '</a>');
-                                        $("#assessment_text").append("<br>");
-                                        assessment_send.push(document.getElementById("assessment_list" + i).value);
-                                }
-
-
-
-                                // 入力必須事項の確認
-                                if (required_flag == true) {
-                                        document.getElementById("required_error").style.display = "none";
-                                        document.getElementById("situation_card").style.display = "none";
-                                        document.getElementById("confirm_situation").style.display = "";
-                                        document.getElementById("required_error").style.display = "none";
-
-                                }
-                                else {
-                                        document.getElementById("required_error").style.display = "";
-
-                                }
-                        }
-                        else if (h == "human") {
-                                var get1 = document.forms.input_human;
+                         if (h == "human") {
+                                var get1 = document.forms.cope_input;
                                 $("#feature_text").empty();
                                 $("#feature_text").append(get1.feature.value);
                                 if (get1.feature.value == "") {
                                         required_flag = false;
                                         document.getElementById("feature_input_text").style.color = "red";
-                                }
-                                $("#age_text").empty();
-                                $("#age_text").append(get1.age.value);
-                                if (get1.age.value == "") {
-                                        required_flag = false;
-                                        document.getElementById("age_input_text").style.color = "red";
-                                }
-
-
-                                $("#sex_text").empty();
-                                $("#sex_text").append(get1.sex.value);
-                                if (get1.sex.value == "") {
-                                        required_flag = false;
-                                        document.getElementById("sex_input_text").style.color = "red";
                                 }
 
 
@@ -446,15 +393,15 @@
                                         console.log(data);
                                         // 状況
                                         $("#situation_text").empty();
-                                        $("#situation_text").append(data.data1);
+                                        $("#situation_text").append(data[0].data1);
                                         $("#confirm_situation_text").empty();
-                                        $("#confirm_situation_text").append(data.data1);
+                                        $("#confirm_situation_text").append(data[0].data1);
 
                                         //画像
-                                        if (data.id == "2" && data.data3 != "") {
+                                        if (data[0].id == "2" && data[0].data3 != "") {
 
                                         }
-                                        else if (data.id == "2" && data.data3 == "") {
+                                        else if (data[0].id == "2" && data[0].data3 == "") {
                                                 $("#image_draw").empty();
                                                 $("#image_draw").append("なし");
                                         }
