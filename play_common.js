@@ -176,6 +176,7 @@ function get_history() {
         });
 }
 
+//履歴データの書き込み
 function set_history_data(data, h) {
         var sentence = "";
         switch (data.id) {
@@ -191,6 +192,9 @@ function set_history_data(data, h) {
                                         sentence += "<br>" + "<a href='#!' onclick='exchange_part_history_image_view(" + image + ")' id='" + data.data3 + "_view_part' class='square_btn'>画像を表示</a>";
                                         document.getElementById("history_image_detail_box_img").src = "http://192.168.0.159/2018grade4/HUG/HUG_Server/image/" + data.data3 + ".jpeg";
                                 }
+                        }
+                        if (window.sessionStorage.getItem(["role"]) == "PS") {
+                                sentence += '<br><center><input type="button" id="cope_' + data.num + '" style="position: relative; left:0px;" value="対応" onclick="new_cope(' + data.num + ')"></center>';
                         }
                         break;
                 case "3":

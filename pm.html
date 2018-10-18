@@ -100,7 +100,22 @@
         <script>
                 $(function () { $("#include_common").load("play_common.html"); })
         </script>
+        <br><br><br><br>
+        <!-- 新規・再利用 切り替えボタン-->
+        <a href="#!" class="tag_r" onclick="exchange_mode('new')" id="new_button">新規</a>
+        &nbsp;&nbsp;&nbsp;&nbsp;
+        <a href="#!" class="tag_b" onclick="exchange_mode('reuse')" id="reuse_button">再利用</a>
+        </b>
+        <b style="position: relative;left:8%;">
 
+                <!-- カード切り替え -->
+                <form id="target" class="cp_ipradio">
+                        <input name="cpipr03" id="new_situation" type="radio" value="a" onclick='exchange_card("situation")'
+                                checked> <label for="new_situation">状況カード</label>
+                        <input name="cpipr03" id="new_human" type="radio" value="b" onclick='exchange_card("human")'>
+                        <label for="new_human">人間カード</label>
+                </form>
+        </b>
         <div id="include_common">
         </div>
         <!-- 状況カード -->
