@@ -161,6 +161,7 @@
                 <br>
         </a>
         <script>
+                var now_situation_number = "";
                 var assessment_send = [], category_send, time_send = "", image_send = "";//登録時に送信する用
                 var mode = "new";//新規作成か再利用の識別変数
                 //次へボタンが押された時
@@ -186,33 +187,34 @@
                 function decide(h) {
                         var get1 = document.forms.cope_input;
                         var file_name = "";
-                        var form = document.getElementById("file_input");
-                        var a = document.getElementById("image_file");
+                        console.log(now_situation_number);
+                        // var form = document.getElementById("file_input");
+                        // var a = document.getElementById("image_file");
                         // alert(a.value);
-                        if (a.value != "")
-                                file_name = window.sessionStorage.getItem(["eventcode"]);
+                        // if (a.value != "")
+                        //         file_name = window.sessionStorage.getItem(["eventcode"]);
                         if (send_f == 1) {
                                 send_f = 0;
                                 $.ajax({ //非同期通信
                                         type: "POST",
                                         url: "http://192.168.0.159/2018grade4/HUG/HUG_Server/eventcode.php",
                                         data: {
-                                                data1: get1.situation.value,
-                                                data2: assessment_send.join("/"),
+                                                data1: get1.cope.value,
+                                                data2: now_situation_number,
                                                 data3: file_name,
                                                 data4: "21:20",
                                                 code: window.sessionStorage.getItem(["eventcode"]),
                                                 mode: "insert",
-                                                id: 2
+                                                id: 4
                                         },
                                         success: function (data) {
-                                                console.log(data);
-                                                alert(data);
+                                                // console.log(data);
+                                                // alert(data);
                                                 data = data.split("/");
                                                 if (data[1] != "")
                                                         file(data[1]);
                                                 if (data[0] == "ok") {
-                                                        window.location.href = "pm.html";
+                                                        window.location.href = "ps.html";
                                                 }
                                                 else {
                                                         alert("ok以外");
@@ -306,6 +308,7 @@
                                         num: h
                                 },
                                 success: function (data) {
+                                        now_situation_number = "" + data[0].num;
                                         // console.log(data);
                                         // 状況
                                         $("#situation_text").empty();
