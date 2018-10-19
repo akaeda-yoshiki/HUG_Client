@@ -178,10 +178,19 @@ function get_history() {
 
 //履歴データの書き込み
 function set_history_data(data, h) {
-        var sentence = "";
+        var sentence = "", left = "30px";
+        // console.log(window.sessionStorage.getItem(["role"]));
+        if(data.data4 == ""){
+                left = "68px";
+        }
         switch (data.id) {
                 case "2":
-                        sentence += "【状況カード】" + data.data4 + " <br> " + data.data1;
+                        sentence += "【状況カード】" + data.data4;
+                        
+                        if (window.sessionStorage.getItem(["role"]) == "PS") {
+                                sentence += '<input type="button" id="cope_' + data.num + '" style="position: relative; left:' + left + ';text-align: right;" value="対応" onclick="new_cope(' + data.num + ')"><br>';
+                        }
+                        sentence += data.data1;
                         if (data.data3 != "") {
                                 var image = '"' + data.data3 + '"';
                                 if (h == "all") {
@@ -193,13 +202,15 @@ function set_history_data(data, h) {
                                         document.getElementById("history_image_detail_box_img").src = "http://192.168.0.159/2018grade4/HUG/HUG_Server/image/" + data.data3 + ".jpeg";
                                 }
                         }
-                        if (window.sessionStorage.getItem(["role"]) == "PS") {
-                                sentence += '<br><center><input type="button" id="cope_' + data.num + '" style="position: relative; left:0px;" value="対応" onclick="new_cope(' + data.num + ')"></center>';
-                        }
+                        
                         break;
                 case "3":
-                        sentence += "【人間カード】" + data.data4 + " <br> ";
+                        sentence += "【人間カード】" + data.data4;
+                        if (window.sessionStorage.getItem(["role"]) == "PS") {
+                                sentence += '<input type="button" id="cope_' + data.num + '" style="position: relative; left:' + left + ';" value="対応" onclick="new_cope(' + data.num + ')"><br>';
+                        }
                         sentence += data.data3 + "&nbsp;&nbsp;" + data.data2 + "<br>" + data.data1;
+                        
                         break;
         }
         return sentence;

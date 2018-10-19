@@ -105,6 +105,7 @@
 
         <div id="include_common">
         </div>
+        <br><br><br>
         <!-- 新規入力画面 *************************************************************-->
         <form id="cope_input" style="display: none;">
                 <div class="block1" id="situation">
@@ -125,7 +126,7 @@
                                 required></textarea>
                 </div>
                 <br>
-                <a style="position: relative; left:27%;">
+                <a style="position: relative; left:32%;">
                         <!-- ボタン -->
                         <input type="button" value="次へ" onclick='next("situation")'>
                 </a>
@@ -138,21 +139,27 @@
                 </div>
                 <div class="block2">
                         画像
-                        <div id="image_draw"></div>
+                        <div id="confirm_image_draw"></div>
 
                 </div>
                 <!-- 対応 -->
                 <div class="block1">
                         対応*<br>
-                        <draw_area id="confirm_cope"></draw_area>
+                        <draw_area id="confirm_cope_text"></draw_area>
                 </div>
                 <br>
                 <a style="position: relative; left:27%;">
                         <!-- ボタン -->
-                        <input type="button" value="訂正" onclick='back("situation")'> &nbsp; &nbsp; &nbsp; &nbsp;
+                        <input type="button" value="訂正" onclick='exchange_mode("input")'> &nbsp; &nbsp; &nbsp; &nbsp;
                         <input type="button" value="内容確定" onclick='decide("situation")'>
                 </a>
         </form>
+        <!-- エラーメッセージ -->
+        <a id="required_error" style="position: relative; left:26%;color: red;display: none;">
+                <br>入力内容に不備があります。
+                <br>
+                <br>
+        </a>
         <script>
                 var assessment_send = [], category_send, time_send = "", image_send = "";//登録時に送信する用
                 var mode = "new";//新規作成か再利用の識別変数
@@ -160,124 +167,64 @@
                 function next() {
                         var required_flag = true;//入力必須事項の確認用
 
-                         if (h == "human") {
-                                var get1 = document.forms.cope_input;
-                                $("#feature_text").empty();
-                                $("#feature_text").append(get1.feature.value);
-                                if (get1.feature.value == "") {
-                                        required_flag = false;
-                                        document.getElementById("feature_input_text").style.color = "red";
-                                }
-
-
-                                // 入力必須事項の確認
-                                if (required_flag == true) {
-                                        document.getElementById("required_error").style.display = "none";
-                                        document.getElementById("human_card").style.display = "none";
-                                        document.getElementById("confirm_human").style.display = "";
-                                        document.getElementById("required_error").style.display = "none";
-                                }
-                                else {
-                                        document.getElementById("required_error").style.display = "";
-                                }
+                        var get1 = document.forms.cope_input;
+                        $("#confirm_cope_text").empty();
+                        $("#confirm_cope_text").append(get1.cope.value);
+                        if (get1.cope.value == "") {
+                                document.getElementById("required_error").style.display = "";
+                                document.getElementById("cope_input_text").style.color = "red";
+                        }
+                        else {
+                                error_reset();
+                                exchange_mode("confirm");
                         }
                 }
 
-                //訂正ボタンが押された
-                function back(h) {
-                        if (h == "situation") {
-                                document.getElementById("situation_card").style.display = "";
-                        }
-                        else if (h == "human") {
-                                document.getElementById("human_card").style.display = "";
-                        }
-                        document.getElementById("required_error").style.display = "";
-                        document.getElementById("confirm_situation").style.display = "none";
-                        document.getElementById("confirm_human").style.display = "none";
-                        document.getElementById("required_error").style.display = "none";
-                }
 
                 var send_f = 1;
                 //内容確定ボタンが押された
                 function decide(h) {
-                        if (h == "situation") {
-                                var get1 = document.forms.input1;
-                                var file_name = "";
-                                var form = document.getElementById("file_input");
-                                var a = document.getElementById("image_file");
-                                alert(a.value);
-                                if (a.value != "")
-                                        file_name = window.sessionStorage.getItem(["eventcode"]);
-                                if (send_f == 1) {
-                                        send_f = 0;
-                                        $.ajax({ //非同期通信
-                                                type: "POST",
-                                                url: "http://192.168.0.159/2018grade4/HUG/HUG_Server/eventcode.php",
-                                                data: {
-                                                        data1: get1.situation.value,
-                                                        data2: assessment_send.join("/"),
-                                                        data3: file_name,
-                                                        data4: "21:20",
-                                                        code: window.sessionStorage.getItem(["eventcode"]),
-                                                        mode: "insert",
-                                                        id: 2
-                                                },
-                                                success: function (data) {
-                                                        console.log(data);
-                                                        alert(data);
-                                                        data = data.split("/");
-                                                        if (data[1] != "")
-                                                                file(data[1]);
-                                                        if (data[0] == "ok") {
-                                                                window.location.href = "pm.html";
-                                                        }
-                                                        else {
-                                                                alert("ok以外");
-                                                        }
-                                                        send_f = 1;
-                                                },
-                                                error: function (XMLHttpRequest, textStatus, errorThrown) { //接続が失敗
-                                                        // alert('エラーです！'); //エラーを表示
-                                                        send_f = 1;
-                                                        console.log("えらー:" + textStatus);
+                        var get1 = document.forms.cope_input;
+                        var file_name = "";
+                        var form = document.getElementById("file_input");
+                        var a = document.getElementById("image_file");
+                        // alert(a.value);
+                        if (a.value != "")
+                                file_name = window.sessionStorage.getItem(["eventcode"]);
+                        if (send_f == 1) {
+                                send_f = 0;
+                                $.ajax({ //非同期通信
+                                        type: "POST",
+                                        url: "http://192.168.0.159/2018grade4/HUG/HUG_Server/eventcode.php",
+                                        data: {
+                                                data1: get1.situation.value,
+                                                data2: assessment_send.join("/"),
+                                                data3: file_name,
+                                                data4: "21:20",
+                                                code: window.sessionStorage.getItem(["eventcode"]),
+                                                mode: "insert",
+                                                id: 2
+                                        },
+                                        success: function (data) {
+                                                console.log(data);
+                                                alert(data);
+                                                data = data.split("/");
+                                                if (data[1] != "")
+                                                        file(data[1]);
+                                                if (data[0] == "ok") {
+                                                        window.location.href = "pm.html";
                                                 }
-                                        });
-                                }
-                        }
-                        else if (h == "human") {
-                                if (send_f == 1) {
-                                        var get2 = document.forms.input_human;
-
-                                        send_f = 0;
-                                        $.ajax({ //非同期通信
-                                                type: "POST",
-                                                url: "http://192.168.0.159/2018grade4/HUG/HUG_Server/eventcode.php",
-                                                data: {
-                                                        data1: get2.feature.value,
-                                                        data2: get2.age.value,
-                                                        data3: get2.sex.value,
-                                                        data4: "21:20",
-                                                        code: window.sessionStorage.getItem(["eventcode"]),
-                                                        mode: "insert",
-                                                        id: 3
-                                                },
-                                                success: function (data) {
-                                                        if (data == "ok") {
-                                                                // window.location.href = "pm.html";
-                                                                exchange_mode("new");
-                                                        }
-                                                        else {
-                                                                alert("ok以外");
-                                                        }
-                                                        send_f = 1;
-                                                },
-                                                error: function (XMLHttpRequest, textStatus, errorThrown) { //接続が失敗
-                                                        // alert('エラーです！'); //エラーを表示
-                                                        console.log("えらー:" + textStatus);
-                                                        send_f = 1;
+                                                else {
+                                                        alert("ok以外");
                                                 }
-                                        });
-                                }
+                                                send_f = 1;
+                                        },
+                                        error: function (XMLHttpRequest, textStatus, errorThrown) { //接続が失敗
+                                                // alert('エラーです！'); //エラーを表示
+                                                send_f = 1;
+                                                console.log("えらー:" + textStatus);
+                                        }
+                                });
                         }
                 }
                 function file(num) {
@@ -325,40 +272,9 @@
                 //エラー系のリセット
                 function error_reset() {
                         document.getElementById("required_error").style.display = "none";
-                        document.getElementById("situation_input_text").style.color = "";
-                        document.getElementById("feature_input_text").style.color = "";
-                        document.getElementById("age_input_text").style.color = "";
-                        document.getElementById("sex_input_text").style.color = "";
+                        document.getElementById("cope_input_text").style.color = "";
                 }
 
-                //作成する種類の変更
-                function exchange_card(h) {
-                        error_reset();
-                        document.getElementById("confirm_situation").style.display = "none";
-                        document.getElementById("confirm_human").style.display = "none";
-                        if (mode == "new")
-                                switch (h) {
-                                        case "human":
-                                                document.getElementById("situation_card").style.display = "none";
-                                                document.getElementById("human_card").style.display = "";
-                                                break;
-                                        case "situation":
-                                                document.getElementById("situation_card").style.display = "";
-                                                document.getElementById("human_card").style.display = "none";
-                                                break;
-                                }
-                        else if (mode == "reuse")
-                                switch (h) {
-                                        case "human":
-                                                document.getElementById("reuse_situation_card").style.display = "none";
-                                                document.getElementById("reuse_human_card").style.display = "";
-                                                break;
-                                        case "situation":
-                                                document.getElementById("reuse_situation_card").style.display = "";
-                                                document.getElementById("reuse_human_card").style.display = "none";
-                                                break;
-                                }
-                }
 
                 //新規・再利用の切り替え
                 function exchange_mode(h) {
@@ -381,7 +297,7 @@
 
                 //新規状況対応
                 function new_cope(h) {
-                        
+
                         $.ajax({ //非同期通信
                                 type: "POST",
                                 url: "http://192.168.0.159/2018grade4/HUG/HUG_Server/eventcode.php",
@@ -390,7 +306,7 @@
                                         num: h
                                 },
                                 success: function (data) {
-                                        console.log(data);
+                                        // console.log(data);
                                         // 状況
                                         $("#situation_text").empty();
                                         $("#situation_text").append(data[0].data1);
@@ -404,6 +320,8 @@
                                         else if (data[0].id == "2" && data[0].data3 == "") {
                                                 $("#image_draw").empty();
                                                 $("#image_draw").append("なし");
+                                                $("#confirm_image_draw").empty();
+                                                $("#confirm_image_draw").append("なし");
                                         }
                                 },
                                 error: function (XMLHttpRequest, textStatus, errorThrown) { //接続が失敗
@@ -414,41 +332,6 @@
                         exchange_mode("input");
                 }
 
-                //再利用するデータを決めたとき
-                function reuse_select(select_num) {
-
-                        $.ajax({ //非同期通信
-                                type: "POST",
-                                url: "http://192.168.0.159/2018grade4/HUG/HUG_Server/eventcode.php",
-                                data: {
-                                        code: window.sessionStorage.getItem(["eventcode"]),
-                                        num: select_num
-                                },
-                                success: function (data) {
-                                        console.log(data);
-                                        if (data[0].id == "2") {
-                                                var get1 = document.forms.input1;
-                                                get1.situation.value = data[0].data1;
-                                                data[0].data2 = data[0].data2.split("/");
-                                                for (var i = 0; i < assessment_data[0].length; i++) {
-                                                        document.getElementById("assessment_list" + i).value = data[0].data2[i];
-                                                }
-                                                exchange_mode("new");
-                                        }
-                                        else if (data[0].id == "3") {
-                                                var get1 = document.forms.input_human;
-                                                get1.feature.value = data[0].data1;
-                                                get1.age.value = data[0].data2;
-                                                get1.sex.value = data[0].data3;
-                                                exchange_mode("new");
-                                        }
-                                },
-                                error: function (XMLHttpRequest, textStatus, errorThrown) { //接続が失敗
-                                        // alert('エラーです！'); //エラーを表示
-                                        console.log("data");
-                                }
-                        });
-                }
         </script>
 
 </body>

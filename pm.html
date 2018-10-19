@@ -375,7 +375,7 @@
                                 var file_name = "";
                                 var form = document.getElementById("file_input");
                                 var a = document.getElementById("image_file");
-                                alert(a.value);
+                                // alert(a.value);
                                 if (a.value != "")
                                         file_name = window.sessionStorage.getItem(["eventcode"]);
                                 if (send_f == 1) {
@@ -394,7 +394,7 @@
                                                 },
                                                 success: function (data) {
                                                         console.log(data);
-                                                        alert(data);
+                                                        // alert(data);
                                                         data = data.split("/");
                                                         if (data[1] != "")
                                                                 file(data[1]);
