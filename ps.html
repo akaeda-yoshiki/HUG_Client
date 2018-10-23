@@ -9,6 +9,63 @@
         <script src="https://code.jquery.com/jquery-1.9.0.min.js"></script>
         <script type="text/javascript" src="jquery.balloon.js"></script>
         <script type="text/javascript" src="play_common.js"></script>
+        <script type="text/javascript" src="figure.js"></script>
+        <style type="text/css">
+                canvas {
+                        /* background: rgb(255, 255, 255); */
+                        background: url(image.jpeg);
+                        background-size: cover;
+                        border: 1px solid #999;
+                        /* position: absolute;
+                    top: 32px;
+                    left: 8px; */
+
+                }
+
+                input[type=radio] {
+                        display: none;
+                        /* ラジオボタンを非表示にする */
+                }
+
+                input[type="radio"]:checked+label {
+                        background: #31A9EE;
+                        /* マウス選択時の背景色を指定する */
+                        color: #ffffff;
+                        /* マウス選択時のフォント色を指定する */
+                }
+
+                .label {
+                        display: block;
+                        /* ブロックレベル要素化する */
+                        float: left;
+                        /* 要素の左寄せ・回り込を指定する */
+                        margin: 5px;
+                        /* ボックス外側の余白を指定する */
+                        width: 50px;
+                        /* ボックスの横幅を指定する */
+                        height: 30px;
+                        /* ボックスの高さを指定する */
+                        padding-left: 5px;
+                        /* ボックス内左側の余白を指定する */
+                        padding-right: 5px;
+                        /* ボックス内御右側の余白を指定する */
+                        color: #b20000;
+                        /* フォントの色を指定 */
+                        text-align: center;
+                        /* テキストのセンタリングを指定する */
+                        cursor: pointer;
+                        /* マウスカーソルの形（リンクカーソル）を指定する */
+                        border: 2px solid #006DD9;
+                        /* ボックスの境界線を実線で指定する */
+                        border-radius: 5px;
+                        /* 角丸を指定する */
+                }
+
+                .label:hover {
+                        background-color: rgb(142, 194, 250);
+                        /* マウスオーバー時の背景色を指定する */
+                }
+        </style>
         <script>
 
 
@@ -22,7 +79,7 @@
 
                         var list = '<option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5" selected>5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option><option value="10">10</option>';
 
-                        if (DEBUG)
+                        if (DEBUG) {
                                 $.ajax({ //非同期通信
                                         type: "POST",
                                         url: "http://192.168.0.159/2018grade4/HUG/HUG_Server/eventcode.php",
@@ -69,8 +126,9 @@
                                         }
                                 });
 
-                        if (DEBUG)
                                 get_history();
+                                init();
+                        }
                 });
 
 
@@ -124,13 +182,65 @@
                         </text_and_pop>
                         <textarea id="cope" maxlength='100' class="textarea_smoll" wrap="soft" style="position: relative; left:0px;top:-30%;"
                                 required></textarea>
+                        <input type="button" value="エリアの操作する" id="area_operate_on_button" onclick='erea_operate_swcth(true)'
+                                style="position: relative;left: 130px;">
+                        <input type="button" value="エリアの操作をや取り消す" id="area_operate_off_button" onclick='erea_operate_swcth(false)'
+                                style="display: none;position: relative;left: 130px;">
                 </div>
+
+
+                <!-- </center> -->
+                <datalist id="color_list">
+                        <option value="#ff0000">#ff0000</option>
+                        <option value="#00ff00">#00ff00</option>
+                        <option value="#0000ff">#0000ff</option>
+                </datalist>
+                <datalist id="label_text_list">
+                        <option value="A">A</option>
+                        <option value="B">B</option>
+                        <option value="C">C</option>
+                </datalist>
                 <br>
-                <a style="position: relative; left:32%;">
+                <a style="position: relative; left:35%;">
                         <!-- ボタン -->
                         <input type="button" value="次へ" onclick='next("situation")'>
                 </a>
         </form>
+        <br>
+        <!-- エリア操作画面 -->
+        <div class="block1" id="erea_operate"style="display: none;">
+
+                <form id="select_figure">
+                        <input type="radio" name="figure" value="□" id="rect">
+                        <label for="rect" class="label">□</label>
+
+                        <input type="radio" name="figure" value="〇" id="circle">
+                        <label for="circle" class="label">〇</label>
+
+                        <input type="radio" name="figure" value="△" id="triangle">
+                        <label for="triangle" class="label">△</label>
+                        <input type="radio" name="figure" value="no" id="no">
+
+                </form>
+                <form id="create_figure">
+
+                        <br>
+                        <br> 図形の色
+                        <input type="color" name="figure_color" list="color_list" value="#00ff00">
+                        <br> ラベル名
+                        <input type="text" name="label_text" list="label_text_list" required>
+                        <br>ラベルの色
+                        <input type="color" name="label_color" list="color_list" value="#ff0000">
+
+                        <br>
+                        <input type="button" id="create" value="新規作成" onclick="create_figure()">
+                        <input type="button" id="edit" value="変更" onclick="create_figure()">
+                        <input type="button" value="削除" onclick="figure_delete()">
+
+                </form>
+                <br>
+                <canvas id="canvas" width="400" height="400"></canvas>
+        </div>
         <!-- 確認画面 *************************************************************-->
         <form id="confirm_cope" style="display: none;">
                 <div class="block1" id="situation">
@@ -335,6 +445,252 @@
                         exchange_mode("input");
                 }
 
+                //エリア操作のオンオフを変更
+                function erea_operate_swcth(h) {
+                        if (h) {
+                                draw_flag = true;
+                                document.getElementById("area_operate_on_button").style.display = "none";
+                                document.getElementById("area_operate_off_button").style.display = "";
+                                document.getElementById("erea_operate").style.display = "";
+                        } else {
+                                draw_flag = false;
+                                document.getElementById("area_operate_on_button").style.display = "";
+                                document.getElementById("area_operate_off_button").style.display = "none";
+                                document.getElementById("erea_operate").style.display = "none";
+                        }
+                }
+                var debug = false;//通信のオンオフ（１：オフ）
+                var draw_flag = false;
+                if (debug == true)
+                        var mynumber = sessionStorage.getItem('mynumber') - 1;//自分のユーザーIDを取得
+                else
+                        mynumber = 1;
+                document.write(mynumber);
+                var ev;
+                var figure_info = [];//図形の情報
+                var canvas = document.getElementById("canvas");
+                var figure_ctx = canvas.getContext("2d");
+                var size_change_marker = {//図形を拡大縮小可能時に表示されるマーカー
+                        place: {
+                                x: -10,
+                                y: -10,
+                                width: 8,
+                                height: 8
+                        },
+                        color: "blue",
+                        ctx: canvas.getContext("2d")
+                };
+                var rectx = 0, recty = 0;
+                var myedit = -1;//現在選択している図形のID
+                var mousex = 0, mousey = 0;//画面上のマウスの座標
+                var imag_mousex, imag_mousey;//図形範囲内でのマウスの座標
+                var change_flag = 0;
+
+
+                //初期化処理
+                function init() {
+                        setInterval(draw, 100);
+                        if (debug == true)
+                                get_user_info();//他のユーザー情報の取得
+
+                        // figure_init();//画像関係の初期化処理
+                }
+
+
+                //マウスが動いた時
+                function handleMouseMove(e) {
+                        event = e; // IE対応
+                        ev = event;
+                        //画面上のマウスの座標
+                        mousex = event.clientX;
+                        mousey = event.clientY;
+
+                        //画像上のマウスの座標
+                        imag_mousex = mousex - canvas.getBoundingClientRect().left;
+                        imag_mousey = mousey - canvas.getBoundingClientRect().top;
+
+                        if (myedit != -1 && figure_info[myedit].stats != FIGURE.MOVE)
+                                size_change_marker_move();
+
+                }
+
+
+                //更新処理
+                function draw() {
+                        if (draw_flag) {
+                                // console.log(mousex + "::" + mousey + "::::::" + figure[mynumber][0] + "~" + (figure[mynumber][0] + x1) + "::" + figure[mynumber][1] + "~" + (figure[mynumber][1] + y1));
+                                // console.log(myedit);
+                                window.onmousemove = handleMouseMove;
+                                if (debug == true)
+                                        recieve();
+                                clear_figure();
+                                if (myedit != -1)
+                                        switch (figure_info[myedit].stats) {
+                                                case FIGURE.MOVE://座標の更新
+                                                        // if (figure_info[myedit].TYPE == TYPE.TRIANGLE) {
+
+                                                        // } else {
+                                                        figure_info[myedit].place[0] = mousex - canvas.getBoundingClientRect().left - rectx;
+                                                        figure_info[myedit].place[1] = mousey - canvas.getBoundingClientRect().top - recty;
+                                                        // }
+                                                        break;
+                                                case FIGURE.CHANGE:
+                                                        size_change();
+                                                        break;
+                                        }
+                                draw_figure();//図形の描画
+
+                                // size_change_flag();
+                        }
+                }
+
+                //マウスが押された時
+                document.onmousedown = function (e) {
+                        if (!e) e = window.event; // レガシー
+                        // console.log(canvas.getBoundingClientRect().left + ":" + canvas.getBoundingClientRect().top + ":" + canvas.getBoundingClientRect().width + ":" + canvas.getBoundingClientRect().height + "::::" + mousex + ":" + mousey);
+                        //画像上にマウスがあるか判定
+                        if (rect_judge(canvas.getBoundingClientRect().left, canvas.getBoundingClientRect().width, canvas.getBoundingClientRect().top, canvas.getBoundingClientRect().height, mousex, mousey))
+                                for (var i = 0; i < figure_info.length; i++)
+                                        //図形の上にマウスがあるか判定
+                                        if (place_judge(i)) {
+                                                myedit = i;
+                                                var get = document.getElementById("select_figure");
+                                                // get.figure.value = figure_info[i].type;
+                                                get.style.display = "none";
+                                                $("#create").prop("disabled", true);
+                                                $("#edit").prop("disabled", false);
+
+                                                get = document.getElementById("create_figure");
+                                                var result = (figure_info[i].color).split(",");
+                                                get.figure_color.value = rgb_to_16(result);
+
+                                                result = (figure_info[i].label_color).split(",");
+                                                get.label_color.value = rgb_to_16(result);
+                                                get.label_text.value = figure_info[i].label_text;
+
+                                                if (size_change_flag() == 1)
+                                                        figure_info[myedit].stats = FIGURE.CHANGE;
+                                                else {
+                                                        rectx = imag_mousex - figure_info[myedit].place[0];
+                                                        recty = imag_mousey - figure_info[myedit].place[1];
+                                                        clear_figure();
+                                                        // figure_info[myedit].place[0] = mousex - canvas.getBoundingClientRect().left - rectx;
+                                                        // figure_info[myedit].place[1] = mousey - canvas.getBoundingClientRect().top - recty;
+
+                                                        figure_info[myedit].stats = FIGURE.MOVE;
+                                                        draw_figure();
+                                                }
+                                                break;
+                                        }
+                                        else {
+                                                myedit = -1;
+                                                $("#create").prop("disabled", false);
+                                                $("#edit").prop("disabled", true);
+
+                                                var get = document.getElementById("select_figure");
+                                                get.style.display = "";
+                                                get.figure.value = "no";
+                                                // console.log(get.figure.value);
+                                                var get = document.getElementById("create_figure");
+                                                get.figure_color.value = COLOR16.GREEN;
+                                                get.label_text.value = "";
+                                                get.label_color.value = COLOR16.RED;
+
+                                        }
+                }
+
+                //マウスが離された時
+                window.onmouseup = function (e) {
+                        // console.log("離された");
+                        if (myedit != -1)
+                                figure_info[myedit].stats = FIGURE.NULL;
+                        // myedit = -1;
+                        change_flag = 0;
+                }
+
+                //他のユーザー情報の取得
+                function get_user_info() {
+                        $.ajax({
+                                type: "POST",
+                                url: "http://192.168.0.159/2018grade4/HUG/HUG_Server/read_user.php",
+                                dataType: "json",
+                        }).done(function (data, dataType) {
+                                for (var i = 0; i < data.length; i++) {
+                                        $("user_info").append("name : " + data[i].name + "&nbsp;" + data[i].role + "<br>");
+                                }
+                        }).fail(function (XMLHttpRequest, textStatus, errorThrown) {
+                                // alert('Error : ' + errorThrown);
+                        });
+                }
+
+                //図形情報の取得
+                function recieve() {
+                        $.ajax({
+                                type: "POST",
+                                url: "http://192.168.0.159/2018grade4/HUG/HUG_Server/read_share.php",
+                                dataType: "json",
+                        }).done(function (data, dataType) {
+                                for (var i = 0; i < data.length; i++) {
+                                        // if (data[i].number - 1 != mynumber) {
+                                        //     figure[data[i].number - 1][0] = data[i].data1;
+                                        //     figure[data[i].number - 1][1] = data[i].data2;
+                                        //     figure[data[i].number - 1][2] = data[i].data3;
+                                        //     figure[data[i].number - 1][3] = data[i].data4;
+
+                                        // }
+
+                                        //色とIDとラベル関係***********************************************************
+                                        var place = [data[i].data1, data[i].data2, data[i].data3, data[i].data4];
+                                        figure_info.push(new rect(0, TYPE.RECT, place, FIGURE.NULL, "green", "red", "ラベル", canvas.getContext("2d")));
+
+                                }
+                        }).fail(function (XMLHttpRequest, textStatus, errorThrown) {
+                                // alert('Error : ' + errorThrown);
+                        });
+                        clear_figure();
+                        draw_figure();
+                }
+
+                //図形情報の送信
+                function send() {
+                        $.ajax({ //ajaxによる非同期通信発生
+                                type: "POST", //POST送信でデータを受け渡す
+                                url: "http://192.168.0.159/2018grade4/HUG/HUG_Server/share_insert.php",
+                                data: {
+                                        //色々変える必要あり***********************************************************
+                                        info_id: 1,
+                                        number: sessionStorage.getItem('mynumber'),
+                                        data1: figure[mynumber][0],
+                                        data2: figure[mynumber][1],
+                                        data3: figure[mynumber][2],
+                                        data4: figure[mynumber][3]
+                                },
+                                success: function (hoge) { //接続が成功
+                                        // alert(hoge);
+                                },
+                                error: function (XMLHttpRequest, textStatus, errorThrown) { //接続が失敗
+                                        // alert(errorThrown); //エラーを表示
+                                }
+                        });
+                        return false;
+                }
+
+                function create_figure() {
+                        var get = document.getElementById("select_figure");
+                        // var get = document.forms.select_figure;
+                        switch (get.figure.value) {
+                                case TYPE.RECT:
+                                        create_rect();
+                                        break;
+                                case TYPE.CIRCLE:
+                                        create_circle();
+
+                                        break;
+                                case TYPE.TRIANGLE:
+                                        create_triangle();
+                                        break;
+                        }
+                }
         </script>
 
 </body>
