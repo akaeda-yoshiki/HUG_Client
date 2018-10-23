@@ -64,8 +64,19 @@ function get_theme_detail() {
                                                 // 画像
                                                 $("#theme_image_text").empty();
                                                 // $("#image_text").append(data[0].image);
-                                                if (data[0].image != "" && data[0].image != null)
-                                                        $("#theme_image_text").append('<img src="http://192.168.0.159/2018grade4/HUG/HUG_Server/image/' + data[0].image + '">');
+                                                if (data[0].image != "" && data[0].image != null) {
+                                                        $("#theme_image_text").append('<img id="aaa" src="http://192.168.0.159/2018grade4/HUG/HUG_Server/image/' + data[0].image + '">');
+                                                        $('canvas').css('background', 'url(http://192.168.0.159/2018grade4/HUG/HUG_Server/image/' + data[0].image + ')');
+                                                        $('canvas').css('background-size', '100% 100%');
+                                                        // var img = new Image();
+                                                        // img.src = 'http://192.168.0.159/2018grade4/HUG/HUG_Server/image/' + data[0].image;//高さと幅を取得したいURLを入力
+
+                                                        // var img_width = img.width;  // 幅
+                                                        // var img_height = img.height; // 高さ
+                                                        // console.log(img_width + "::" + img_height);
+                                                        // $('canvas').css('width', img.width / 10 + "%");
+                                                        // $('canvas').css('height', img.height / 10 + "%");
+                                                }
                                                 receive_flag = 0;
                                         },
                                         error: function (XMLHttpRequest, textStatus, errorThrown) { //接続が失敗
@@ -180,13 +191,13 @@ function get_history() {
 function set_history_data(data, h) {
         var sentence = "", left = "30px";
         // console.log(window.sessionStorage.getItem(["role"]));
-        if(data.data4 == ""){
+        if (data.data4 == "") {
                 left = "68px";
         }
         switch (data.id) {
                 case "2":
                         sentence += "【状況カード】" + data.data4;
-                        
+
                         if (window.sessionStorage.getItem(["role"]) == "PS") {
                                 sentence += '<input type="button" id="cope_' + data.num + '" style="position: relative; left:' + left + ';text-align: right;" value="対応" onclick="new_cope(' + data.num + ')"><br>';
                         }
@@ -202,7 +213,7 @@ function set_history_data(data, h) {
                                         document.getElementById("history_image_detail_box_img").src = "http://192.168.0.159/2018grade4/HUG/HUG_Server/image/" + data.data3 + ".jpeg";
                                 }
                         }
-                        
+
                         break;
                 case "3":
                         sentence += "【人間カード】" + data.data4;
@@ -210,7 +221,7 @@ function set_history_data(data, h) {
                                 sentence += '<input type="button" id="cope_' + data.num + '" style="position: relative; left:' + left + ';" value="対応" onclick="new_cope(' + data.num + ')"><br>';
                         }
                         sentence += data.data3 + "&nbsp;&nbsp;" + data.data2 + "<br>" + data.data1;
-                        
+
                         break;
         }
         return sentence;
