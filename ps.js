@@ -32,8 +32,8 @@ function draw() {
                 // console.log(mousex + "::" + mousey + "::::::" + figure[mynumber][0] + "~" + (figure[mynumber][0] + x1) + "::" + figure[mynumber][1] + "~" + (figure[mynumber][1] + y1));
                 // console.log(myedit);
                 window.onmousemove = handleMouseMove;
-                if (debug == true)
-                        recieve();
+                // if (debug == true)
+                //         recieve();
                 clear_figure();
                 if (myedit != -1)
                         switch (figure_info[myedit].stats) {

@@ -183,9 +183,9 @@
                         </text_and_pop>
                         <textarea id="cope" maxlength='100' class="textarea_smoll" wrap="soft" style="position: relative; left:0px;top:-30%;"
                                 required></textarea>
-                        <input type="button" value="エリアの操作する" id="area_operate_on_button" onclick='erea_operate_swcth(true)'
+                        <input type="button" value="エリアの操作する" id="area_operate_on_button" onclick='area_operate_swcth(true)'
                                 style="position: relative;left: 130px;">
-                        <input type="button" value="エリアの操作をや取り消す" id="area_operate_off_button" onclick='erea_operate_swcth(false)'
+                        <input type="button" value="エリアの操作をやめる" id="area_operate_off_button" onclick='area_operate_swcth(false)'
                                 style="display: none;position: relative;left: 130px;">
                 </div>
 
@@ -209,7 +209,7 @@
         </form>
         <br>
         <!-- エリア操作画面 -->
-        <div class="block1" id="erea_operate"style="display: none;">
+        <div class="block1" id="area_operate" style="display: none;">
 
                 <form id="select_figure">
                         <input type="radio" name="figure" value="□" id="rect">
@@ -258,6 +258,10 @@
                         対応*<br>
                         <draw_area id="confirm_cope_text"></draw_area>
                 </div>
+                <div class="block2">
+                        エリア画像*<br>
+                        <draw_area id="confirm_area"></draw_area>
+                </div>
                 <br>
                 <a style="position: relative; left:27%;">
                         <!-- ボタン -->
@@ -271,6 +275,12 @@
                 <br>
                 <br>
         </a>
+        <form id="file_input" action="http://192.168.0.159/2018grade4/HUG/HUG_Server/file_upload.php" method="post"
+                enctype="multipart/form-data" style="display: none;">
+                <!-- <br> -->
+                <input type="file" name="pic" id="image_file" style="position: relative; left:128px;top:-20px;">
+                <!-- <br> -->
+        </form>
         <script>
                 var now_situation_number = "";
                 var assessment_send = [], category_send, time_send = "", image_send = "";//登録時に送信する用
@@ -282,6 +292,20 @@
                         var get1 = document.forms.cope_input;
                         $("#confirm_cope_text").empty();
                         $("#confirm_cope_text").append(get1.cope.value);
+
+                        $("#confirm_area").empty();
+                        if (document.getElementById("area_operate_on_button").style.display == "none") {
+                                var img = new Image("image/jpeg");
+                                img.src = document.getElementById('aaa').src;
+                                figure_ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+
+                                canvas_image = canvas.toDataURL();
+
+                                $("#confirm_area").append('<img id="confirm_area_image" src="' + canvas_image + '">');
+                        }
+                        else
+                        $("#confirm_area").append('変更なし');
+
                         if (get1.cope.value == "") {
                                 document.getElementById("required_error").style.display = "";
                                 document.getElementById("cope_input_text").style.color = "red";
@@ -296,14 +320,15 @@
                 var send_f = 1;
                 //内容確定ボタンが押された
                 function decide(h) {
+                        // document.getElementById("image_file").value = canvas_image;
                         var get1 = document.forms.cope_input;
                         var file_name = "";
-                        console.log(now_situation_number);
+                        // console.log(now_situation_number);
                         // var form = document.getElementById("file_input");
                         // var a = document.getElementById("image_file");
                         // alert(a.value);
                         // if (a.value != "")
-                        //         file_name = window.sessionStorage.getItem(["eventcode"]);
+                        // file_name = window.sessionStorage.getItem(["eventcode"]);
                         if (send_f == 1) {
                                 send_f = 0;
                                 $.ajax({ //非同期通信
@@ -341,19 +366,19 @@
                         }
                 }
                 function file(num) {
-                        var form = document.getElementById("file_input");
-                        var formdata = new FormData(form);
+                        // var form = document.getElementById("file_input");
+                        // var formdata = new FormData(form);
                         // console.log();
                         // if (form != "")
                         $.ajax({
                                 type: 'POST',
                                 url: 'http://192.168.0.159/2018grade4/HUG/HUG_Server/file_upload.php?code=' + window.sessionStorage.getItem(["eventcode"]) + '&&num=' + num,
-                                data: formdata,
+                                data: canvas_image,
                                 processData: false,	// jQueryがデータを処理しないように設定
                                 contentType: false,	// jQueryがcontentTypeを設定しないように設定
                                 error: function (data) {
                                         // console.log("error:" + data);
-                                        // alert("error:" + data);
+                                        alert("error:" + data);
                                 }
                         });
                 }
@@ -396,10 +421,13 @@
                                 case "input":
                                         document.getElementById("cope_input").style.display = "";
                                         document.getElementById("confirm_cope").style.display = "none";
+                                        if (document.getElementById("area_operate_on_button").style.display == "none")
+                                                document.getElementById("area_operate").style.display = "";
                                         break;
                                 case "confirm":
                                         document.getElementById("cope_input").style.display = "none";
                                         document.getElementById("confirm_cope").style.display = "";
+                                        document.getElementById("area_operate").style.display = "none";
                                         break;
                                 case "none":
                                         document.getElementById("cope_input").style.display = "none";
@@ -444,20 +472,21 @@
                                 }
                         });
                         exchange_mode("input");
+                        area_operate_swcth(false);
                 }
 
                 //エリア操作のオンオフを変更
-                function erea_operate_swcth(h) {
+                function area_operate_swcth(h) {
                         if (h) {
                                 draw_flag = true;
                                 document.getElementById("area_operate_on_button").style.display = "none";
                                 document.getElementById("area_operate_off_button").style.display = "";
-                                document.getElementById("erea_operate").style.display = "";
+                                document.getElementById("area_operate").style.display = "";
                         } else {
                                 draw_flag = false;
                                 document.getElementById("area_operate_on_button").style.display = "";
                                 document.getElementById("area_operate_off_button").style.display = "none";
-                                document.getElementById("erea_operate").style.display = "none";
+                                document.getElementById("area_operate").style.display = "none";
                         }
                 }
                 var debug = false;//通信のオンオフ（１：オフ）
@@ -486,9 +515,10 @@
                 var mousex = 0, mousey = 0;//画面上のマウスの座標
                 var imag_mousex, imag_mousey;//図形範囲内でのマウスの座標
                 var change_flag = 0;
+                var canvas_image;
 
 
-                
+
         </script>
 
 </body>
