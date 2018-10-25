@@ -243,12 +243,12 @@
                                         data: window.sessionStorage.getItem(["mail"]),
                                         data1: window.sessionStorage.getItem(["role"]),
                                         code: window.sessionStorage.getItem(["eventcode"]),
-                                        mode: "delete",
+                                        mode: "updata",
                                         id: 1
                                 },
                                 success: function (data) {
                                         // alert(data);
-                                        window.location.href = "play.html";
+                                        window.location.href = "prepare_play.html";
                                 },
                                 error: function (XMLHttpRequest, textStatus, errorThrown) { //接続が失敗
                                         // alert('エラーです！'); //エラーを表示

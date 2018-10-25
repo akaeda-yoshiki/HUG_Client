@@ -163,16 +163,18 @@ function get_history() {
 
                                                 //履歴の一部
                                                 if (i == data.length - 1) {
-                                                        add = "<div class='" + class_name + "' style='width:100%;height:15%;left:-3.5%;font-size: 13px;border:1px solid green;background: " + color + ";'>";
+                                                        add = "<div class='" + class_name + "' style='width:100%;height:auto;left:-3.5%;font-size: 13px;border:1px solid green;background: " + color + ";'>";
                                                         add += set_history_data(data[i], "part") + "</div > ";
                                                         $("#situation_box_add").append(add);
                                                 } else if (i > data.length - 6) {
-                                                        add = "<div class='" + class_name + "' style='width:100%;height:15%;left:-3.5%;font-size: 13px;border:1px solid green;border-top:0px solid green;background: " + color + ";'>";
+                                                        add = "<div class='" + class_name + "' style='width:100%;height:auto;left:-3.5%;font-size: 13px;border:1px solid green;border-top:0px solid green;background: " + color + ";'>";
                                                         add += set_history_data(data[i], "part") + "</div > ";
                                                         $("#situation_box_add").append(add);
                                                 }
 
                                         }
+                                        // document.getElementById("history_part_box").style.height = "auto";
+
                                 },
                                 error: function (XMLHttpRequest, textStatus, errorThrown) { //接続が失敗
                                         // alert('エラーです！'); //エラーを表示
@@ -199,7 +201,10 @@ function set_history_data(data, h) {
                         sentence += "【状況カード】" + data.data4;
 
                         if (window.sessionStorage.getItem(["role"]) == "PS") {
-                                sentence += '<input type="button" id="cope_' + data.num + '" style="position: relative; left:' + left + ';text-align: right;" value="対応" onclick="new_cope(' + data.num + ')"><br>';
+                                if (data.data5 == 0)
+                                        sentence += '<input type="button" id="cope_' + data.num + '" style="position: relative; left:' + left + ';text-align: right;" value="対応" onclick="new_cope(' + data.num + ')"><br>';
+                                else
+                                        sentence += '<input type="button" id="cope_' + data.num + '" style="position: relative; left:' + left + ';text-align: right;" value="対応済み" onclick="new_cope(' + data.num + ')"><br>';
                         }
                         sentence += data.data1;
                         if (data.data3 != "") {
@@ -218,7 +223,10 @@ function set_history_data(data, h) {
                 case "3":
                         sentence += "【人間カード】" + data.data4;
                         if (window.sessionStorage.getItem(["role"]) == "PS") {
-                                sentence += '<input type="button" id="cope_' + data.num + '" style="position: relative; left:' + left + ';" value="対応" onclick="new_cope(' + data.num + ')"><br>';
+                                if (data.data5 == 0)
+                                        sentence += '<input type="button" id="cope_' + data.num + '" style="position: relative; left:' + left + ';" value="対応" onclick="new_cope(' + data.num + ')"><br>';
+                                else
+                                        sentence += '<input type="button" id="cope_' + data.num + '" style="position: relative; left:' + left + ';" value="対応済み" onclick="new_cope(' + data.num + ')"><br>';
                         }
                         sentence += data.data3 + "&nbsp;&nbsp;" + data.data2 + "<br>" + data.data1;
 

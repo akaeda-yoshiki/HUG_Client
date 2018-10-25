@@ -304,7 +304,7 @@
                                 $("#confirm_area").append('<img id="confirm_area_image" src="' + canvas_image + '">');
                         }
                         else
-                        $("#confirm_area").append('変更なし');
+                                $("#confirm_area").append('変更なし');
 
                         if (get1.cope.value == "") {
                                 document.getElementById("required_error").style.display = "";
@@ -344,10 +344,29 @@
                                                 id: 4
                                         },
                                         success: function (data) {
+                                                // alert(now_situation_number);
+                                                data = data.split("/");
+                                                $.ajax({ //非同期通信
+                                                        type: "POST",
+                                                        url: "http://192.168.0.159/2018grade4/HUG/HUG_Server/eventcode.php",
+                                                        data: {
+                                                                data: "" + now_situation_number,
+                                                                data1: "",
+                                                                code: window.sessionStorage.getItem(["eventcode"]),
+                                                                mode: "updata",
+                                                                id: 4
+                                                        },
+                                                        success: function (data) {
+                                                                // alert(data);
+                                                        },
+                                                        error: function (XMLHttpRequest, textStatus, errorThrown) { //接続が失敗
+                                                                // alert('エラーです！' + textStatus); //エラーを表示
+                                                        }
+                                                });
                                                 // console.log(data);
                                                 // alert(data);
-                                                data = data.split("/");
-                                                if (data[1] != "")
+
+                                                if (file_name != "")
                                                         file(data[1]);
                                                 if (data[0] == "ok") {
                                                         window.location.href = "ps.html";
@@ -438,7 +457,8 @@
 
                 //新規状況対応
                 function new_cope(h) {
-
+                        // if ("16" == 0020)
+                        console.log(h + "");
                         $.ajax({ //非同期通信
                                 type: "POST",
                                 url: "http://192.168.0.159/2018grade4/HUG/HUG_Server/eventcode.php",
