@@ -190,27 +190,60 @@
                 </div>
 
 
-                <!-- </center> -->
-                <datalist id="color_list">
-                        <option value="#ff0000">#ff0000</option>
-                        <option value="#00ff00">#00ff00</option>
-                        <option value="#0000ff">#0000ff</option>
-                </datalist>
-                <datalist id="label_text_list">
-                        <option value="A">A</option>
-                        <option value="B">B</option>
-                        <option value="C">C</option>
-                </datalist>
+
                 <br>
                 <a style="position: relative; left:35%;">
                         <!-- ボタン -->
-                        <input type="button" value="次へ" onclick='next("situation")'>
+                        <input type="button" value="次へ" onclick='next("")'>
                 </a>
         </form>
+        <form id="cope_human_input" style="display: none;">
+                <div class="block1" id="feature">
+                        特徴*<br>
+                        <draw_area id="feature_text"></draw_area>
+                </div>
+                <div class="block2">
+                        年齢
+                        <draw_area id="age_text"></draw_area>
+                </div>
+                <div class="block1">
+                        性別*<br>
+                        <draw_area id="sex_text"></draw_area>
+                </div>
+                <!-- 対応 -->
+                <div class="block2">
+                        <text_and_pop id="cope_input_human_text" title="状況への対応を記入してください" style="position: relative;top:-30px;">対応*
+                                <b style="font-size: 10px;">(100字以内)</b>
+                        </text_and_pop>
+                        <textarea id="cope" maxlength='100' class="textarea_smoll" wrap="soft" style="position: relative; left:0px;top:-30%;"
+                                required></textarea>
+                        <input type="button" value="エリアの操作する" id="area_operate_on_button" onclick='area_operate_swcth(true)'
+                                style="position: relative;left: 130px;">
+                        <input type="button" value="エリアの操作をやめる" id="area_operate_off_button" onclick='area_operate_swcth(false)'
+                                style="display: none;position: relative;left: 130px;">
+                </div>
+
+
+
+                <br>
+                <a style="position: relative; left:35%;">
+                        <!-- ボタン -->
+                        <input type="button" value="次へ" onclick='next("_human")'>
+                </a>
+        </form>
+        <datalist id="color_list">
+                <option value="#ff0000">#ff0000</option>
+                <option value="#00ff00">#00ff00</option>
+                <option value="#0000ff">#0000ff</option>
+        </datalist>
+        <datalist id="label_text_list">
+                <option value="A">A</option>
+                <option value="B">B</option>
+                <option value="C">C</option>
+        </datalist>
         <br>
         <!-- エリア操作画面 -->
         <div class="block1" id="area_operate" style="display: none;">
-
                 <form id="select_figure">
                         <input type="radio" name="figure" value="□" id="rect">
                         <label for="rect" class="label">□</label>
@@ -253,7 +286,6 @@
                         <div id="confirm_image_draw"></div>
 
                 </div>
-                <!-- 対応 -->
                 <div class="block1">
                         対応*<br>
                         <draw_area id="confirm_cope_text"></draw_area>
@@ -265,7 +297,38 @@
                 <br>
                 <a style="position: relative; left:27%;">
                         <!-- ボタン -->
-                        <input type="button" value="訂正" onclick='exchange_mode("input")'> &nbsp; &nbsp; &nbsp; &nbsp;
+                        <input type="button" value="訂正" onclick='exchange_mode("input_situation")'> &nbsp; &nbsp;
+                        &nbsp; &nbsp;
+                        <input type="button" value="内容確定" onclick='decide("situation")'>
+                </a>
+        </form>
+        <form id="confirm_human_cope" style="display: none;">
+                <div class="block1" id="feature">
+                        特徴*<br>
+                        <draw_area id="confirm_feature_text"></draw_area>
+                </div>
+                <div class="block2">
+                        年齢
+                        <draw_area id="confirm_age_text"></draw_area>
+
+                </div>
+                <div class="block1">
+                        性別*<br>
+                        <draw_area id="confirm_sex_text"></draw_area>
+                </div>
+                <div class="block2">
+                        対応*<br>
+                        <draw_area id="confirm_cope_human_text"></draw_area>
+                </div>
+                <div class="block1">
+                        エリア画像*<br>
+                        <draw_area id="confirm_human_area"></draw_area>
+                </div>
+                <br>
+                <a style="position: relative; left:27%;">
+                        <!-- ボタン -->
+                        <input type="button" value="訂正" onclick='exchange_mode("input_human")'> &nbsp; &nbsp; &nbsp;
+                        &nbsp;
                         <input type="button" value="内容確定" onclick='decide("situation")'>
                 </a>
         </form>
@@ -286,14 +349,18 @@
                 var assessment_send = [], category_send, time_send = "", image_send = "";//登録時に送信する用
                 var mode = "new";//新規作成か再利用の識別変数
                 //次へボタンが押された時
-                function next() {
+                function next(h) {
                         var required_flag = true;//入力必須事項の確認用
+                        var get1;
+                        if (h == "_human")
+                                get1 = document.forms.cope_human_input;
+                        else
+                                get1 = document.forms.cope_input;
 
-                        var get1 = document.forms.cope_input;
-                        $("#confirm_cope_text").empty();
-                        $("#confirm_cope_text").append(get1.cope.value);
+                        $("#confirm_cope" + h + "_text").empty();
+                        $("#confirm_cope" + h + "_text").append(get1.cope.value);
 
-                        $("#confirm_area").empty();
+                        $("#confirm" + h + "_area").empty();
                         if (document.getElementById("area_operate_on_button").style.display == "none") {
                                 var img = new Image("image/jpeg");
                                 img.src = document.getElementById('aaa').src;
@@ -301,18 +368,20 @@
 
                                 canvas_image = canvas.toDataURL();
 
-                                $("#confirm_area").append('<img id="confirm_area_image" src="' + canvas_image + '">');
+                                $("#confirm" + h + "_area").append('<img id="confirm_area_image" src="' + canvas_image + '">');
                         }
                         else
-                                $("#confirm_area").append('変更なし');
-
+                                $("#confirm" + h + "_area").append('変更なし');
                         if (get1.cope.value == "") {
                                 document.getElementById("required_error").style.display = "";
-                                document.getElementById("cope_input_text").style.color = "red";
+                                document.getElementById("cope_input" + h + "_text").style.color = "red";
                         }
                         else {
                                 error_reset();
-                                exchange_mode("confirm");
+                                if (h == "_human")
+                                        exchange_mode("confirm_human");
+                                else
+                                        exchange_mode("confirm_situation");
                         }
                 }
 
@@ -437,15 +506,34 @@
                 function exchange_mode(h) {
 
                         switch (h) {
-                                case "input":
+                                case "input_situation":
                                         document.getElementById("cope_input").style.display = "";
+                                        document.getElementById("cope_human_input").style.display = "none";
                                         document.getElementById("confirm_cope").style.display = "none";
+                                        document.getElementById("confirm_human_cope").style.display = "none";
                                         if (document.getElementById("area_operate_on_button").style.display == "none")
                                                 document.getElementById("area_operate").style.display = "";
                                         break;
-                                case "confirm":
+                                case "input_human":
                                         document.getElementById("cope_input").style.display = "none";
+                                        document.getElementById("cope_human_input").style.display = "";
+                                        document.getElementById("confirm_cope").style.display = "none";
+                                        document.getElementById("confirm_human_cope").style.display = "none";
+                                        if (document.getElementById("area_operate_on_button").style.display == "none")
+                                                document.getElementById("area_operate").style.display = "";
+                                        break;
+                                case "confirm_situation":
+                                        document.getElementById("cope_input").style.display = "none";
+                                        document.getElementById("cope_human_input").style.display = "none";
+                                        document.getElementById("confirm_human_cope").style.display = "none";
                                         document.getElementById("confirm_cope").style.display = "";
+                                        document.getElementById("area_operate").style.display = "none";
+                                        break;
+                                case "confirm_human":
+                                        document.getElementById("cope_input").style.display = "none";
+                                        document.getElementById("cope_human_input").style.display = "none";
+                                        document.getElementById("confirm_human_cope").style.display = "";
+                                        document.getElementById("confirm_cope").style.display = "none";
                                         document.getElementById("area_operate").style.display = "none";
                                         break;
                                 case "none":
@@ -459,6 +547,7 @@
                 function new_cope(h) {
                         // if ("16" == 0020)
                         console.log(h + "");
+                        error_reset();
                         $.ajax({ //非同期通信
                                 type: "POST",
                                 url: "http://192.168.0.159/2018grade4/HUG/HUG_Server/eventcode.php",
@@ -468,22 +557,41 @@
                                 },
                                 success: function (data) {
                                         now_situation_number = "" + data[0].num;
-                                        // console.log(data);
-                                        // 状況
-                                        $("#situation_text").empty();
-                                        $("#situation_text").append(data[0].data1);
-                                        $("#confirm_situation_text").empty();
-                                        $("#confirm_situation_text").append(data[0].data1);
 
-                                        //画像
-                                        if (data[0].id == "2" && data[0].data3 != "") {
+                                        if (data[0].id == 2) {
+                                                // console.log(data);
+                                                // 状況
+                                                $("#situation_text").empty();
+                                                $("#situation_text").append(data[0].data1);
+                                                $("#confirm_situation_text").empty();
+                                                $("#confirm_situation_text").append(data[0].data1);
 
+                                                //画像
+                                                if (data[0].id == "2" && data[0].data3 != "") {
+
+                                                }
+                                                else if (data[0].id == "2" && data[0].data3 == "") {
+                                                        $("#image_draw").empty();
+                                                        $("#image_draw").append("なし");
+                                                        $("#confirm_image_draw").empty();
+                                                        $("#confirm_image_draw").append("なし");
+                                                }
+                                                exchange_mode("input_situation");
                                         }
-                                        else if (data[0].id == "2" && data[0].data3 == "") {
-                                                $("#image_draw").empty();
-                                                $("#image_draw").append("なし");
-                                                $("#confirm_image_draw").empty();
-                                                $("#confirm_image_draw").append("なし");
+                                        else if (data[0].id == 3) {
+                                                $("#feature_text").empty();
+                                                $("#feature_text").append(data[0].data1);
+                                                $("#confirm_feature_text").empty();
+                                                $("#confirm_feature_text").append(data[0].data1);
+                                                $("#age_text").empty();
+                                                $("#age_text").append(data[0].data2);
+                                                $("#confirm_age_text").empty();
+                                                $("#confirm_age_text").append(data[0].data2);
+                                                $("#sex_text").empty();
+                                                $("#sex_text").append(data[0].data3);
+                                                $("#confirm_sex_text").empty();
+                                                $("#confirm_sex_text").append(data[0].data3);
+                                                exchange_mode("input_human");
                                         }
                                 },
                                 error: function (XMLHttpRequest, textStatus, errorThrown) { //接続が失敗
@@ -491,8 +599,8 @@
                                         console.log("新規状況データ書き込みエラー");
                                 }
                         });
-                        exchange_mode("input");
                         area_operate_swcth(false);
+                        overview("off");
                 }
 
                 //エリア操作のオンオフを変更

@@ -89,7 +89,6 @@ function get_theme_detail() {
                         error: function (XMLHttpRequest, textStatus, errorThrown) { //接続が失敗
                                 // alert('エラーです！'); //エラーを表示
                                 console.log("えらー:" + textStatus);
-
                         }
                 });
 }
