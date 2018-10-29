@@ -543,6 +543,20 @@
                         }
                 }
 
+                //履歴上にある画像の非表を切り替え
+                function exchange_history_image_not_view1(image_id) {
+                        document.getElementById(image_id).style.display = "none";
+                        document.getElementById(image_id + "_view_all").style.display = "";
+                        document.getElementById(image_id + "_not_view").style.display = "none";
+                }
+                //履歴上にある画像の表示
+                function exchange_history_image_view1(image_id) {
+                        // console.log(image_id + "");
+                        document.getElementById(image_id + "_view_all").style.display = "none";
+                        document.getElementById(image_id + "_not_view").style.display = "";
+                        document.getElementById(image_id).style.display = "";
+                }
+
                 //新規状況対応
                 function new_cope(h) {
                         // if ("16" == 0020)
@@ -568,7 +582,28 @@
 
                                                 //画像
                                                 if (data[0].id == "2" && data[0].data3 != "") {
+                                                        // $("#image_draw").append('<img src="http://192.168.0.159/2018grade4/HUG/HUG_Server/image/' + data[0].data3 + '.jpeg" id="situation' + data[0].data3 + '" style="display: none;">');
 
+                                                        // var ima = "sit_" + data[0].data3;
+                                                        // console.log(data[0].data3);
+                                                        // var sentence = "<br>" + "<a href='#!' onclick='exchange_history_image_not_view1(" + ima + ")' id='sit_" + data[0].data3 + "_not_view' style='display: ;'class='square_btn'>画像を非表示</a>";
+                                                        // sentence += "<a href='#!' onclick='exchange_history_image_view1(" + ima + ")' id='sit_" + data[0].data3 + "_view_all' class='square_btn'>画像を表示</a>";
+                                                        // sentence += '<img src="http://192.168.0.159/2018grade4/HUG/HUG_Server/image/' + data[0].data3 + '.jpeg" id="sit_' + data[0].data3 + '" style="display: ;">';
+
+                                                        var image = '"' + data[0].data3 + '1"';
+                                                        var sentence = "";
+                                                        sentence += "<br>" + "<a href='#!' onclick='exchange_history_image_not_view1(" + image + ")' id='" + data[0].data3 + "1_not_view' style='display: none;'class='square_btn'>画像を非表示</a>";
+                                                        sentence += "<a href='#!' onclick='exchange_history_image_view1(" + image + ")' id='" + data[0].data3 + "1_view_all' class='square_btn'>画像を表示</a>";
+                                                        sentence += '<img src="http://192.168.0.159/2018grade4/HUG/HUG_Server/image/' + data[0].data3 + '.jpeg" id="' + data[0].data3 + '1" style="display: none;">';
+                                                        $("#image_draw").empty();
+                                                        $("#image_draw").append(sentence);
+
+                                                        image = '"' + data[0].data3 + '2"';
+                                                        sentence = "<br>" + "<a href='#!' onclick='exchange_history_image_not_view1(" + image + ")' id='" + data[0].data3 + "2_not_view' style='display: none;'class='square_btn'>画像を非表示</a>";
+                                                        sentence += "<a href='#!' onclick='exchange_history_image_view1(" + image + ")' id='" + data[0].data3 + "2_view_all' class='square_btn'>画像を表示</a>";
+                                                        sentence += '<img src="http://192.168.0.159/2018grade4/HUG/HUG_Server/image/' + data[0].data3 + '.jpeg" id="' + data[0].data3 + '2" style="display: none;">';
+                                                        $("#confirm_image_draw").empty();
+                                                        $("#confirm_image_draw").append(sentence);
                                                 }
                                                 else if (data[0].id == "2" && data[0].data3 == "") {
                                                         $("#image_draw").empty();
