@@ -115,8 +115,8 @@ function get_history() {
 
                                         data = data.concat(data1);
                                         data.sort(function (a, b) {
-                                                if (a.num < b.num) return -1;
-                                                if (a.num > b.num) return 1;
+                                                if (Number(a.num) < Number(b.num)) return -1;
+                                                if (Number(a.num) > Number(b.num)) return 1;
                                                 return 0;
                                         });
                                         // console.log(data);
