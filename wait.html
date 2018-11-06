@@ -159,26 +159,30 @@
                                                         add += "<br>";
                                                 }
                                                 $("#member").append(add);
+                                                if (window.sessionStorage.getItem(["role"]) != "PM")
+                                                        $.ajax({ //非同期通信
+                                                                type: "POST",
+                                                                url: "http://192.168.0.159/2018grade4/HUG/HUG_Server/eventcode.php",
+                                                                data: {
+                                                                        id: '2',
+                                                                        code: window.sessionStorage.getItem(["eventcode"])
+                                                                },
+                                                                success: function (data) {
+                                                                        // console.log(data);
+                                                                        window.location.href = "ps.html";
+                                                                },
+                                                                error: function (XMLHttpRequest, textStatus, errorThrown) { //接続が失敗
+                                                                        // alert('エラーです！'); //エラーを表示
+                                                                        console.log("状況登録確認エラー");
+                                                                }
+                                                        });
+
                                         },
                                         error: function (XMLHttpRequest, textStatus, errorThrown) { //接続が失敗
-                                                alert('エラーです！'); //エラーを表示
+                                                console.log("メンバー取得エラー"); //エラーを表示
                                         }
                                 });
-                                if (window.sessionStorage.getItem(["role"]) != "PM")
-                                        $.ajax({ //非同期通信
-                                                type: "POST",
-                                                url: "http://192.168.0.159/2018grade4/HUG/HUG_Server/eventcode.php",
-                                                data: {
-                                                        id: '2',
-                                                        code: window.sessionStorage.getItem(["eventcode"])
-                                                },
-                                                success: function (data) {
-                                                        console.log(data);
-                                                },
-                                                error: function (XMLHttpRequest, textStatus, errorThrown) { //接続が失敗
-                                                        // alert('エラーです！'); //エラーを表示
-                                                }
-                                        });
+
                         }
                         // get_member();
                         setInterval(get_member, 500);
