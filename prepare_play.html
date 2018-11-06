@@ -128,7 +128,8 @@
                         <input type="radio" name="role" value="J">J
                         <br>
                         <br>
-                        <input type="button" id="eventcode_decide" style="position: relative; left:40%;" value="決定" onclick='eventcode("decide")'>
+                        <input type="button" id="eventcode_decide" style="position: relative; left:40%;" value="決定"
+                                onclick='eventcode("decide")'>
 
                 </div>
                 <br>
@@ -139,8 +140,10 @@
         <form id="search" style="display: none;">
                 <div class="block3" style="border-bottom: none;">
                         並び順
-                        <input type="button" id="sort_day" style="position: relative; left:50px;border: solid 2px #203aff;" value="作成日" onclick='exchange_mode("day")'>
-                        <input type="button" id="sort_play" style="position: relative; left:80px;" value="プレイ回数" onclick='exchange_mode("play")'>
+                        <input type="button" id="sort_day" style="position: relative; left:50px;border: solid 2px #203aff;"
+                                value="作成日" onclick='exchange_mode("day")'>
+                        <input type="button" id="sort_play" style="position: relative; left:80px;" value="プレイ回数"
+                                onclick='exchange_mode("play")'>
                 </div>
 
 
@@ -182,7 +185,8 @@
         </form>
 
         <br>
-        <input type="button" id="get_theme_button" style="position: relative; left:7%;display: none;" value="全てのテーマ" onclick='exchange_volume("all", 0)'>
+        <input type="button" id="get_theme_button" style="position: relative; left:7%;display: none;" value="全てのテーマ"
+                onclick='exchange_volume("all", 0)'>
         <input type="button" id="back_button" style="position: relative; left:7%;display: none;" value="戻る" onclick='exchange_volume("not_all")'>
 
 
@@ -192,7 +196,8 @@
                 </table>
                 <br>
         </a>
-        <input type="button" id="get_theme_button1" style="position: relative; left:7%;display: none;" value="全てのテーマ" onclick='exchange_volume("all", 1)'>
+        <input type="button" id="get_theme_button1" style="position: relative; left:7%;display: none;" value="全てのテーマ"
+                onclick='exchange_volume("all", 1)'>
         <input type="button" id="back_button1" style="position: relative; left:7%;display: none;" value="戻る" onclick='exchange_volume("not_all")'>
         <a id="table">
                 <table id='table1' style="display: none;">
@@ -564,40 +569,48 @@
                                                 type: "POST",
                                                 url: "http://192.168.0.159/2018grade4/HUG/HUG_Server/eventcode.php",
                                                 data: {
-                                                        data2: window.sessionStorage.getItem(["mail"]),
-                                                        data1: document.getElementById("eventcode").role.value,
                                                         code: get.eventcode_text.value,
-                                                        mode: "insert",
-                                                        id: 1
+                                                        mode: "event_confirm"
                                                 },
                                                 success: function (data) {
-                                                        // alert(data);
-                                                        if (data == "ok") {
+                                                        if (data == "no") {
                                                                 $("errer_text_eventcode").empty();
-                                                                window.sessionStorage.setItem(["eventcode"], get.eventcode_text.value);
-                                                                window.sessionStorage.setItem(["role"], document.getElementById("eventcode").role.value);
-                                                                window.location.href = "wait.html";
-                                                                // document.getElementById("get_theme_button").style.display = "none";
-                                                                // document.getElementById("back_button").style.display = "none";
-                                                                // document.getElementById("table").style.display = "none";
-                                                                // document.getElementById("detail").style.display = "none";
-                                                                // document.getElementById("get_theme_button").style.display = "none";
-                                                                // document.getElementById("get_theme_button1").style.display = "none";
-                                                                // document.getElementById("back_button1").style.display = "none";
-                                                                // document.getElementById("table1").style.display = "none";
-                                                                // document.getElementById("mytable").style.display = "none";
-                                                                // document.getElementById("search").style.display = "none";
-                                                                // document.getElementById("eventcode").style.display = "none";
-                                                                // document.getElementById("wait").style.display = "";
+                                                                $("errer_text_eventcode").append("入力されたイベントコードは存在しません");
                                                         }
                                                         else {
-                                                                $("errer_text_eventcode").empty();
-                                                                $("errer_text_eventcode").append("その役割はすでに使用されています");
+                                                                $.ajax({ //非同期通信
+                                                                        type: "POST",
+                                                                        url: "http://192.168.0.159/2018grade4/HUG/HUG_Server/eventcode.php",
+                                                                        data: {
+                                                                                data2: window.sessionStorage.getItem(["mail"]),
+                                                                                data1: document.getElementById("eventcode").role.value,
+                                                                                code: get.eventcode_text.value,
+                                                                                mode: "insert",
+                                                                                id: 1
+                                                                        },
+                                                                        success: function (data) {
+                                                                                // alert(data);
+                                                                                if (data == "ok") {
+                                                                                        $("errer_text_eventcode").empty();
+                                                                                        window.sessionStorage.setItem(["eventcode"], get.eventcode_text.value);
+                                                                                        window.sessionStorage.setItem(["role"], document.getElementById("eventcode").role.value);
+                                                                                        window.location.href = "wait.html";
+                                                                                }
+                                                                                else {
+                                                                                        $("errer_text_eventcode").empty();
+                                                                                        $("errer_text_eventcode").append("その役割はすでに使用されています");
+                                                                                }
+
+                                                                        },
+                                                                        error: function (XMLHttpRequest, textStatus, errorThrown) { //接続が失敗
+                                                                                console.log("イベント参加エラー");
+                                                                        }
+                                                                });
                                                         }
 
                                                 },
                                                 error: function (XMLHttpRequest, textStatus, errorThrown) { //接続が失敗
-                                                        // alert('エラーです！'); //エラーを表示
+                                                        console.log("イベント存在確認エラー");
                                                 }
                                         });
                                 }
