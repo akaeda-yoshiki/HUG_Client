@@ -11,24 +11,14 @@
         <script type="text/javascript" src="pm.js"></script>
         <script type="text/javascript" src="play_common.js"></script>
         <script>
-
-
                 $('texi_and_pop').balloon();//マウスオーバーの割り当て
-
-
                 //受信
                 $(document).ready(function () {
                         // window.sessionStorage.setItem(["eventcode"], "5SrgaP0MjG");
                         get_theme_detail();
-
-
-
-                        if (DEBUG)
-                                get_assessment();
-
                         if (DEBUG) {
+                                get_assessment();
                                 get_history();
-
                                 setInterval(get_history, 500);
                         }
                 });
@@ -47,8 +37,10 @@
                                                 return data;
                                         },
                                         error: function (XMLHttpRequest, textStatus, errorThrown) { //接続が失敗
-                                                // alert('エラーです！'); //エラーを表示
-                                                console.log("えらー:" + textStatus);
+                                                console.log("ID指定データ受信エラー");
+                                                console.log("XMLHttpRequest::" + XMLHttpRequest);
+                                                console.log("textStatus::" + textStatus);
+                                                console.log("errorThrown::" + errorThrown);
                                         }
                                 });
                         return null;
@@ -58,6 +50,7 @@
 
 <body>
         <script>
+                // 共通部分の描画
                 $(function () { $("#include_common").load("play_common.html"); })
         </script>
         <br><br><br><br>
@@ -67,7 +60,6 @@
         <a href="#!" class="tag_b" onclick="exchange_mode('reuse')" id="reuse_button">再利用</a>
         </b>
         <b style="position: relative;left:8%;">
-
                 <!-- カード切り替え -->
                 <form id="target" class="cp_ipradio">
                         <input name="cpipr03" id="new_situation" type="radio" value="a" onclick='exchange_card("situation")'
@@ -102,10 +94,8 @@
 
                         <form id="file_input" action="http://192.168.0.159/2018grade4/HUG/HUG_Server/file_upload.php"
                                 method="post" enctype="multipart/form-data">
-                                <!-- <br> -->
                                 <input type="file" name="pic" id="image_file" style="position: relative; left:128px;top:-20px;"
                                         onchange="image_update()">
-                                <!-- <br> -->
                         </form>
                         <div id="image_input_draw"></div>
                 </div>
@@ -123,16 +113,15 @@
                                 </text_and_pop>
                                 <textarea id="feature" maxlength='100' class="textarea_smoll" wrap="soft" style="position: relative; left:0px;top:-30%;"
                                         required></textarea>
-                                <!-- <input type="text" id="feature" class="textarea_smoll" required> -->
                         </div>
                         <!-- 年 -->
                         <div class="block2">
                                 <text_and_pop id="age_input_text" title="年齢がわからない場合はおよそを記入して下さい">年齢*</text_and_pop>
                                 <input type="text" id="age" class="textarea_smoll" style="height:20px;" required>
                         </div>
+                        <!-- 性別 -->
                         <div class="block1">
                                 <text_and_pop id="sex_input_text">性別*</text_and_pop>
-
                                 <b style="position: relative; left:60px;">
                                         <input type="radio" name="sex" value="男性">男性
                                         <input type="radio" name="sex" value="女性">女性
@@ -237,7 +226,7 @@
                         error_reset();
                         document.getElementById("confirm_situation").style.display = "none";
                         document.getElementById("confirm_human").style.display = "none";
-                        if (mode == "new")
+                        if (mode == "new")//新規作成
                                 switch (h) {
                                         case "human":
                                                 document.getElementById("situation_card").style.display = "none";
@@ -248,7 +237,7 @@
                                                 document.getElementById("human_card").style.display = "none";
                                                 break;
                                 }
-                        else if (mode == "reuse")
+                        else if (mode == "reuse")//再利用
                                 switch (h) {
                                         case "human":
                                                 document.getElementById("reuse_situation_card").style.display = "none";
@@ -285,20 +274,21 @@
                                         break;
                         }
                 }
+
                 var send_f = 1;
                 //内容確定ボタンが押された
                 function decide(h) {
                         if (h == "situation") {
+                                //画像名関係
                                 var get1 = document.forms.input1;
                                 var file_name = "";
                                 var form = document.getElementById("file_input");
                                 var a = document.getElementById("image_file");
-                                // alert(a.value);
                                 if (a.value != "")
                                         file_name = window.sessionStorage.getItem(["eventcode"]);
                                 if (send_f == 1) {
                                         send_f = 0;
-                                        $.ajax({ //非同期通信
+                                        $.ajax({ //新規状況カード登録
                                                 type: "POST",
                                                 url: "http://192.168.0.159/2018grade4/HUG/HUG_Server/eventcode.php",
                                                 data: {
@@ -312,8 +302,6 @@
                                                         id: 2
                                                 },
                                                 success: function (data) {
-                                                        console.log(data);
-                                                        // alert(data);
                                                         data = data.split("/");
                                                         if (data[1] != "")
                                                                 file(data[1]);
@@ -321,14 +309,16 @@
                                                                 window.location.href = "pm.html";
                                                         }
                                                         else {
-                                                                alert("ok以外");
+                                                                console.log("新規状況データ登録のリスポンスがok以外");
                                                         }
                                                         send_f = 1;
                                                 },
                                                 error: function (XMLHttpRequest, textStatus, errorThrown) { //接続が失敗
-                                                        // alert('エラーです！'); //エラーを表示
                                                         send_f = 1;
-                                                        console.log("えらー:" + textStatus);
+                                                        console.log("新規状況データ登録エラー");
+                                                        console.log("XMLHttpRequest::" + XMLHttpRequest);
+                                                        console.log("textStatus::" + textStatus);
+                                                        console.log("errorThrown::" + errorThrown);
                                                 }
                                         });
                                 }
@@ -338,7 +328,7 @@
                                         var get2 = document.forms.input_human;
 
                                         send_f = 0;
-                                        $.ajax({ //非同期通信
+                                        $.ajax({ //新規人間カード登録
                                                 type: "POST",
                                                 url: "http://192.168.0.159/2018grade4/HUG/HUG_Server/eventcode.php",
                                                 data: {
@@ -352,18 +342,20 @@
                                                 },
                                                 success: function (data) {
                                                         if (data == "ok") {
-                                                                // window.location.href = "pm.html";
-                                                                exchange_mode("new");
+                                                                window.location.href = "pm.html";
+                                                                // exchange_mode("new");
                                                         }
                                                         else {
-                                                                alert("ok以外");
+                                                                console.log("新規人間データ登録のリスポンスがok以外");
                                                         }
                                                         send_f = 1;
                                                 },
                                                 error: function (XMLHttpRequest, textStatus, errorThrown) { //接続が失敗
-                                                        // alert('エラーです！'); //エラーを表示
-                                                        console.log("えらー:" + textStatus);
                                                         send_f = 1;
+                                                        console.log("新規人間データ登録エラー");
+                                                        console.log("XMLHttpRequest::" + XMLHttpRequest);
+                                                        console.log("textStatus::" + textStatus);
+                                                        console.log("errorThrown::" + errorThrown);
                                                 }
                                         });
                                 }
