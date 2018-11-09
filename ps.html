@@ -75,7 +75,7 @@
                 var assessment_data = [];
                 //受信
                 $(document).ready(function () {
-                        window.sessionStorage.setItem(["eventcode"], "5SrgaP0MjG");
+                        // window.sessionStorage.setItem(["eventcode"], "5SrgaP0MjG");
                         get_theme_detail();
 
                         var list = '<option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5" selected>5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option><option value="10">10</option>';
@@ -128,6 +128,7 @@
                                 });
 
                                 get_history();
+                                setInterval(get_history, 500);
                                 init();
                         }
                 });

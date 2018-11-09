@@ -26,8 +26,11 @@
                         if (DEBUG)
                                 get_assessment();
 
-                        if (DEBUG)
+                        if (DEBUG) {
                                 get_history();
+
+                                setInterval(get_history, 500);
+                        }
                 });
 
                 //ID指定のデータの受信

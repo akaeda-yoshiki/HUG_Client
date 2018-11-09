@@ -95,6 +95,8 @@ function get_theme_detail() {
 
 //履歴データの受信と表示
 function get_history() {
+
+
         $.ajax({ //非同期通信
                 type: "POST",
                 url: "http://192.168.0.159/2018grade4/HUG/HUG_Server/eventcode.php",
@@ -113,8 +115,30 @@ function get_history() {
                                 success: function (data1) {
 
                                         data = data.concat(data1);
-                                        
-                                        adjustment_history(data);
+
+                                        $.ajax({ //非同期通信
+                                                type: "POST",
+                                                url: "http://192.168.0.159/2018grade4/HUG/HUG_Server/eventcode.php",
+                                                data: {
+                                                        code: window.sessionStorage.getItem(["eventcode"]),
+                                                        id: "4"
+                                                },
+                                                success: function (data2) {
+
+                                                        data = data.concat(data2);
+
+                                                        adjustment_history(data);
+                                                        // console.log(data);
+
+                                                        // document.getElementById("history_part_box").style.height = "auto";
+
+                                                },
+                                                error: function (XMLHttpRequest, textStatus, errorThrown) { //接続が失敗
+                                                        // alert('エラーです！'); //エラーを表示
+                                                        console.log("えらー:" + textStatus);
+                                                        adjustment_history(data);
+                                                }
+                                        });
                                         // console.log(data);
 
                                         // document.getElementById("history_part_box").style.height = "auto";
@@ -123,7 +147,29 @@ function get_history() {
                                 error: function (XMLHttpRequest, textStatus, errorThrown) { //接続が失敗
                                         // alert('エラーです！'); //エラーを表示
                                         console.log("えらー:" + textStatus);
-                                        adjustment_history(data);
+                                        $.ajax({ //非同期通信
+                                                type: "POST",
+                                                url: "http://192.168.0.159/2018grade4/HUG/HUG_Server/eventcode.php",
+                                                data: {
+                                                        code: window.sessionStorage.getItem(["eventcode"]),
+                                                        id: "4"
+                                                },
+                                                success: function (data2) {
+
+                                                        data = data.concat(data2);
+
+                                                        adjustment_history(data);
+                                                        // console.log(data);
+
+                                                        // document.getElementById("history_part_box").style.height = "auto";
+
+                                                },
+                                                error: function (XMLHttpRequest, textStatus, errorThrown) { //接続が失敗
+                                                        // alert('エラーです！'); //エラーを表示
+                                                        console.log("えらー:" + textStatus);
+                                                        adjustment_history(data);
+                                                }
+                                        });
                                 }
                         });
                 },
@@ -138,12 +184,54 @@ function get_history() {
                                         id: "3"
                                 },
                                 success: function (data1) {
-                                        adjustment_history(data1);
+                                        data = data1;
+                                        $.ajax({ //非同期通信
+                                                type: "POST",
+                                                url: "http://192.168.0.159/2018grade4/HUG/HUG_Server/eventcode.php",
+                                                data: {
+                                                        code: window.sessionStorage.getItem(["eventcode"]),
+                                                        id: "4"
+                                                },
+                                                success: function (data2) {
 
+                                                        data = data.concat(data2);
+
+                                                        adjustment_history(data);
+                                                        // console.log(data);
+
+                                                        // document.getElementById("history_part_box").style.height = "auto";
+
+                                                },
+                                                error: function (XMLHttpRequest, textStatus, errorThrown) { //接続が失敗
+                                                        // alert('エラーです！'); //エラーを表示
+                                                        console.log("えらー:" + textStatus);
+                                                        adjustment_history(data);
+                                                }
+                                        });
                                 },
                                 error: function (XMLHttpRequest, textStatus, errorThrown) { //接続が失敗
                                         // alert('エラーです！'); //エラーを表示
                                         console.log("えらー:" + textStatus);
+                                        $.ajax({ //非同期通信
+                                                type: "POST",
+                                                url: "http://192.168.0.159/2018grade4/HUG/HUG_Server/eventcode.php",
+                                                data: {
+                                                        code: window.sessionStorage.getItem(["eventcode"]),
+                                                        id: "4"
+                                                },
+                                                success: function (data2) {
+
+                                                        adjustment_history(data2);
+                                                        // console.log(data);
+
+                                                        // document.getElementById("history_part_box").style.height = "auto";
+
+                                                },
+                                                error: function (XMLHttpRequest, textStatus, errorThrown) { //接続が失敗
+                                                        // alert('エラーです！'); //エラーを表示
+                                                        console.log("えらー:" + textStatus);
+                                                }
+                                        });
                                 }
                         });
                 }
@@ -151,6 +239,10 @@ function get_history() {
 }
 
 function adjustment_history(data) {
+        $("#situation_detail_box_add").empty();
+        $("#reuse_situation_select_add").empty();
+        $("#reuse_human_select_add").empty();
+        $("#situation_box_add").empty();
         var first_human_card_data = 1, first_situation_card_data = 1;
 
         data.sort(function (a, b) {
@@ -167,6 +259,10 @@ function adjustment_history(data) {
                 }
                 else if (data[i].id == "3") {
                         class_name = "block2";
+                        color = "#fff8ef";
+                }
+                else if (data[i].id == "4") {
+                        class_name = "block1";
                         color = "#fff8ef";
                 }
 
@@ -222,7 +318,7 @@ function set_history_data(data, h) {
         }
         switch (data.id) {
                 case "2":
-                        sentence += "【状況カード】" + data.data4 + "<br>";
+                        sentence += "【状況カード】" + data.data4;
 
                         if (window.sessionStorage.getItem(["role"]) == "PS") {
                                 if (data.data5 == 0)
@@ -230,6 +326,7 @@ function set_history_data(data, h) {
                                 else
                                         sentence += '<input type="button" id="cope_' + data.num + '" style="position: relative; left:' + left + ';text-align: right;" value="対応済み" onclick="new_cope(' + data.num + ')"><br>';
                         }
+                        else sentence += "<br>";
                         sentence += data.data1;
                         if (data.data3 != "") {
                                 var image = '"' + data.data3 + '"';
@@ -253,6 +350,23 @@ function set_history_data(data, h) {
                                         sentence += '<input type="button" id="cope_' + data.num + '" style="position: relative; left:' + left + ';" value="対応済み" onclick="new_cope(' + data.num + ')"><br>';
                         }
                         sentence += data.data3 + "&nbsp;&nbsp;" + data.data2 + "<br>" + data.data1;
+
+                        break;
+                case "4":
+                        sentence += "【対応】" + data.data4 + "<br>";
+
+                        sentence += data.data1;
+                        if (data.data3 != "") {
+                                var image = '"' + data.data3 + '"';
+                                if (h == "all") {
+                                        sentence += "<br>" + "<a href='#!' onclick='exchange_history_image_not_view(" + image + ")' id='" + data.data3 + "_not_view' style='display: none;'class='square_btn'>画像を非表示</a>";
+                                        sentence += "<a href='#!' onclick='exchange_history_image_view(" + image + ")' id='" + data.data3 + "_view_all' class='square_btn'>画像を表示</a>";
+                                        sentence += '<img src="http://192.168.0.159/2018grade4/HUG/HUG_Server/image/' + data.data3 + '.jpeg" id="' + data.data3 + '" style="display: none;">';
+                                } else if (h == "part") {
+                                        sentence += "<br>" + "<a href='#!' onclick='exchange_part_history_image_view(" + image + ")' id='" + data.data3 + "_view_part' class='square_btn'>画像を表示</a>";
+                                        document.getElementById("history_image_detail_box_img").src = "http://192.168.0.159/2018grade4/HUG/HUG_Server/image/" + data.data3 + ".jpeg";
+                                }
+                        }
 
                         break;
         }
