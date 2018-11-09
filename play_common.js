@@ -95,7 +95,6 @@ function get_theme_detail() {
 
 //履歴データの受信と表示
 function get_history() {
-        var first_human_card_data = 1, first_situation_card_data = 1;
         $.ajax({ //非同期通信
                 type: "POST",
                 url: "http://192.168.0.159/2018grade4/HUG/HUG_Server/eventcode.php",
@@ -114,65 +113,32 @@ function get_history() {
                                 success: function (data1) {
 
                                         data = data.concat(data1);
-                                        data.sort(function (a, b) {
-                                                if (Number(a.num) < Number(b.num)) return -1;
-                                                if (Number(a.num) > Number(b.num)) return 1;
-                                                return 0;
-                                        });
+                                        
+                                        adjustment_history(data);
                                         // console.log(data);
-                                        var add = "", class_name, color;
-                                        for (var i = data.length - 1; i > -1; i--) {
-                                                if (data[i].id == "2") {
-                                                        class_name = "block1";
-                                                        color = "#f7fdc4";
-                                                }
-                                                else if (data[i].id == "3") {
-                                                        class_name = "block2";
-                                                        color = "#fff8ef";
-                                                }
 
-                                                //全ての履歴
-                                                if (i != data.length - 1)
-                                                        add = "<div class='" + class_name + "' style='width:90%;left:4%;font-size: 13px;border:1px solid green;border-top:0px solid green;background: " + color + ";'>";
-                                                else
-                                                        add = "<div class='" + class_name + "' style='width:90%;left:4%;font-size: 13px;border:1px solid green;background: " + color + ";'>";
-                                                add += set_history_data(data[i], "all");
-                                                // console.log(set_history_data(data[i]));
-                                                add += "</div> ";
-                                                $("#situation_detail_box_add").append(add);
-                                                //再利用
-                                                if (first_human_card_data == 1 && data[i].id == "3") {
-                                                        add = "<div class='" + class_name + "' style='width:60%;left:7%;font-size: 13px;border:1px solid green;background: " + color + ";'>";
-                                                        first_human_card_data = 0;
-                                                }
-                                                else if (first_situation_card_data == 1 && data[i].id == "2") {
-                                                        add = "<div class='" + class_name + "' style='width:60%;left:7%;font-size: 13px;border:1px solid green;background: " + color + ";'>";
-                                                        first_situation_card_data = 0;
-                                                }
-                                                else
-                                                        add = "<div class='" + class_name + "' style='width:60%;left:7%;font-size: 13px;border:1px solid green;border-top:0px solid green;background: " + color + ";'>";
-
-                                                add += set_history_data(data[i], "all");
-                                                add += '<br><center><input type="button" value="再利用" onclick="reuse_select(' + data[i].num + ')"></center></div >';
-                                                if (data[i].id == "2")
-                                                        $("#reuse_situation_select_add").append(add);
-                                                else if (data[i].id == "3")
-                                                        $("#reuse_human_select_add").append(add);
-
-
-                                                //履歴の一部
-                                                if (i == data.length - 1) {
-                                                        add = "<div class='" + class_name + "' style='width:100%;height:auto;left:-3.5%;font-size: 13px;border:1px solid green;background: " + color + ";'>";
-                                                        add += set_history_data(data[i], "part") + "</div > ";
-                                                        $("#situation_box_add").append(add);
-                                                } else if (i > data.length - 6) {
-                                                        add = "<div class='" + class_name + "' style='width:100%;height:auto;left:-3.5%;font-size: 13px;border:1px solid green;border-top:0px solid green;background: " + color + ";'>";
-                                                        add += set_history_data(data[i], "part") + "</div > ";
-                                                        $("#situation_box_add").append(add);
-                                                }
-
-                                        }
                                         // document.getElementById("history_part_box").style.height = "auto";
+
+                                },
+                                error: function (XMLHttpRequest, textStatus, errorThrown) { //接続が失敗
+                                        // alert('エラーです！'); //エラーを表示
+                                        console.log("えらー:" + textStatus);
+                                        adjustment_history(data);
+                                }
+                        });
+                },
+                error: function (XMLHttpRequest, textStatus, errorThrown) { //接続が失敗
+                        // alert('エラーです！'); //エラーを表示
+                        console.log("えらー:" + textStatus);
+                        $.ajax({ //非同期通信
+                                type: "POST",
+                                url: "http://192.168.0.159/2018grade4/HUG/HUG_Server/eventcode.php",
+                                data: {
+                                        code: window.sessionStorage.getItem(["eventcode"]),
+                                        id: "3"
+                                },
+                                success: function (data1) {
+                                        adjustment_history(data1);
 
                                 },
                                 error: function (XMLHttpRequest, textStatus, errorThrown) { //接続が失敗
@@ -180,12 +146,71 @@ function get_history() {
                                         console.log("えらー:" + textStatus);
                                 }
                         });
-                },
-                error: function (XMLHttpRequest, textStatus, errorThrown) { //接続が失敗
-                        // alert('エラーです！'); //エラーを表示
-                        console.log("えらー:" + textStatus);
                 }
         });
+}
+
+function adjustment_history(data) {
+        var first_human_card_data = 1, first_situation_card_data = 1;
+
+        data.sort(function (a, b) {
+                if (Number(a.num) < Number(b.num)) return -1;
+                if (Number(a.num) > Number(b.num)) return 1;
+                return 0;
+        });
+
+        var add = "", class_name, color;
+        for (var i = data.length - 1; i > -1; i--) {
+                if (data[i].id == "2") {
+                        class_name = "block1";
+                        color = "#f7fdc4";
+                }
+                else if (data[i].id == "3") {
+                        class_name = "block2";
+                        color = "#fff8ef";
+                }
+
+                //全ての履歴
+                if (i != data.length - 1)
+                        add = "<div class='" + class_name + "' style='width:90%;left:4%;font-size: 13px;border:1px solid green;border-top:0px solid green;background: " + color + ";'>";
+                else
+                        add = "<div class='" + class_name + "' style='width:90%;left:4%;font-size: 13px;border:1px solid green;background: " + color + ";'>";
+                add += set_history_data(data[i], "all");
+                // console.log(set_history_data(data[i]));
+                add += "</div> ";
+                $("#situation_detail_box_add").append(add);
+                //再利用
+                if (first_human_card_data == 1 && data[i].id == "3") {
+                        add = "<div class='" + class_name + "' style='width:60%;left:7%;font-size: 13px;border:1px solid green;background: " + color + ";'>";
+                        first_human_card_data = 0;
+                }
+                else if (first_situation_card_data == 1 && data[i].id == "2") {
+                        add = "<div class='" + class_name + "' style='width:60%;left:7%;font-size: 13px;border:1px solid green;background: " + color + ";'>";
+                        first_situation_card_data = 0;
+                }
+                else
+                        add = "<div class='" + class_name + "' style='width:60%;left:7%;font-size: 13px;border:1px solid green;border-top:0px solid green;background: " + color + ";'>";
+
+                add += set_history_data(data[i], "all");
+                add += '<br><center><input type="button" value="再利用" onclick="reuse_select(' + data[i].num + ')"></center></div >';
+                if (data[i].id == "2")
+                        $("#reuse_situation_select_add").append(add);
+                else if (data[i].id == "3")
+                        $("#reuse_human_select_add").append(add);
+
+
+                //履歴の一部
+                if (i == data.length - 1) {
+                        add = "<div class='" + class_name + "' style='width:100%;height:auto;left:-3.5%;font-size: 13px;border:1px solid green;background: " + color + ";'>";
+                        add += set_history_data(data[i], "part") + "</div > ";
+                        $("#situation_box_add").append(add);
+                } else if (i > data.length - 6) {
+                        add = "<div class='" + class_name + "' style='width:100%;height:auto;left:-3.5%;font-size: 13px;border:1px solid green;border-top:0px solid green;background: " + color + ";'>";
+                        add += set_history_data(data[i], "part") + "</div > ";
+                        $("#situation_box_add").append(add);
+                }
+
+        }
 }
 
 //履歴データの書き込み
@@ -197,7 +222,7 @@ function set_history_data(data, h) {
         }
         switch (data.id) {
                 case "2":
-                        sentence += "【状況カード】" + data.data4;
+                        sentence += "【状況カード】" + data.data4 + "<br>";
 
                         if (window.sessionStorage.getItem(["role"]) == "PS") {
                                 if (data.data5 == 0)
