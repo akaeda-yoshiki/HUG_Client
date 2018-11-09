@@ -168,7 +168,9 @@
                                                         add += "<br>";
                                                 }
                                                 $("#member").append(add);
-                                                if (window.sessionStorage.getItem(["role"]) != "PM")
+
+
+                                                if (window.sessionStorage.getItem(["role"]) != "PM") {
                                                         $.ajax({ //非同期通信
                                                                 type: "POST",
                                                                 url: "http://192.168.0.159/2018grade4/HUG/HUG_Server/eventcode.php",
@@ -183,9 +185,26 @@
                                                                 error: function (XMLHttpRequest, textStatus, errorThrown) { //接続が失敗
                                                                         // alert('エラーです！'); //エラーを表示
                                                                         console.log("状況登録確認エラー");
+                                                                        $.ajax({ //非同期通信
+                                                                                type: "POST",
+                                                                                url: "http://192.168.0.159/2018grade4/HUG/HUG_Server/eventcode.php",
+                                                                                data: {
+                                                                                        id: '3',
+                                                                                        code: window.sessionStorage.getItem(["eventcode"])
+                                                                                },
+                                                                                success: function (data) {
+                                                                                        // console.log(data);
+                                                                                        window.location.href = "ps.html";
+                                                                                },
+                                                                                error: function (XMLHttpRequest, textStatus, errorThrown) { //接続が失敗
+                                                                                        // alert('エラーです！'); //エラーを表示
+                                                                                        console.log("状況登録確認エラー");
+                                                                                }
+                                                                        });
                                                                 }
                                                         });
 
+                                                }
                                         },
                                         error: function (XMLHttpRequest, textStatus, errorThrown) { //接続が失敗
                                                 console.log("メンバー取得エラー"); //エラーを表示
@@ -200,8 +219,10 @@
         <br>
         <br>
         <ps_part id="ps_part">
-                <input type="button" id="theme_draw_button" value="テーマの詳細の表示" style="position: relative;left:8%;"onclick='theme_detail()'>
-                <input type="button" id="theme_not_draw_button" value="テーマの詳細の非表示" style="position: relative;left:8%;display: none;" onclick='hide_detail()'>
+                <input type="button" id="theme_draw_button" value="テーマの詳細の表示" style="position: relative;left:8%;"
+                        onclick='theme_detail()'>
+                <input type="button" id="theme_not_draw_button" value="テーマの詳細の非表示" style="position: relative;left:8%;display: none;"
+                        onclick='hide_detail()'>
         </ps_part>
         <pm_part id="pm_part">
                 <!-- 状況作成・テーマ確認 切り替えボタン-->
