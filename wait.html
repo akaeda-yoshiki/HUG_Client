@@ -559,7 +559,8 @@
                                                 if (data[1] != "")
                                                         file(data[1]);
                                                 if (data[0] == "ok") {
-                                                        window.location.href = "pm.html";
+                                                        // window.location.href = "pm.html";
+                                                        start_time();
                                                 }
                                                 else {
                                                         console.log("ok以外");
@@ -589,7 +590,8 @@
                                         },
                                         success: function (data) {
                                                 if (data == "ok") {
-                                                        window.location.href = "pm.html";
+                                                        // window.location.href = "pm.html";
+                                                        start_time();
                                                 }
                                                 else {
                                                         console.log("ok以外");
@@ -601,7 +603,23 @@
                                 });
                         }
                 }
-
+                function start_time() {
+                        $.ajax({ //非同期通信
+                                type: "POST",
+                                url: "http://192.168.0.159/2018grade4/HUG/HUG_Server/time.php",
+                                data: {
+                                        code: window.sessionStorage.getItem(["eventcode"]),
+                                        mode: "update"
+                                },
+                                success: function (data) {
+                                                // window.location.href = "pm.html";
+                                                console.log(data);
+                                },
+                                error: function (XMLHttpRequest, textStatus, errorThrown) { //接続が失敗
+                                        console.log("えらー:" + textStatus);
+                                }
+                        });
+                }
         </script>
 </body>
 
