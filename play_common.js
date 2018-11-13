@@ -79,6 +79,46 @@ function get_theme_detail() {
                 });
 }
 
+//更新処理（時間、履歴）
+function update() {
+        get_history();
+
+        get_time();
+
+}
+
+//経過時間を取得
+function get_time() {
+        $.ajax({ //非同期通信
+                type: "POST",
+                url: "http://192.168.0.159/2018grade4/HUG/HUG_Server/time.php",
+                data: {
+                        code: window.sessionStorage.getItem(["eventcode"]),
+                        mode: "update"
+                },
+                success: function (pass_time_data) {
+                        // console.log(pass_time_data);
+                        var time = "";
+                        if (pass_time_data["hour"] != 0)
+                                time += pass_time_data["hour"] + "時間";
+                        if (pass_time_data["minute"] != 0)
+                                time += pass_time_data["minute"] + "分";
+                        if (pass_time_data["second"] != 0)
+                                time += pass_time_data["second"] + "秒";
+                        $("#pass_time").empty();
+                        $("#pass_time").append(time);
+
+                },
+                error: function (XMLHttpRequest, textStatus, errorThrown) { //接続が失敗
+                        console.log("経過時間受信エラー");
+                        console.log("XMLHttpRequest::" + XMLHttpRequest);
+                        console.log("textStatus::" + textStatus);
+                        console.log("errorThrown::" + errorThrown);
+                }
+        });
+
+}
+
 //履歴データの受信と表示
 function get_history() {
 
@@ -113,19 +153,19 @@ function get_history() {
                                                         adjustment_history(data);
                                                 },
                                                 error: function (XMLHttpRequest, textStatus, errorThrown) { //接続が失敗
-                                                        console.log("ID4データ受信エラー");
-                                                        console.log("XMLHttpRequest::" + XMLHttpRequest);
-                                                        console.log("textStatus::" + textStatus);
-                                                        console.log("errorThrown::" + errorThrown);
+                                                        // console.log("ID4データ受信エラー");
+                                                        // console.log("XMLHttpRequest::" + XMLHttpRequest);
+                                                        // console.log("textStatus::" + textStatus);
+                                                        // console.log("errorThrown::" + errorThrown);
                                                         adjustment_history(data);
                                                 }
                                         });
                                 },
                                 error: function (XMLHttpRequest, textStatus, errorThrown) { //接続が失敗
-                                        console.log("ID3データ受信エラー");
-                                        console.log("XMLHttpRequest::" + XMLHttpRequest);
-                                        console.log("textStatus::" + textStatus);
-                                        console.log("errorThrown::" + errorThrown);
+                                        // console.log("ID3データ受信エラー");
+                                        // console.log("XMLHttpRequest::" + XMLHttpRequest);
+                                        // console.log("textStatus::" + textStatus);
+                                        // console.log("errorThrown::" + errorThrown);
                                         $.ajax({ //非同期通信
                                                 type: "POST",
                                                 url: "http://192.168.0.159/2018grade4/HUG/HUG_Server/eventcode.php",
@@ -138,10 +178,10 @@ function get_history() {
                                                         adjustment_history(data);
                                                 },
                                                 error: function (XMLHttpRequest, textStatus, errorThrown) { //接続が失敗
-                                                        console.log("ID4データ受信エラー");
-                                                        console.log("XMLHttpRequest::" + XMLHttpRequest);
-                                                        console.log("textStatus::" + textStatus);
-                                                        console.log("errorThrown::" + errorThrown);
+                                                        // console.log("ID4データ受信エラー");
+                                                        // console.log("XMLHttpRequest::" + XMLHttpRequest);
+                                                        // console.log("textStatus::" + textStatus);
+                                                        // console.log("errorThrown::" + errorThrown);
                                                         adjustment_history(data);
                                                 }
                                         });
@@ -149,10 +189,10 @@ function get_history() {
                         });
                 },
                 error: function (XMLHttpRequest, textStatus, errorThrown) { //接続が失敗
-                        console.log("ID2データ受信エラー");
-                        console.log("XMLHttpRequest::" + XMLHttpRequest);
-                        console.log("textStatus::" + textStatus);
-                        console.log("errorThrown::" + errorThrown);
+                        // console.log("ID2データ受信エラー");
+                        // console.log("XMLHttpRequest::" + XMLHttpRequest);
+                        // console.log("textStatus::" + textStatus);
+                        // console.log("errorThrown::" + errorThrown);
                         $.ajax({ //非同期通信
                                 type: "POST",
                                 url: "http://192.168.0.159/2018grade4/HUG/HUG_Server/eventcode.php",
@@ -174,19 +214,19 @@ function get_history() {
                                                         adjustment_history(data);
                                                 },
                                                 error: function (XMLHttpRequest, textStatus, errorThrown) { //接続が失敗
-                                                        console.log("ID4データ受信エラー");
-                                                        console.log("XMLHttpRequest::" + XMLHttpRequest);
-                                                        console.log("textStatus::" + textStatus);
-                                                        console.log("errorThrown::" + errorThrown);
+                                                        // console.log("ID4データ受信エラー");
+                                                        // console.log("XMLHttpRequest::" + XMLHttpRequest);
+                                                        // console.log("textStatus::" + textStatus);
+                                                        // console.log("errorThrown::" + errorThrown);
                                                         adjustment_history(data);
                                                 }
                                         });
                                 },
                                 error: function (XMLHttpRequest, textStatus, errorThrown) { //接続が失敗
-                                        console.log("ID3データ受信エラー");
-                                        console.log("XMLHttpRequest::" + XMLHttpRequest);
-                                        console.log("textStatus::" + textStatus);
-                                        console.log("errorThrown::" + errorThrown);
+                                        // console.log("ID3データ受信エラー");
+                                        // console.log("XMLHttpRequest::" + XMLHttpRequest);
+                                        // console.log("textStatus::" + textStatus);
+                                        // console.log("errorThrown::" + errorThrown);
                                         $.ajax({ //非同期通信
                                                 type: "POST",
                                                 url: "http://192.168.0.159/2018grade4/HUG/HUG_Server/eventcode.php",
@@ -198,10 +238,10 @@ function get_history() {
                                                         adjustment_history(data2);
                                                 },
                                                 error: function (XMLHttpRequest, textStatus, errorThrown) { //接続が失敗
-                                                        console.log("ID4データ受信エラー");
-                                                        console.log("XMLHttpRequest::" + XMLHttpRequest);
-                                                        console.log("textStatus::" + textStatus);
-                                                        console.log("errorThrown::" + errorThrown);
+                                                        // console.log("ID4データ受信エラー");
+                                                        // console.log("XMLHttpRequest::" + XMLHttpRequest);
+                                                        // console.log("textStatus::" + textStatus);
+                                                        // console.log("errorThrown::" + errorThrown);
                                                 }
                                         });
                                 }

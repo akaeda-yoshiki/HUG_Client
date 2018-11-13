@@ -175,7 +175,7 @@
                                                                 type: "POST",
                                                                 url: "http://192.168.0.159/2018grade4/HUG/HUG_Server/eventcode.php",
                                                                 data: {
-                                                                        id: '2',
+                                                                        id: '0',
                                                                         code: window.sessionStorage.getItem(["eventcode"])
                                                                 },
                                                                 success: function (data) {
@@ -183,24 +183,7 @@
                                                                         window.location.href = "ps.html";
                                                                 },
                                                                 error: function (XMLHttpRequest, textStatus, errorThrown) { //接続が失敗
-                                                                        // alert('エラーです！'); //エラーを表示
-                                                                        console.log("状況登録確認エラー");
-                                                                        $.ajax({ //非同期通信
-                                                                                type: "POST",
-                                                                                url: "http://192.168.0.159/2018grade4/HUG/HUG_Server/eventcode.php",
-                                                                                data: {
-                                                                                        id: '3',
-                                                                                        code: window.sessionStorage.getItem(["eventcode"])
-                                                                                },
-                                                                                success: function (data) {
-                                                                                        // console.log(data);
-                                                                                        window.location.href = "ps.html";
-                                                                                },
-                                                                                error: function (XMLHttpRequest, textStatus, errorThrown) { //接続が失敗
-                                                                                        // alert('エラーです！'); //エラーを表示
-                                                                                        console.log("状況登録確認エラー");
-                                                                                }
-                                                                        });
+
                                                                 }
                                                         });
 
@@ -609,11 +592,11 @@
                                 url: "http://192.168.0.159/2018grade4/HUG/HUG_Server/time.php",
                                 data: {
                                         code: window.sessionStorage.getItem(["eventcode"]),
-                                        mode: "update"
+                                        mode: "new"
                                 },
                                 success: function (data) {
-                                                // window.location.href = "pm.html";
-                                                console.log(data);
+                                                window.location.href = "pm.html";
+                                                // console.log(data);
                                 },
                                 error: function (XMLHttpRequest, textStatus, errorThrown) { //接続が失敗
                                         console.log("えらー:" + textStatus);
