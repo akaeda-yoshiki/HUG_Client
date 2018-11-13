@@ -1,3 +1,4 @@
+var now_time = "";
 
 //テーマの詳細を受信
 function get_theme_detail() {
@@ -82,9 +83,7 @@ function get_theme_detail() {
 //更新処理（時間、履歴）
 function update() {
         get_history();
-
         get_time();
-
 }
 
 //経過時間を取得
@@ -107,7 +106,7 @@ function get_time() {
                                 time += pass_time_data["second"] + "秒";
                         $("#pass_time").empty();
                         $("#pass_time").append(time);
-
+                        now_time = time;
                 },
                 error: function (XMLHttpRequest, textStatus, errorThrown) { //接続が失敗
                         console.log("経過時間受信エラー");
@@ -324,9 +323,9 @@ function adjustment_history(data) {
 
 //履歴データの書き込み
 function set_history_data(data, h) {
-        var sentence = "", left = "30px";
+        var sentence = "", left = "5px";
         if (data.data4 == "") {
-                left = "68px";
+                left = "38px";
         }
         switch (data.id) {
                 case "2":
