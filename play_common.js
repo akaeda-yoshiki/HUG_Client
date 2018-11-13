@@ -2,29 +2,26 @@
 //テーマの詳細を受信
 function get_theme_detail() {
         if (DEBUG)
-                $.ajax({ //非同期通信
+                $.ajax({ //イベントコードに対応するテーマIDを受信
                         type: "POST",
                         url: "http://192.168.0.159/2018grade4/HUG/HUG_Server/eventcode.php",
                         data: {
                                 code: window.sessionStorage.getItem(["eventcode"])
                         },
                         success: function (data1) {
-                                // alert(data1);
-                                $.ajax({ //非同期通信
+                                $.ajax({ //テーマの詳細を受信
                                         type: "POST",
                                         url: "http://192.168.0.159/2018grade4/HUG/HUG_Server/theme.php",
                                         data: {
                                                 id: data1
                                         },
                                         success: function (data) {
-                                                console.log(data);
                                                 // タイトル
                                                 $("#theme_title_text").empty();
                                                 $("#theme_title_text").append(data[0].title);
                                                 // カテゴリー
                                                 $("#theme_category_text").empty();
                                                 $("#theme_category_text").append(data[0].category);
-
                                                 //状況
                                                 $("#theme_situation_text").empty();
                                                 $("#theme_situation_text").append(data[0].situation);
@@ -43,21 +40,15 @@ function get_theme_detail() {
                                                 // 日時・時期
                                                 $("#theme_time_text").empty();
                                                 $("#theme_time_text").append(data[0].time);
-
                                                 // 地域
                                                 $("#theme_area_text").empty();
                                                 $("#theme_area_text").append(data[0].area);
-
-
-
                                                 // 対象者
                                                 $("#theme_target_text").empty();
                                                 $("#theme_target_text").append(data[0].target);
-
                                                 // ねらい
                                                 $("#theme_aim_text").empty();
                                                 $("#theme_aim_text").append(data[0].aim);
-
                                                 // 公開の可否
                                                 $("#theme_open_text").empty();
                                                 $("#theme_open_text").append(data[0].open);
@@ -68,27 +59,22 @@ function get_theme_detail() {
                                                         $("#theme_image_text").append('<img id="aaa" src="http://192.168.0.159/2018grade4/HUG/HUG_Server/image/' + data[0].image + '">');
                                                         $('canvas').css('background', 'url(http://192.168.0.159/2018grade4/HUG/HUG_Server/image/' + data[0].image + ')');
                                                         $('canvas').css('background-size', '100% 100%');
-                                                        // var img = new Image();
-                                                        // img.src = 'http://192.168.0.159/2018grade4/HUG/HUG_Server/image/' + data[0].image;//高さと幅を取得したいURLを入力
-
-                                                        // var img_width = img.width;  // 幅
-                                                        // var img_height = img.height; // 高さ
-                                                        // console.log(img_width + "::" + img_height);
-                                                        // $('canvas').css('width', img.width / 10 + "%");
-                                                        // $('canvas').css('height', img.height / 10 + "%");
                                                 }
                                                 receive_flag = 0;
                                         },
                                         error: function (XMLHttpRequest, textStatus, errorThrown) { //接続が失敗
-                                                // alert('エラーです！'); //エラーを表示
-                                                console.log("えらー:" + textStatus);
-
+                                                console.log("テーマ詳細エラー");
+                                                console.log("XMLHttpRequest::" + XMLHttpRequest);
+                                                console.log("textStatus::" + textStatus);
+                                                console.log("errorThrown::" + errorThrown);
                                         }
                                 });
                         },
                         error: function (XMLHttpRequest, textStatus, errorThrown) { //接続が失敗
-                                // alert('エラーです！'); //エラーを表示
-                                console.log("えらー:" + textStatus);
+                                console.log("イベントのテーマIDエラー");
+                                console.log("XMLHttpRequest::" + XMLHttpRequest);
+                                console.log("textStatus::" + textStatus);
+                                console.log("errorThrown::" + errorThrown);
                         }
                 });
 }
@@ -113,7 +99,6 @@ function get_history() {
                                         id: "3"
                                 },
                                 success: function (data1) {
-
                                         data = data.concat(data1);
 
                                         $.ajax({ //非同期通信
@@ -124,29 +109,23 @@ function get_history() {
                                                         id: "4"
                                                 },
                                                 success: function (data2) {
-
                                                         data = data.concat(data2);
-
                                                         adjustment_history(data);
-                                                        // console.log(data);
-
-                                                        // document.getElementById("history_part_box").style.height = "auto";
-
                                                 },
                                                 error: function (XMLHttpRequest, textStatus, errorThrown) { //接続が失敗
-                                                        // alert('エラーです！'); //エラーを表示
-                                                        console.log("えらー:" + textStatus);
+                                                        console.log("ID4データ受信エラー");
+                                                        console.log("XMLHttpRequest::" + XMLHttpRequest);
+                                                        console.log("textStatus::" + textStatus);
+                                                        console.log("errorThrown::" + errorThrown);
                                                         adjustment_history(data);
                                                 }
                                         });
-                                        // console.log(data);
-
-                                        // document.getElementById("history_part_box").style.height = "auto";
-
                                 },
                                 error: function (XMLHttpRequest, textStatus, errorThrown) { //接続が失敗
-                                        // alert('エラーです！'); //エラーを表示
-                                        console.log("えらー:" + textStatus);
+                                        console.log("ID3データ受信エラー");
+                                        console.log("XMLHttpRequest::" + XMLHttpRequest);
+                                        console.log("textStatus::" + textStatus);
+                                        console.log("errorThrown::" + errorThrown);
                                         $.ajax({ //非同期通信
                                                 type: "POST",
                                                 url: "http://192.168.0.159/2018grade4/HUG/HUG_Server/eventcode.php",
@@ -155,18 +134,14 @@ function get_history() {
                                                         id: "4"
                                                 },
                                                 success: function (data2) {
-
                                                         data = data.concat(data2);
-
                                                         adjustment_history(data);
-                                                        // console.log(data);
-
-                                                        // document.getElementById("history_part_box").style.height = "auto";
-
                                                 },
                                                 error: function (XMLHttpRequest, textStatus, errorThrown) { //接続が失敗
-                                                        // alert('エラーです！'); //エラーを表示
-                                                        console.log("えらー:" + textStatus);
+                                                        console.log("ID4データ受信エラー");
+                                                        console.log("XMLHttpRequest::" + XMLHttpRequest);
+                                                        console.log("textStatus::" + textStatus);
+                                                        console.log("errorThrown::" + errorThrown);
                                                         adjustment_history(data);
                                                 }
                                         });
@@ -174,8 +149,10 @@ function get_history() {
                         });
                 },
                 error: function (XMLHttpRequest, textStatus, errorThrown) { //接続が失敗
-                        // alert('エラーです！'); //エラーを表示
-                        console.log("えらー:" + textStatus);
+                        console.log("ID2データ受信エラー");
+                        console.log("XMLHttpRequest::" + XMLHttpRequest);
+                        console.log("textStatus::" + textStatus);
+                        console.log("errorThrown::" + errorThrown);
                         $.ajax({ //非同期通信
                                 type: "POST",
                                 url: "http://192.168.0.159/2018grade4/HUG/HUG_Server/eventcode.php",
@@ -193,25 +170,23 @@ function get_history() {
                                                         id: "4"
                                                 },
                                                 success: function (data2) {
-
                                                         data = data.concat(data2);
-
                                                         adjustment_history(data);
-                                                        // console.log(data);
-
-                                                        // document.getElementById("history_part_box").style.height = "auto";
-
                                                 },
                                                 error: function (XMLHttpRequest, textStatus, errorThrown) { //接続が失敗
-                                                        // alert('エラーです！'); //エラーを表示
-                                                        console.log("えらー:" + textStatus);
+                                                        console.log("ID4データ受信エラー");
+                                                        console.log("XMLHttpRequest::" + XMLHttpRequest);
+                                                        console.log("textStatus::" + textStatus);
+                                                        console.log("errorThrown::" + errorThrown);
                                                         adjustment_history(data);
                                                 }
                                         });
                                 },
                                 error: function (XMLHttpRequest, textStatus, errorThrown) { //接続が失敗
-                                        // alert('エラーです！'); //エラーを表示
-                                        console.log("えらー:" + textStatus);
+                                        console.log("ID3データ受信エラー");
+                                        console.log("XMLHttpRequest::" + XMLHttpRequest);
+                                        console.log("textStatus::" + textStatus);
+                                        console.log("errorThrown::" + errorThrown);
                                         $.ajax({ //非同期通信
                                                 type: "POST",
                                                 url: "http://192.168.0.159/2018grade4/HUG/HUG_Server/eventcode.php",
@@ -220,16 +195,13 @@ function get_history() {
                                                         id: "4"
                                                 },
                                                 success: function (data2) {
-
                                                         adjustment_history(data2);
-                                                        // console.log(data);
-
-                                                        // document.getElementById("history_part_box").style.height = "auto";
-
                                                 },
                                                 error: function (XMLHttpRequest, textStatus, errorThrown) { //接続が失敗
-                                                        // alert('エラーです！'); //エラーを表示
-                                                        console.log("えらー:" + textStatus);
+                                                        console.log("ID4データ受信エラー");
+                                                        console.log("XMLHttpRequest::" + XMLHttpRequest);
+                                                        console.log("textStatus::" + textStatus);
+                                                        console.log("errorThrown::" + errorThrown);
                                                 }
                                         });
                                 }
@@ -238,6 +210,7 @@ function get_history() {
         });
 }
 
+//履歴データをIDごとに処理
 function adjustment_history(data) {
         $("#situation_detail_box_add").empty();
         $("#reuse_situation_select_add").empty();
@@ -245,6 +218,7 @@ function adjustment_history(data) {
         $("#situation_box_add").empty();
         var first_human_card_data = 1, first_situation_card_data = 1;
 
+        // ソート
         data.sort(function (a, b) {
                 if (Number(a.num) < Number(b.num)) return -1;
                 if (Number(a.num) > Number(b.num)) return 1;
@@ -272,7 +246,6 @@ function adjustment_history(data) {
                 else
                         add = "<div class='" + class_name + "' style='width:90%;left:4%;font-size: 13px;border:1px solid green;background: " + color + ";'>";
                 add += set_history_data(data[i], "all");
-                // console.log(set_history_data(data[i]));
                 add += "</div> ";
                 $("#situation_detail_box_add").append(add);
                 //再利用
@@ -312,7 +285,6 @@ function adjustment_history(data) {
 //履歴データの書き込み
 function set_history_data(data, h) {
         var sentence = "", left = "30px";
-        // console.log(window.sessionStorage.getItem(["role"]));
         if (data.data4 == "") {
                 left = "68px";
         }
@@ -375,7 +347,6 @@ function set_history_data(data, h) {
 
 //履歴上にある画像の表示
 function exchange_history_image_view(image_id) {
-
         document.getElementById(image_id + "_view_all").style.display = "none";
         document.getElementById(image_id + "_not_view").style.display = "";
         document.getElementById(image_id).style.display = "";
@@ -384,8 +355,6 @@ function exchange_history_image_view(image_id) {
 //一部の履歴上にある画像の表示
 function exchange_part_history_image_view() {
         overview("on", "4")
-        // document.getElementById("black_box").style.display = "";
-        // document.getElementById("history_image_detail_box").style.display = "";
 }
 
 //履歴上にある画像の非表を切り替え
