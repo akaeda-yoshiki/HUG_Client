@@ -276,7 +276,7 @@ function adjustment_history(data) {
                 }
                 else if (data[i].id == "4") {
                         class_name = "block1";
-                        color = "#fff8ef";
+                        color = "#e0ffff";
                 }
 
                 //全ての履歴
@@ -341,7 +341,7 @@ function set_history_data(data, h) {
                         sentence += data.data1;
                         if (data.data3 != "") {
                                 var image = '"' + data.data3 + '"';
-                                if (h == "all") {
+                                if (h == "all" || h == "trace") {
                                         sentence += "<br>" + "<a href='#!' onclick='exchange_history_image_not_view(" + image + ")' id='" + data.data3 + "_not_view' style='display: none;'class='square_btn'>画像を非表示</a>";
                                         sentence += "<a href='#!' onclick='exchange_history_image_view(" + image + ")' id='" + data.data3 + "_view_all' class='square_btn'>画像を表示</a>";
                                         sentence += '<img src="http://192.168.0.159/2018grade4/HUG/HUG_Server/image/' + data.data3 + '.jpeg" id="' + data.data3 + '" style="display: none;">';
@@ -369,7 +369,7 @@ function set_history_data(data, h) {
                         sentence += data.data1;
                         if (data.data3 != "") {
                                 var image = '"' + data.data3 + '"';
-                                if (h == "all") {
+                                if (h == "all" || h == "trace") {
                                         sentence += "<br>" + "<a href='#!' onclick='exchange_history_image_not_view(" + image + ")' id='" + data.data3 + "_not_view' style='display: none;'class='square_btn'>画像を非表示</a>";
                                         sentence += "<a href='#!' onclick='exchange_history_image_view(" + image + ")' id='" + data.data3 + "_view_all' class='square_btn'>画像を表示</a>";
                                         sentence += '<img src="http://192.168.0.159/2018grade4/HUG/HUG_Server/image/' + data.data3 + '.jpeg" id="' + data.data3 + '" style="display: none;">';
@@ -381,6 +381,8 @@ function set_history_data(data, h) {
 
                         break;
         }
+        if (h != "trace")
+                sentence += "<br><a href='#!' onclick='trace_history(" + data.num + ")' class='square_btn'>たどる</a>";
         return sentence;
 }
 
@@ -401,4 +403,96 @@ function exchange_history_image_not_view(image_id) {
         document.getElementById(image_id).style.display = "none";
         document.getElementById(image_id + "_view_all").style.display = "";
         document.getElementById(image_id + "_not_view").style.display = "none";
+}
+
+//対応からたどる
+function trace_history(num) {
+        // 状況・人間
+        // numがdata2の対応
+
+        // 対応
+        // data2のnumの状況・人間、data2が一緒の対応
+        // console.log(num + "::");
+        $.ajax({ //非同期通信
+                type: "POST",
+                url: "http://192.168.0.159/2018grade4/HUG/HUG_Server/eventcode.php",
+                data: {
+                        code: window.sessionStorage.getItem(["eventcode"]),
+                        num: num,
+                        mode: "trace"
+                },
+                success: function (data) {
+                        overview("on", "5");
+                        $("#id23").empty();
+                        $("#id4").empty();
+
+                        // ソート
+                        data.sort(function (a, b) {
+                                if (Number(a.num) < Number(b.num)) return 1;
+                                if (Number(a.num) > Number(b.num)) return -1;
+                                return 0;
+                        });
+
+                        var add = "", class_name, color;
+                        for (var i = data.length - 1; i > -1; i--) {
+                                if (data[i].id == "2") {
+                                        class_name = "block1";
+                                        color = "#f7fdc4";
+                                }
+                                else if (data[i].id == "3") {
+                                        class_name = "block2";
+                                        color = "#fff8ef";
+                                }
+                                else if (data[i].id == "4") {
+                                        class_name = "block1";
+                                        color = "#e0ffff";
+                                }
+
+                                //全ての履歴
+                                if (data[i].id == "4")
+                                        add = "<div class='" + class_name + "' style='width:90%;left:4%;font-size: 13px;border:1px solid green;border-top:0px solid green;background: " + color + ";'>";
+                                else
+                                        add = "<div class='" + class_name + "' style='width:90%;left:4%;font-size: 13px;border:1px solid green;background: " + color + ";'>";
+                                add += set_history_data(data[i], "trace");
+                                add += "</div> ";
+                                if (data[i].id == "2" || data[i].id == "3")
+                                        $("#id23").append(add);
+                                else if (data[i].id == "4")
+                                        $("#id4").append(add);
+                        }
+                        // console.log(data);
+                },
+                error: function (XMLHttpRequest, textStatus, errorThrown) { //接続が失敗
+                        console.log("トレースエラー");
+                        console.log("XMLHttpRequest::" + XMLHttpRequest);
+                        console.log("textStatus::" + textStatus);
+                        console.log("errorThrown::" + errorThrown);
+                }
+        });
+}
+
+function overview(h, n) {
+        if (h == "on") {
+                document.getElementById("black_box").style.display = "";
+                if (n == "1")
+                        document.getElementById("theme_detail_box").style.display = "";
+                else if (n == "2")
+                        document.getElementById("overview_detail_box").style.display = "";
+                else if (n == "3")
+                        document.getElementById("situation_detail_box").style.display = "";
+                else if (n == "4")
+                        document.getElementById("history_image_detail_box").style.display = "";
+                else if (n == "5")
+                        document.getElementById("trace_box").style.display = "";
+
+        } else if (h == "off") {
+                document.getElementById("black_box").style.display = "none";
+                document.getElementById("theme_detail_box").style.display = "none";
+                document.getElementById("overview_detail_box").style.display = "none";
+                document.getElementById("situation_detail_box").style.display = "none";
+                document.getElementById("history_image_detail_box").style.display = "none";
+                document.getElementById("trace_box").style.display = "none";
+
+        }
+
 }

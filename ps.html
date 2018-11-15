@@ -330,7 +330,7 @@
                         <!-- ボタン -->
                         <input type="button" value="訂正" onclick='exchange_mode("input_human")'> &nbsp; &nbsp; &nbsp;
                         &nbsp;
-                        <input type="button" value="内容確定" onclick='decide("situation")'>
+                        <input type="button" value="内容確定" onclick='decide("human")'>
                 </a>
         </form>
         <!-- エラーメッセージ -->
@@ -391,7 +391,13 @@
                 //内容確定ボタンが押された
                 function decide(h) {
                         // document.getElementById("image_file").value = canvas_image;
-                        var get1 = document.forms.cope_input;
+                        var get1
+                        if (h == "situation")
+                                get1 = document.forms.cope_input;
+                        else if (h == "human")
+                                get1 = document.forms.cope_human_input;
+
+
                         var file_name = "";
                         // console.log(now_situation_number);
                         // var form = document.getElementById("file_input");
@@ -474,27 +480,7 @@
 
 
 
-                function overview(h, n) {
-                        if (h == "on") {
-                                document.getElementById("black_box").style.display = "";
-                                if (n == "1")
-                                        document.getElementById("theme_detail_box").style.display = "";
-                                else if (n == "2")
-                                        document.getElementById("overview_detail_box").style.display = "";
-                                else if (n == "3")
-                                        document.getElementById("situation_detail_box").style.display = "";
-                                else if (n == "4")
-                                        document.getElementById("history_image_detail_box").style.display = "";
-                        } else if (h == "off") {
-                                document.getElementById("black_box").style.display = "none";
-                                document.getElementById("theme_detail_box").style.display = "none";
-                                document.getElementById("overview_detail_box").style.display = "none";
-                                document.getElementById("situation_detail_box").style.display = "none";
-                                document.getElementById("history_image_detail_box").style.display = "none";
-
-                        }
-
-                }
+                
 
                 //エラー系のリセット
                 function error_reset() {
