@@ -442,13 +442,13 @@
                                                 // console.log(data);
                                                 // alert(data);
 
-                                                if (file_name != "")
-                                                        file(data[1]);
+                                                // if (file_name != "")
+                                                file(data[1]);
                                                 if (data[0] == "ok") {
-                                                        window.location.href = "ps.html";
+                                                        // window.location.href = "ps.html";
                                                 }
                                                 else {
-                                                        alert("ok以外");
+                                                        // alert("ok以外");
                                                 }
                                                 send_f = 1;
                                         },
@@ -465,22 +465,61 @@
                         // var formdata = new FormData(form);
                         // console.log();
                         // if (form != "")
+                        // $.ajax({
+                        //         type: 'POST',
+                        //         url: 'http://192.168.0.159/2018grade4/HUG/HUG_Server/file_upload.php?code=' + window.sessionStorage.getItem(["eventcode"]) + '&&num=' + num,
+                        //         data: canvas_image,
+                        //         processData: false,	// jQueryがデータを処理しないように設定
+                        //         contentType: false,	// jQueryがcontentTypeを設定しないように設定
+                        //         error: function (data) {
+                        //                 // console.log("error:" + data);
+                        //                 alert("error:" + data);
+                        //         }
+                        // });
+
+                        // $.ajax({ //非同期通信
+                        //         type: "POST",
+                        //         url: "http://192.168.0.159/2018grade4/HUG/HUG_Server/file_upload.php",
+                        //         data: {
+                        //                 code: window.sessionStorage.getItem(["eventcode"]),
+                        //                 num: num,
+                        //                 image: canvas_image
+                        //         },
+                        //         success: function (data) {
+                        //                 console.log(data);
+                        //         },
+                        //         error: function (XMLHttpRequest, textStatus, errorThrown) { //接続が失敗
+                        //                 console.log("受信エラー");
+                        //                 console.log("XMLHttpRequest::" + XMLHttpRequest);
+                        //                 console.log("textStatus::" + textStatus);
+                        //                 console.log("errorThrown::" + errorThrown);
+                        //         }
+                        // });
+                        var data = {};
+                        // 不要な情報を取り除く
+                        canvas_image = canvas_image.replace(/^data:image\/png;base64,/, '');
+
+                        data.image = canvas_image;
+                        data.num = num;
+                        data.code = window.sessionStorage.getItem(["eventcode"]);
                         $.ajax({
+                                url: 'http://192.168.0.159/2018grade4/HUG/HUG_Server/file_upload.php',
                                 type: 'POST',
-                                url: 'http://192.168.0.159/2018grade4/HUG/HUG_Server/file_upload.php?code=' + window.sessionStorage.getItem(["eventcode"]) + '&&num=' + num,
-                                data: canvas_image,
-                                processData: false,	// jQueryがデータを処理しないように設定
-                                contentType: false,	// jQueryがcontentTypeを設定しないように設定
-                                error: function (data) {
-                                        // console.log("error:" + data);
-                                        alert("error:" + data);
-                                }
+                                success: function () {
+                                        // 成功時の処理
+                                        console.log(data);
+                                },
+                                error(jqXHR, textStatus, errorThrown) {
+                                        // 失敗時の処理
+                                },
+                                data: data,
+                                dataType: 'json'
                         });
                 }
 
 
 
-                
+
 
                 //エラー系のリセット
                 function error_reset() {
@@ -547,7 +586,7 @@
                 //新規状況対応
                 function new_cope(h) {
                         // if ("16" == 0020)
-                        console.log(h + "");
+                        // console.log(h + "");
                         error_reset();
                         $.ajax({ //非同期通信
                                 type: "POST",
