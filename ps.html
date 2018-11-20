@@ -459,9 +459,10 @@
                 function file(num) {
                         var data = {};
                         // 不要な情報を取り除く
-                        canvas_image = canvas_image.replace(/^data:image\/png;base64,/, '');
+                        // canvas_image = canvas_image.replace(/^data:image\/png;base64,/, '');
 
-                        data.image = canvas_image;
+                        // data.image = canvas_image;
+                        data.image = document.getElementById("confirm_area_image").src;
                         data.num = num;
                         data.code = window.sessionStorage.getItem(["eventcode"]);
                         $.ajax({
