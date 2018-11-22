@@ -276,13 +276,13 @@
                 <div class="theme_box" id="situation_detail_box" style="width: 80%;height: auto;position: absolute;top: 8%;left: 8%;z-index: 1;">
                         【全ての履歴】
                         <br>
-                        <center> <a href='#!' onclick='overview("off")' class='square_btn'>閉じる</a></center>
                         <br><a id="situation_detail_box_add"></a>
                 </div>
         </reflection>
         <br>
         <script>
                 var now_mode = "day";
+                var eventcode = "";
 
                 function start_reflection() {
                         document.getElementById("prepare").style.display = "none";
@@ -517,13 +517,7 @@
                                 case "2":
                                         sentence += "【状況カード】" + data.data4;
 
-                                        if (window.sessionStorage.getItem(["role"]) == "PS") {
-                                                if (data.data5 == 0)
-                                                        sentence += '<input type="button" id="cope_' + data.num + '" style="position: relative; left:' + left + ';text-align: right;" value="対応" onclick="new_cope(' + data.num + ')"><br>';
-                                                else
-                                                        sentence += '<input type="button" id="cope_' + data.num + '" style="position: relative; left:' + left + ';text-align: right;" value="対応済み" onclick="new_cope(' + data.num + ')"><br>';
-                                        }
-                                        else sentence += "<br>";
+                                        sentence += "<br>";
                                         sentence += data.data1;
                                         if (data.data3 != "") {
                                                 var image = '"' + data.data3 + '"';
@@ -540,12 +534,6 @@
                                         break;
                                 case "3":
                                         sentence += "【人間カード】" + data.data4;
-                                        if (window.sessionStorage.getItem(["role"]) == "PS") {
-                                                if (data.data5 == 0)
-                                                        sentence += '<input type="button" id="cope_' + data.num + '" style="position: relative; left:' + left + ';" value="対応" onclick="new_cope(' + data.num + ')"><br>';
-                                                else
-                                                        sentence += '<input type="button" id="cope_' + data.num + '" style="position: relative; left:' + left + ';" value="対応済み" onclick="new_cope(' + data.num + ')"><br>';
-                                        }
                                         sentence += data.data3 + "&nbsp;&nbsp;" + data.data2 + "<br>" + data.data1;
 
                                         break;
@@ -584,7 +572,7 @@
                                 type: "POST",
                                 url: "http://192.168.0.159/2018grade4/HUG/HUG_Server/eventcode.php",
                                 data: {
-                                        code: window.sessionStorage.getItem(["eventcode"]),
+                                        code: eventcode,
                                         num: num,
                                         mode: "trace"
                                 },
@@ -728,6 +716,7 @@
                         h = h.split("|");
                         var decide_id = h[0];
                         get_history(h[1]);
+                        eventcode = h[1];
                         $.ajax({ //非同期通信
                                 type: "POST",
                                 url: "http://192.168.0.159/2018grade4/HUG/HUG_Server/theme.php",
@@ -845,7 +834,19 @@
                         document.getElementById("detail").style.display = "";
                 }
 
+                //履歴上にある画像の表示
+                function exchange_history_image_view(image_id) {
+                        document.getElementById(image_id + "_view_all").style.display = "none";
+                        document.getElementById(image_id + "_not_view").style.display = "";
+                        document.getElementById(image_id).style.display = "";
+                }
 
+                //履歴上にある画像の非表を切り替え
+                function exchange_history_image_not_view(image_id) {
+                        document.getElementById(image_id).style.display = "none";
+                        document.getElementById(image_id + "_view_all").style.display = "";
+                        document.getElementById(image_id + "_not_view").style.display = "none";
+                }
         </script>
 </body>
 
