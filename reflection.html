@@ -230,11 +230,10 @@
         </prepare>
         <reflection id="reflection" style="display: none;">
                 <!-- テーマボタン -->
-                <div class="theme_box" style="height:20px;width: 100px;top:80px">
-                        <center>
-                                <a href='#!' onclick='overview("on", "1")' class='square_btn'>テーマ確認</a>
-                        </center>
+                <div class="theme_box" style="position: relative;left:8%;height:20px;width: 100px;">
+                        <a href='#!' onclick='overview("on", "1")' class='square_btn'>テーマ確認</a>
                 </div>
+                <br>
                 <!-- 半透明の黒 -->
                 <div class="hide_black" id="black_box" style="display: none;" onclick='overview("off")'></div>
                 <!-- テーマ内容 -->
@@ -263,7 +262,7 @@
                         <div id="theme_image_text" style="position: relative;left: 0px;"></div>
                 </div>
                 <!-- トレース -->
-                <div class="theme_box" id="trace_box" style="display: none;width: 60%;height: auto;position: absolute;top: 20%;left: 17%;z-index: 1;">
+                <div class="theme_box" id="trace_box" style="display: none;width: 60%;height: auto;top: 20%;left: 17%;z-index: 1;">
                         【トレース】
 
                         <a id="id23"></a>
@@ -273,7 +272,7 @@
 
                 </div>
                 <!-- 履歴詳細 -->
-                <div class="theme_box" id="situation_detail_box" style="width: 80%;height: auto;position: absolute;top: 8%;left: 8%;z-index: 1;">
+                <div class="theme_box" id="situation_detail_box" style="position: relative;width: 80%;height: auto;top: 8%;left: 8%;">
                         【全ての履歴】
                         <br>
                         <br><a id="situation_detail_box_add"></a>
@@ -285,6 +284,7 @@
                 var eventcode = "";
 
                 function start_reflection() {
+                        $(window).scrollTop(0);
                         document.getElementById("prepare").style.display = "none";
                         document.getElementById("reflection").style.display = "";
                         // get_history();
@@ -846,6 +846,32 @@
                         document.getElementById(image_id).style.display = "none";
                         document.getElementById(image_id + "_view_all").style.display = "";
                         document.getElementById(image_id + "_not_view").style.display = "none";
+                }
+
+                function overview(h, n) {
+                        if (h == "on") {
+                                document.getElementById("black_box").style.display = "";
+                                if (n == "1")
+                                        document.getElementById("theme_detail_box").style.display = "";
+                                else if (n == "2")
+                                        document.getElementById("overview_detail_box").style.display = "";
+                                else if (n == "3")
+                                        document.getElementById("situation_detail_box").style.display = "";
+                                else if (n == "4")
+                                        document.getElementById("history_image_detail_box").style.display = "";
+                                else if (n == "5")
+                                        document.getElementById("trace_box").style.display = "";
+
+                        } else if (h == "off") {
+                                document.getElementById("black_box").style.display = "none";
+                                document.getElementById("theme_detail_box").style.display = "none";
+                                // document.getElementById("overview_detail_box").style.display = "none";
+                                // document.getElementById("situation_detail_box").style.display = "none";
+                                // document.getElementById("history_image_detail_box").style.display = "none";
+                                document.getElementById("trace_box").style.display = "none";
+
+                        }
+
                 }
         </script>
 </body>
