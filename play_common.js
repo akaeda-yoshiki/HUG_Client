@@ -120,7 +120,23 @@ function get_time() {
 
 //履歴データの受信と表示
 function get_history() {
-
+        $.ajax({ //非同期通信
+                type: "POST",
+                url: "http://192.168.0.159/2018grade4/HUG/HUG_Server/eventcode.php",
+                data: {
+                        code: window.sessionStorage.getItem(["eventcode"]),
+                        id: "6"
+                },
+                success: function (data2) {
+                        window.location.href = "finish.html";
+                },
+                error: function (XMLHttpRequest, textStatus, errorThrown) { //接続が失敗
+                        // console.log("ID4データ受信エラー");
+                        // console.log("XMLHttpRequest::" + XMLHttpRequest);
+                        // console.log("textStatus::" + textStatus);
+                        // console.log("errorThrown::" + errorThrown);
+                }
+        });
 
         $.ajax({ //非同期通信
                 type: "POST",
@@ -484,7 +500,8 @@ function overview(h, n) {
                         document.getElementById("history_image_detail_box").style.display = "";
                 else if (n == "5")
                         document.getElementById("trace_box").style.display = "";
-
+                else if (n == "6")
+                        document.getElementById("finish").style.display = "";
         } else if (h == "off") {
                 document.getElementById("black_box").style.display = "none";
                 document.getElementById("theme_detail_box").style.display = "none";
@@ -492,7 +509,25 @@ function overview(h, n) {
                 document.getElementById("situation_detail_box").style.display = "none";
                 document.getElementById("history_image_detail_box").style.display = "none";
                 document.getElementById("trace_box").style.display = "none";
-
+                document.getElementById("finish").style.display = "none";
         }
+}
 
+//終了が確定した時の処理
+function finish() {
+        $.ajax({ //非同期通信
+                type: "POST",
+                url: "http://192.168.0.159/2018grade4/HUG/HUG_Server/time.php",
+                data: {
+                        code: window.sessionStorage.getItem(["eventcode"]),
+                        mode: "finish"
+                },
+                success: function (data) {
+                        window.location.href = "finish.html";
+                        // console.log(data);
+                },
+                error: function (XMLHttpRequest, textStatus, errorThrown) { //接続が失敗
+                        console.log("えらー:" + textStatus);
+                }
+        });
 }

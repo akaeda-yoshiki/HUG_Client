@@ -4,6 +4,12 @@
                 <a href='#!' onclick='overview("on", "1")' class='square_btn'>テーマ確認</a>
         </center>
 </div>
+<!-- 終了ボタン -->
+<div class="theme_box" style="height:20px;width:auto;top:80px;left:90%;background: #9edce7;border-bottom: solid 6px #9edce7;">
+        <center>
+                <a href='#!' onclick='overview("on", "6")' class='square_btn'>終了</a>
+        </center>
+</div>
 <!-- 概要一部 -->
 <div class="theme_box" style="top: 130px;">
         【概要】
@@ -70,10 +76,21 @@
 <!-- トレース -->
 <div class="theme_box" id="trace_box" style="display: none;width: 60%;height: auto;position: absolute;top: 20%;left: 17%;z-index: 1;">
         【トレース】
-        
+
         <a id="id23"></a>
         <a id="id4"></a>
 
         <center> <a href='#!' onclick='overview("off")' class='square_btn'>閉じる</a></center>
+</div>
+<!-- 終了確認 -->
+<div class="theme_box" id="finish" style="display: none;width: 40%;height: 30%;position: absolute;top: 20%;left: 27%;z-index: 1;">
+                <br><br><br><br>
+        <center>
+                【本当に終了しますか？】
+                <br><br>
+                <a href='#!' onclick='finish()' class='square_btn'>はい</a>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <a href='#!' onclick='overview("off")' style="left: 10%;" class='square_btn'>いいえ</a>
+        </center>
 
 </div>

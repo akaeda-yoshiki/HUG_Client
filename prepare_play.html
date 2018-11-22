@@ -127,10 +127,9 @@
                         <input type="radio" name="role" value="PS">PS
                         <input type="radio" name="role" value="J">J
                         <br>
-                        <br>
                         <input type="button" id="eventcode_decide" style="position: relative; left:40%;" value="決定"
                                 onclick='eventcode("decide")'>
-
+                        <br> <br>※プレイ中のイベントへの途中参加はできません
                 </div>
                 <br>
                 <center>
@@ -580,6 +579,10 @@
                                                         if (data == "no") {
                                                                 $("errer_text_eventcode").empty();
                                                                 $("errer_text_eventcode").append("入力されたイベントコードは存在しません");
+                                                        }
+                                                        else if (data == "play_now") {
+                                                                $("errer_text_eventcode").empty();
+                                                                $("errer_text_eventcode").append("入力されたイベントコードは現在プレイ中またはすでに終了しています");
                                                         }
                                                         else {
                                                                 $.ajax({ //非同期通信
