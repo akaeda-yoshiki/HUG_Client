@@ -75,37 +75,46 @@
         <script>
 
                 $(document).ready(function () {
-                        get_theme();
 
-                        //マスターテーブルからカテゴリーを受信
-                        $.ajax({
-                                type: "POST",
-                                url: "http://192.168.0.159/2018grade4/HUG/HUG_Server/category.php",
-                                dataType: "json",
-                        }).done(function (data, dataType) {
-                                //カテゴリーのプルダウンに追加
-                                for (var i = 0; i < data.length; i++) {
-                                        if (data[i].word != "入力")
-                                                $('#search_category').append($('<option>').html(data[i].word).val(data[i].word));
-                                }
-                        }).fail(function (XMLHttpRequest, textStatus, errorThrown) {
-                                // alert('Error : ' + errorThrown);
-                        });
+                        if (window.sessionStorage.getItem(["reflection"]) == null) {
+                                get_theme();
 
-                        //マスターテーブルから評価項目を受信
-                        $.ajax({
-                                type: "POST",
-                                url: "http://192.168.0.159/2018grade4/HUG/HUG_Server/assessment.php",
-                                dataType: "json",
-                        }).done(function (data, dataType) {
-                                //評価項目のチェックリストに追加
-                                for (var i = 0; i < data.length; i++) {
-                                        $('#search_assessment').append($('<option>').html(data[i].word).val(data[i].word));
-                                }
-                        }).fail(function (XMLHttpRequest, textStatus, errorThrown) {
-                                // alert('Error : ' + errorThrown);
-                        });
+                                //マスターテーブルからカテゴリーを受信
+                                $.ajax({
+                                        type: "POST",
+                                        url: "http://192.168.0.159/2018grade4/HUG/HUG_Server/category.php",
+                                        dataType: "json",
+                                }).done(function (data, dataType) {
+                                        //カテゴリーのプルダウンに追加
+                                        for (var i = 0; i < data.length; i++) {
+                                                if (data[i].word != "入力")
+                                                        $('#search_category').append($('<option>').html(data[i].word).val(data[i].word));
+                                        }
+                                }).fail(function (XMLHttpRequest, textStatus, errorThrown) {
+                                        // alert('Error : ' + errorThrown);
+                                });
+
+                                //マスターテーブルから評価項目を受信
+                                $.ajax({
+                                        type: "POST",
+                                        url: "http://192.168.0.159/2018grade4/HUG/HUG_Server/assessment.php",
+                                        dataType: "json",
+                                }).done(function (data, dataType) {
+                                        //評価項目のチェックリストに追加
+                                        for (var i = 0; i < data.length; i++) {
+                                                $('#search_assessment').append($('<option>').html(data[i].word).val(data[i].word));
+                                        }
+                                }).fail(function (XMLHttpRequest, textStatus, errorThrown) {
+                                        // alert('Error : ' + errorThrown);
+                                });
+                        }
+                        else{
+                                theme_detail(window.sessionStorage.getItem(["reflection"]));
+                                start_reflection();
+                                sessionStorage.removeItem(["reflection"]);
+                        }
                 });
+
         </script>
 </head>
 

@@ -5,15 +5,43 @@
         <meta charset="UTF-8" />
         <title>HUG</title>
         <link rel="stylesheet" type="text/css" href="play.css">
+        <script src="https://code.jquery.com/jquery-1.9.0.min.js"></script>
 
 <body>
 
-        <div class="theme_box" id="situation_detail_box" style="width: 80%;height:50%;position: absolute;top: 8%;left: 8%;z-index: 1;">
-                
-                <br>
-                <center> <a href='#!' onclick='' class='square_btn'>ホームへ戻る</a></center>
-                <br><a id="situation_detail_box_add"></a>
+        <div class="theme_box" id="situation_detail_box" style="font-size: 30px;width: 80%;height:50%;position: absolute;top: 8%;left: 8%;z-index: 1;">
+                <br><br> <br>
+                <center>
+                        【おつかれさまでした】
+                        <br><br>
+                        <a href='#!' onclick='window.location.href = "home.html";' class='square_btn'>ホームへ</a>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        <a href='#!' onclick='goto_reflection()' style="left: 10%;" class='square_btn'>振り返りへ</a>
+                </center>
         </div>
+        <script>
+                //振り返り画面への移行
+                function goto_reflection() {
+                        $.ajax({ //新規人間カード登録
+                                type: "POST",
+                                url: "http://192.168.0.159/2018grade4/HUG/HUG_Server/eventcode.php",
+                                data: {
+                                        code: window.sessionStorage.getItem(["eventcode"])
+                                },
+                                success: function (data) {
+                                        window.sessionStorage.setItem(["reflection"], data + "|" + window.sessionStorage.getItem(["eventcode"]));
+                                        window.location.href = "reflection.html";
+
+                                },
+                                error: function (XMLHttpRequest, textStatus, errorThrown) { //接続が失敗
+                                        console.log("エラー");
+                                        console.log("XMLHttpRequest::" + XMLHttpRequest);
+                                        console.log("textStatus::" + textStatus);
+                                        console.log("errorThrown::" + errorThrown);
+                                }
+                        });
+                }
+        </script>
 </body>
 
 </html>
