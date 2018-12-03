@@ -2,6 +2,7 @@ var assessment_send = [], category_send, time_send = "", image_send = "";//登�
 var mode = "new";//新規作成か再利用の識別変数
 var assessment_data = [];
 function get_assessment() {
+        
         var list = '<option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5" selected>5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option><option value="10">10</option>';
         $.ajax({ //非同期通信
                 type: "POST",
@@ -178,10 +179,8 @@ function error_reset() {
 
 
 
-
 //再利用するデータを決めたとき
 function reuse_select(select_num) {
-
         $.ajax({ //非同期通信
                 type: "POST",
                 url: "http://192.168.0.159/2018grade4/HUG/HUG_Server/eventcode.php",
@@ -195,7 +194,8 @@ function reuse_select(select_num) {
                                 var get1 = document.forms.input1;
                                 get1.situation.value = data[0].data1;
                                 data[0].data2 = data[0].data2.split("/");
-                                for (var i = 0; i < assessment_data[0].length; i++) {
+                                for (var i = 0; i < assessment_data.length; i++) {
+                                        console.log(i);
                                         document.getElementById("assessment_list" + i).value = data[0].data2[i];
                                 }
                                 exchange_mode("new");
@@ -214,3 +214,4 @@ function reuse_select(select_num) {
                 }
         });
 }
+
