@@ -184,9 +184,9 @@
                         </text_and_pop>
                         <textarea id="cope" maxlength='100' class="textarea_smoll" wrap="soft" style="position: relative; left:0px;top:-30%;"
                                 required></textarea>
-                        <input type="button" value="エリアの操作する" id="area_operate_on_button" onclick='area_operate_swcth(true)'
+                        <input type="button" value="エリアの操作する" id="area_operate_on_button" onclick='area_operate_swcth("on")'
                                 style="position: relative;left: 130px;">
-                        <input type="button" value="エリアの操作をやめる" id="area_operate_off_button" onclick='area_operate_swcth(false)'
+                        <input type="button" value="エリアの操作をやめる" id="area_operate_off_button" onclick='area_operate_swcth("off")'
                                 style="display: none;position: relative;left: 130px;">
                 </div>
 
@@ -341,9 +341,7 @@
         </a>
         <form id="file_input" action="http://192.168.0.159/2018grade4/HUG/HUG_Server/file_upload.php" method="post"
                 enctype="multipart/form-data" style="display: none;">
-                <!-- <br> -->
                 <input type="file" name="pic" id="image_file" style="position: relative; left:128px;top:-20px;">
-                <!-- <br> -->
         </form>
         <script>
                 var now_situation_number = "";
@@ -435,13 +433,14 @@
                                                                 // alert('エラーです！' + textStatus); //エラーを表示
                                                         }
                                                 });
-                                                // console.log(data);
+                                                console.log(data);
                                                 // alert(data);
 
                                                 if (file_name != "")
                                                         file(data[1]);
                                                 if (data[0] == "ok") {
-                                                        window.location.href = "ps.html";
+                                                        // window.location.href = "ps.html";
+                                                        // exchange_mode("none");
                                                 }
                                                 else {
                                                         // alert("ok以外");
@@ -457,26 +456,60 @@
                         }
                 }
                 function file(num) {
-                        var data = {};
+                        // var data = {
+                        //         "image": document.getElementById("confirm_area_image").src,
+                        //         "num": num,
+                        //         "code": window.sessionStorage.getItem(["eventcode"])
+                        // };
+                        // var data = {};
                         // 不要な情報を取り除く
                         // canvas_image = canvas_image.replace(/^data:image\/png;base64,/, '');
 
                         // data.image = canvas_image;
-                        data.image = document.getElementById("confirm_area_image").src;
-                        data.num = num;
-                        data.code = window.sessionStorage.getItem(["eventcode"]);
-                        $.ajax({
-                                url: 'http://192.168.0.159/2018grade4/HUG/HUG_Server/file_upload.php',
-                                type: 'POST',
-                                success: function () {
-                                        // 成功時の処理
-                                        console.log(data);
+                        // data.image = document.getElementById("confirm_area_image").src;
+                        // data.num = num;
+                        // data.code = window.sessionStorage.getItem(["eventcode"]);
+                        // console.log(data);
+
+                        var ima = document.getElementById("confirm_area_image").src;
+                        ima = ima.replace(/^data:image\/png;base64,/, '');
+                        // $.ajax({
+                        //         url: 'http://192.168.0.159/2018grade4/HUG/HUG_Server/file_upload.php',
+                        //         type: 'POST',
+                        //         success: function () {
+                        //                 // 成功時の処理
+                        //                 console.log(data);
+                        //                 exchange_mode("none");
+                        //         },
+                        //         error(jqXHR, textStatus, errorThrown) {
+                        //                 // 失敗時の処理
+                        //                 console.log("エリア画像エラー");
+                        //                 console.log("XMLHttpRequest::" + XMLHttpRequest);
+                        //                 console.log("textStatus::" + textStatus);
+                        //                 console.log("errorThrown::" + errorThrown);
+                        //         },
+                        //         data: data,
+                        //         dataType: 'json'
+                        // });
+                        $.ajax({ //非同期通信
+                                type: "POST",
+                                url: "http://192.168.0.159/2018grade4/HUG/HUG_Server/file_upload.php",
+                                data: {
+                                        image: ima,
+                                        code: window.sessionStorage.getItem(["eventcode"]),
+                                        num: num
                                 },
-                                error(jqXHR, textStatus, errorThrown) {
+                                success: function (data2) {
+                                        // console.log(data);
+                                        exchange_mode("none");
+                                },
+                                error: function (XMLHttpRequest, textStatus, errorThrown) { //接続が失敗
                                         // 失敗時の処理
-                                },
-                                data: data,
-                                dataType: 'json'
+                                        console.log("エリア画像エラー");
+                                        console.log("XMLHttpRequest::" + XMLHttpRequest);
+                                        console.log("textStatus::" + textStatus);
+                                        console.log("errorThrown::" + errorThrown);
+                                }
                         });
                 }
 
@@ -623,7 +656,7 @@
                                         console.log("新規状況データ書き込みエラー");
                                 }
                         });
-                        area_operate_swcth(false);
+                        // area_operate_swcth("off");
                         overview("off");
                 }
 
@@ -672,7 +705,6 @@
 
 
         </script>
-
 </body>
 
 </html>
