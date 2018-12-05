@@ -1,4 +1,5 @@
 var now_time = "";
+var image_view = [];
 
 //テーマの詳細を受信
 function get_theme_detail() {
@@ -358,12 +359,20 @@ function set_history_data(data, h) {
                         if (data.data3 != "") {
                                 var image = '"' + data.data3 + '"';
                                 if (h == "all" || h == "trace") {
-                                        sentence += "<br>" + "<a href='#!' onclick='exchange_history_image_not_view(" + image + ")' id='" + data.data3 + "_not_view' style='display: none;'class='square_btn'>画像を非表示</a>";
-                                        sentence += "<a href='#!' onclick='exchange_history_image_view(" + image + ")' id='" + data.data3 + "_view_all' class='square_btn'>画像を表示</a>";
-                                        sentence += '<img src="http://192.168.0.159/2018grade4/HUG/HUG_Server/image/' + data.data3 + '.jpeg" id="' + data.data3 + '" style="display: none;">';
+                                        if (image_view.indexOf(data.data3) == -1) {
+                                                sentence += "<br>" + "<a href='#!' onclick='exchange_history_image_not_view(" + image + ")' id='" + data.data3 + "_not_view' style='display: none;'class='square_btn'>画像を非表示</a>";
+                                                sentence += "<a href='#!' onclick='exchange_history_image_view(" + image + ")' id='" + data.data3 + "_view_all' class='square_btn'>画像を表示</a>";
+                                                sentence += '<img src="http://192.168.0.159/2018grade4/HUG/HUG_Server/image/' + data.data3 + '.jpeg" id="' + data.data3 + '" style="display: none;">';
+                                        }
+                                        else {
+                                                sentence += "<br>" + "<a href='#!' onclick='exchange_history_image_not_view(" + image + ")' id='" + data.data3 + "_not_view' class='square_btn'>画像を非表示</a>";
+                                                sentence += "<a href='#!' onclick='exchange_history_image_view(" + image + ")' id='" + data.data3 + "_view_all' style='display: none;'>画像を表示</a>";
+                                                sentence += '<img src="http://192.168.0.159/2018grade4/HUG/HUG_Server/image/' + data.data3 + '.jpeg" id="' + data.data3 + '" >';
+                                        }
                                 } else if (h == "part") {
+
                                         sentence += "<br>" + "<a href='#!' onclick='exchange_part_history_image_view(" + image + ")' id='" + data.data3 + "_view_part' class='square_btn'>画像を表示</a>";
-                                        document.getElementById("history_image_detail_box_img").src = "http://192.168.0.159/2018grade4/HUG/HUG_Server/image/" + data.data3 + ".jpeg";
+
                                 }
                         }
 
@@ -386,12 +395,19 @@ function set_history_data(data, h) {
                         if (data.data3 != "") {
                                 var image = '"' + data.data3 + '"';
                                 if (h == "all" || h == "trace") {
-                                        sentence += "<br>" + "<a href='#!' onclick='exchange_history_image_not_view(" + image + ")' id='" + data.data3 + "_not_view' style='display: none;'class='square_btn'>画像を非表示</a>";
-                                        sentence += "<a href='#!' onclick='exchange_history_image_view(" + image + ")' id='" + data.data3 + "_view_all' class='square_btn'>画像を表示</a>";
-                                        sentence += '<img src="http://192.168.0.159/2018grade4/HUG/HUG_Server/image/' + data.data3 + '.jpeg" id="' + data.data3 + '" style="display: none;">';
+                                        if (image_view.indexOf(data.data3) == -1) {
+                                                sentence += "<br>" + "<a href='#!' onclick='exchange_history_image_not_view(" + image + ")' id='" + data.data3 + "_not_view' style='display: none;'class='square_btn'>画像を非表示</a>";
+                                                sentence += "<a href='#!' onclick='exchange_history_image_view(" + image + ")' id='" + data.data3 + "_view_all' >画像を表示</a>";
+                                                sentence += '<img src="http://192.168.0.159/2018grade4/HUG/HUG_Server/image/' + data.data3 + '.jpeg" id="' + data.data3 + '" style="display: none;">';
+                                        }
+                                        else {
+                                                sentence += "<br>" + "<a href='#!' onclick='exchange_history_image_not_view(" + image + ")' id='" + data.data3 + "_not_view' class='square_btn'>画像を非表示</a>";
+                                                sentence += "<a href='#!' onclick='exchange_history_image_view(" + image + ")' id='" + data.data3 + "_view_all' style='display: none;'>画像を表示</a>";
+                                                sentence += '<img src="http://192.168.0.159/2018grade4/HUG/HUG_Server/image/' + data.data3 + '.jpeg" id="' + data.data3 + '" >';
+                                        }
                                 } else if (h == "part") {
                                         sentence += "<br>" + "<a href='#!' onclick='exchange_part_history_image_view(" + image + ")' id='" + data.data3 + "_view_part' class='square_btn'>画像を表示</a>";
-                                        document.getElementById("history_image_detail_box_img").src = "http://192.168.0.159/2018grade4/HUG/HUG_Server/image/" + data.data3 + ".jpeg";
+                                        // document.getElementById("history_image_detail_box_img").src = "http://192.168.0.159/2018grade4/HUG/HUG_Server/image/" + data.data3 + ".jpeg";
                                 }
                         }
 
@@ -407,11 +423,14 @@ function exchange_history_image_view(image_id) {
         document.getElementById(image_id + "_view_all").style.display = "none";
         document.getElementById(image_id + "_not_view").style.display = "";
         document.getElementById(image_id).style.display = "";
+        image_view.push(image_id);
+
 }
 
 //一部の履歴上にある画像の表示
-function exchange_part_history_image_view() {
-        overview("on", "4")
+function exchange_part_history_image_view(image) {
+        document.getElementById("history_image_detail_box_img").src = "http://192.168.0.159/2018grade4/HUG/HUG_Server/image/" + image + ".jpeg";
+        overview("on", "4");
 }
 
 //履歴上にある画像の非表を切り替え
@@ -419,6 +438,7 @@ function exchange_history_image_not_view(image_id) {
         document.getElementById(image_id).style.display = "none";
         document.getElementById(image_id + "_view_all").style.display = "";
         document.getElementById(image_id + "_not_view").style.display = "none";
+        image_view.splice(image_view.indexOf(image_id), 1);
 }
 
 //対応からたどる
