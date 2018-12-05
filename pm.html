@@ -22,6 +22,35 @@
                                 setInterval(update, 500);
                         }
                         get_reuse();
+
+                        //マスターテーブルからカテゴリーを受信
+                        $.ajax({
+                                type: "POST",
+                                url: "http://192.168.0.159/2018grade4/HUG/HUG_Server/category.php",
+                                dataType: "json",
+                        }).done(function (data, dataType) {
+                                //カテゴリーのプルダウンに追加
+                                for (var i = 0; i < data.length; i++) {
+                                        if (data[i].word != "入力")
+                                                $('#search_category').append($('<option>').html(data[i].word).val(data[i].word));
+                                }
+                        }).fail(function (XMLHttpRequest, textStatus, errorThrown) {
+                                // alert('Error : ' + errorThrown);
+                        });
+
+                        //マスターテーブルから評価項目を受信
+                        $.ajax({
+                                type: "POST",
+                                url: "http://192.168.0.159/2018grade4/HUG/HUG_Server/assessment.php",
+                                dataType: "json",
+                        }).done(function (data, dataType) {
+                                //評価項目のチェックリストに追加
+                                for (var i = 0; i < data.length; i++) {
+                                        $('#search_assessment').append($('<option>').html(data[i].word).val(data[i].word));
+                                }
+                        }).fail(function (XMLHttpRequest, textStatus, errorThrown) {
+                                // alert('Error : ' + errorThrown);
+                        });
                 });
 
                 //ID指定のデータの受信
@@ -209,6 +238,48 @@
                         <input type="button" value="内容確定" onclick='decide("human")'>
                 </a>
         </form>
+        <div class="block1" id="reuse_search" style="display: none;">
+                <form id="search">
+                        絞り込
+                        み<input type="button" id="reuse_open_btn" value="開く" onclick='document.getElementById("reuse_close_btn").style.display = "";document.getElementById("reuse_open_btn").style.display = "none";'
+                                style="position:relative;left:30px;background-color:rgb(183, 182, 253);display: none;">
+                        <b id="reuse_close_btn" style="font-weight:400">
+                                <input type="button" value="しまう" onclick='document.getElementById("reuse_close_btn").style.display = "none";document.getElementById("reuse_open_btn").style.display = "";'
+                                        style="position:relative;left:30px;background-color:rgb(183, 182, 253);">
+
+                                <br>
+                                <a style="position: relative; left:115px;">
+                                        タイトル
+                                        <input type="text" id="search_title" style="position: relative; left:128px;">
+                                        <br> カテゴリー
+                                        <select id="search_category" style="width: 172px;position: relative; left:110px;">
+                                                <option value=""></option>
+                                        </select>
+                                        <!-- <input type="text" id="search_category" style="position: relative; left:110px;"> -->
+                                        <br> 状況
+                                        <input type="text" id="search_situation" style="position: relative; left:170px;">
+                                        <br> 日時・時期
+                                        <input type="text" id="search_time" style="position: relative; left:110px;">
+                                        <br> 地域
+                                        <input type="text" id="search_area" style="position: relative; left:170px;">
+                                        <br> 対象者
+                                        <input type="text" id="search_target" style="position: relative; left:150px;">
+                                        <br> ねらい
+                                        <input type="text" id="search_aim" style="position: relative; left:150px;">
+                                        <br> 評価項目
+                                        <select id="search_assessment" style="width: 172px;position: relative; left:130px;">
+                                                <option value=""></option>
+                                        </select>
+                                        <!-- <input type="text" id="search_assessment" style="position: relative; left:130px;"> -->
+                                        <br>
+                                        <br>
+
+                                        <input type="button" value="絞り込む" onclick='get_reuse()'>
+                                </a>
+                        </b>
+                </form>
+        </div>
+        <br>
         <!-- 状況カード再利用****************************************************************************** -->
         <reuse_situation_card id="reuse_situation_card" style="display:none;">
                 <reuse_situation_select_add id="reuse_situation_select_add">
@@ -227,7 +298,8 @@
                         error_reset();
                         document.getElementById("confirm_situation").style.display = "none";
                         document.getElementById("confirm_human").style.display = "none";
-                        if (mode == "new")//新規作成
+                        if (mode == "new") {//新規作成
+                                document.getElementById("reuse_search").style.display = "none";
                                 switch (h) {
                                         case "human":
                                                 document.getElementById("situation_card").style.display = "none";
@@ -238,7 +310,9 @@
                                                 document.getElementById("human_card").style.display = "none";
                                                 break;
                                 }
-                        else if (mode == "reuse")//再利用
+                        }
+                        else if (mode == "reuse") {//再利用
+                                document.getElementById("reuse_search").style.display = "";
                                 switch (h) {
                                         case "human":
                                                 document.getElementById("reuse_situation_card").style.display = "none";
@@ -249,6 +323,7 @@
                                                 document.getElementById("reuse_human_card").style.display = "none";
                                                 break;
                                 }
+                        }
                 }
 
                 //新規・再利用の切り替え

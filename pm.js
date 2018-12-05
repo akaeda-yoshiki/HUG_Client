@@ -2,7 +2,7 @@ var assessment_send = [], category_send, time_send = "", image_send = "";//登�
 var mode = "new";//新規作成か再利用の識別変数
 var assessment_data = [];
 function get_assessment() {
-        
+
         var list = '<option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5" selected>5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option><option value="10">10</option>';
         $.ajax({ //非同期通信
                 type: "POST",
@@ -181,37 +181,56 @@ function error_reset() {
 
 //再利用するデータを決めたとき
 function reuse_select(select_num) {
-        $.ajax({ //非同期通信
-                type: "POST",
-                url: "http://192.168.0.159/2018grade4/HUG/HUG_Server/eventcode.php",
-                data: {
-                        code: window.sessionStorage.getItem(["eventcode"]),
-                        num: select_num
-                },
-                success: function (data) {
-                        console.log(data);
-                        if (data[0].id == "2") {
-                                var get1 = document.forms.input1;
-                                get1.situation.value = data[0].data1;
-                                data[0].data2 = data[0].data2.split("/");
-                                for (var i = 0; i < assessment_data.length; i++) {
-                                        console.log(i);
-                                        document.getElementById("assessment_list" + i).value = data[0].data2[i];
-                                }
-                                exchange_mode("new");
-                        }
-                        else if (data[0].id == "3") {
-                                var get1 = document.forms.input_human;
-                                get1.feature.value = data[0].data1;
-                                get1.age.value = data[0].data2;
-                                get1.sex.value = data[0].data3;
-                                exchange_mode("new");
-                        }
-                },
-                error: function (XMLHttpRequest, textStatus, errorThrown) { //接続が失敗
-                        // alert('エラーです！'); //エラーを表示
-                        console.log("data");
+        // select_num = select_num.split("_");
+        // var code = select_num[1];
+        // $.ajax({ //非同期通信
+        //         type: "POST",
+        //         url: "http://192.168.0.159/2018grade4/HUG/HUG_Server/eventcode.php",
+        //         data: {
+        //                 code: code,
+        //                 num: select_num[0]
+        //         },
+        //         success: function (data) {
+        //                 console.log(data);
+        //                 if (data[0].id == "2") {
+        //                         var get1 = document.forms.input1;
+        //                         get1.situation.value = data[0].data1;
+        //                         data[0].data2 = data[0].data2.split("/");
+        //                         for (var i = 0; i < assessment_data.length; i++) {
+        //                                 console.log(i);
+        //                                 document.getElementById("assessment_list" + i).value = data[0].data2[i];
+        //                         }
+        //                         exchange_mode("new");
+        //                 }
+        //                 else if (data[0].id == "3") {
+        //                         var get1 = document.forms.input_human;
+        //                         get1.feature.value = data[0].data1;
+        //                         get1.age.value = data[0].data2;
+        //                         get1.sex.value = data[0].data3;
+        //                         exchange_mode("new");
+        //                 }
+        //         },
+        //         error: function (XMLHttpRequest, textStatus, errorThrown) { //接続が失敗
+        //                 // alert('エラーです！'); //エラーを表示
+        //                 console.log("data");
+        //         }
+        // });
+        if (reuse_data[select_num].id == "2") {
+                var get1 = document.forms.input1;
+                get1.situation.value = reuse_data[select_num].data1;
+                reuse_data[select_num].data2 = reuse_data[select_num].data2.split("/");
+                for (var i = 0; i < assessment_data.length; i++) {
+                        // console.log(i);
+                        document.getElementById("assessment_list" + i).value = reuse_data[select_num].data2[i];
                 }
-        });
+                exchange_mode("new");
+        }
+        else if (reuse_data[select_num].id == "3") {
+                var get1 = document.forms.input_human;
+                get1.feature.value = reuse_data[select_num].data1;
+                get1.age.value = reuse_data[select_num].data2;
+                get1.sex.value = reuse_data[select_num].data3;
+                exchange_mode("new");
+        }
 }
 

@@ -552,14 +552,26 @@ function finish() {
         });
 }
 
-
+var reuse_data = [];
 function get_reuse() {
+        var get = document.forms.search;
         $.ajax({ //非同期通信
                 type: "POST",
                 url: "http://192.168.0.159/2018grade4/HUG/HUG_Server/reuse.php",
                 data: {
+                        title: search.search_title.value,
+                        category: search_category.value,
+                        situation: search_situation.value,
+                        time: search_time.value,
+                        area: search_area.value,
+                        target: search_target.value,
+                        aim: search_aim.value,
+                        assessment: search_assessment.value
                 },
                 success: function (data) {
+                        $("#reuse_situation_select_add").empty();
+                        $("#reuse_human_select_add").empty();
+                        reuse_data = data;
                         // ソート
                         data.sort(function (a, b) {
                                 if (Number(a.num) < Number(b.num)) return -1;
@@ -572,7 +584,7 @@ function get_reuse() {
                         console.log(data);
                         var add = "", class_name, color;
                         for (var i = data.length - 1; i > -1; i--) {
-
+                                // console.log(data[i]);
                                 if (data[i].id == "2") {
                                         class_name = "block1";
                                         color = "#f7fdc4";
@@ -600,17 +612,25 @@ function get_reuse() {
                                 else
                                         add = "<div class='" + class_name + "' style='width:60%;left:7%;font-size: 13px;border:1px solid green;border-top:0px solid green;background: " + color + ";'>";
 
+                                var set = data[i].num + '_' + data[i].code + '"';
                                 add += i + set_history_data(data[i], "all");
-                                add += '<br><center><input type="button" value="再利用" onclick="reuse_select(' + data[i].num + ')"></center></div >';
+                                add += '<br><center><input type="button" value="再利用" onclick="reuse_select(' + i + ')"></center></div >';
                                 if (data[i].id == "2")
                                         $("#reuse_situation_select_add").append(add);
                                 else if (data[i].id == "3")
                                         $("#reuse_human_select_add").append(add);
+
+
+
                         }
                 },
                 error: function (XMLHttpRequest, textStatus, errorThrown) { //接続が失敗
                         // alert('エラーです！'); //エラーを表示
                         console.log("data");
+                        $("#reuse_situation_select_add").empty();
+                        $("#reuse_human_select_add").empty();
+                        $("#reuse_situation_select_add").append("再利用可能なデータはありません");
+                        $("#reuse_human_select_add").append("再利用可能なデータはありません");
                 }
         });
 }
