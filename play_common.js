@@ -581,7 +581,7 @@ function get_reuse() {
 
                         var first_human_card_data = 1, first_situation_card_data = 1;
                         // data = data[0];
-                        console.log(data);
+                        // console.log(data);
                         var add = "", class_name, color;
                         for (var i = data.length - 1; i > -1; i--) {
                                 // console.log(data[i]);
@@ -613,7 +613,7 @@ function get_reuse() {
                                         add = "<div class='" + class_name + "' style='width:60%;left:7%;font-size: 13px;border:1px solid green;border-top:0px solid green;background: " + color + ";'>";
 
                                 var set = data[i].num + '_' + data[i].code + '"';
-                                add += i + set_history_data(data[i], "all");
+                                add += set_history_data(data[i], "trace");
                                 add += '<br><center><input type="button" value="再利用" onclick="reuse_select(' + i + ')"></center></div >';
                                 if (data[i].id == "2")
                                         $("#reuse_situation_select_add").append(add);
