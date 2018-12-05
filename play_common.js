@@ -626,7 +626,7 @@ function get_reuse() {
                 },
                 error: function (XMLHttpRequest, textStatus, errorThrown) { //接続が失敗
                         // alert('エラーです！'); //エラーを表示
-                        console.log("data");
+                        // console.log("data");
                         $("#reuse_situation_select_add").empty();
                         $("#reuse_human_select_add").empty();
                         $("#reuse_situation_select_add").append("再利用可能なデータはありません");
