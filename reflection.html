@@ -73,7 +73,7 @@
                 }
         </style>
         <script>
-
+                var reflection_eventcode = "";
                 $(document).ready(function () {
 
                         if (window.sessionStorage.getItem(["reflection"]) == null) {
@@ -108,7 +108,7 @@
                                         // alert('Error : ' + errorThrown);
                                 });
                         }
-                        else{
+                        else {
                                 theme_detail(window.sessionStorage.getItem(["reflection"]));
                                 start_reflection();
                                 sessionStorage.removeItem(["reflection"]);
@@ -239,16 +239,34 @@
         </prepare>
         <reflection id="reflection" style="display: none;">
                 <!-- テーマボタン -->
-                <div class="theme_box" style="position: relative;left:8%;height:20px;width: 100px;">
+                <b class="theme_box" style="position: -webkit-sticky;
+                position: sticky;left:82%;height:20px;width: 100px;top:8%;">
                         <a href='#!' onclick='overview("on", "1")' class='square_btn'>テーマ確認</a>
-                </div>
+                </b>
                 <!-- 終了ボタン -->
-                <div class="theme_box" style="top:10px;height:20px;width:auto;left:20%;background: #9edce7;border-bottom: solid 6px #9edce7;">
-                        <center>
-                                <a href='#!' onclick='window.location.href = "reflection.html";' class='square_btn'>終了</a>
-                        </center>
+                <b class="theme_box" style="position: -webkit-sticky;
+                position: sticky;top:8%;height:20px;width:40px;left:92%;background: #9edce7;border-bottom: solid 6px #9edce7;">
+                        <a href='#!' onclick='window.location.href = "reflection.html";' class='square_btn'>終了</a>
+                </b>
+                <br><br><br><br><br>
+                <!-- コメント -->
+                <div class="theme_box" id="situation_detail_box" style="position: -webkit-sticky;
+                position: sticky;width: 15%;height: auto;top: 15%;left: 82%;">
+                        コメントを付けたり、見たりすることができます
+                        <a id="comment_input" style="display: none;">
+                                <textarea id="comment_input_text" rows="3" style="width: 100%;position: relative;left: 0px;"></textarea>
+                                <input type="button" style="position: relative; left:7%;" value="次へ" onclick='next_comment()'>
+                                <input type="button" style="position: relative; left:7%;" value="やめる" onclick='stop_comment()'>
+                        </a>
+                        <br>
+                        <a id="comment_confirm" style="display: none;">
+                                <b id="comment_confirm_text"></b>
+                                <br>
+                                <input type="button" style="position: relative; left:7%;" value="内容確定" onclick='decide_comment()'>
+                                <input type="button" style="position: relative; left:7%;" value="やめる" onclick='stop_comment()'>
+
+                        </a>
                 </div>
-                <br>
                 <!-- 半透明の黒 -->
                 <div class="hide_black" id="black_box" style="display: none;" onclick='overview("off")'></div>
                 <!-- テーマ内容 -->
@@ -287,11 +305,12 @@
 
                 </div>
                 <!-- 履歴詳細 -->
-                <div class="theme_box" id="situation_detail_box" style="position: relative;width: 80%;height: auto;top: 8%;left: 8%;">
+                <div class="theme_box" id="situation_detail_box" style="position: absolute;width: 70%;height: auto;top: 8%;left: 8%;">
                         【全ての履歴】
                         <br>
                         <br><a id="situation_detail_box_add"></a>
                 </div>
+
         </reflection>
         <br>
         <script>
@@ -516,7 +535,7 @@
                                         add = "<div class='" + class_name + "' style='width:90%;left:4%;font-size: 13px;border:1px solid green;border-top:0px solid green;background: " + color + ";'>";
                                 else
                                         add = "<div class='" + class_name + "' style='width:90%;left:4%;font-size: 13px;border:1px solid green;background: " + color + ";'>";
-                                add += set_history_data(data[i], "all");
+                                add += set_history_data(data[i], "reflection");
                                 add += "</div> ";
                                 $("#situation_detail_box_add").append(add);
                         }
@@ -536,7 +555,7 @@
                                         sentence += data.data1;
                                         if (data.data3 != "") {
                                                 var image = '"' + data.data3 + '"';
-                                                if (h == "all" || h == "trace") {
+                                                if (h == "all" || h == "trace" || h == "reflection") {
                                                         sentence += "<br>" + "<a href='#!' onclick='exchange_history_image_not_view(" + image + ")' id='" + data.data3 + "_not_view' style='display: none;'class='square_btn'>画像を非表示</a>";
                                                         sentence += "<a href='#!' onclick='exchange_history_image_view(" + image + ")' id='" + data.data3 + "_view_all' class='square_btn'>画像を表示</a>";
                                                         sentence += '<img src="http://192.168.0.159/2018grade4/HUG/HUG_Server/image/' + data.data3 + '.jpeg" id="' + data.data3 + '" style="display: none;">';
@@ -558,7 +577,7 @@
                                         sentence += data.data1;
                                         if (data.data3 != "") {
                                                 var image = '"' + data.data3 + '"';
-                                                if (h == "all" || h == "trace") {
+                                                if (h == "all" || h == "trace" || h == "reflection") {
                                                         sentence += "<br>" + "<a href='#!' onclick='exchange_history_image_not_view(" + image + ")' id='" + data.data3 + "_not_view' style='display: none;'class='square_btn'>画像を非表示</a>";
                                                         sentence += "<a href='#!' onclick='exchange_history_image_view(" + image + ")' id='" + data.data3 + "_view_all' class='square_btn'>画像を表示</a>";
                                                         sentence += '<img src="http://192.168.0.159/2018grade4/HUG/HUG_Server/image/' + data.data3 + '.jpeg" id="' + data.data3 + '" style="display: none;">';
@@ -572,6 +591,9 @@
                         }
                         if (h != "trace")
                                 sentence += "<br><a href='#!' onclick='trace_history(" + data.num + ")' class='square_btn'>たどる</a>";
+                        if (h == "reflection")
+                                sentence += "<br><a href='#!' onclick='comment_start(" + data.num + ")' class='square_btn'>コメントをつける</a>";
+
                         return sentence;
                 }
 
@@ -730,6 +752,7 @@
                 function theme_detail(h) {
                         h = h.split("|");
                         var decide_id = h[0];
+                        reflection_eventcode = h[1];
                         get_history(h[1]);
                         eventcode = h[1];
                         $.ajax({ //非同期通信
@@ -887,6 +910,54 @@
 
                         }
 
+                }
+
+                var comment_num = -1;
+                function comment_start(num) {
+                        comment_num = num;
+                        document.getElementById("comment_input").style.display = "";
+                        document.getElementById("comment_confirm").style.display = "none";
+                }
+
+                function next_comment() {
+                        document.getElementById("comment_input").style.display = "none";
+                        document.getElementById("comment_confirm").style.display = "";
+
+                        $("#comment_confirm_text").empty();
+                        $("#comment_confirm_text").append(document.getElementById("comment_input_text").value)
+                }
+                function decide_comment() {
+                        document.getElementById("comment_input").style.display = "";
+                        document.getElementById("comment_confirm").style.display = "none";
+
+                        $.ajax({ //振り返りコメント登録
+                                type: "POST",
+                                url: "http://192.168.0.159/2018grade4/HUG/HUG_Server/eventcode.php",
+                                data: {
+                                        data1: document.getElementById("comment_input_text").value,
+                                        data2: comment_num,
+                                        code: reflection_eventcode,
+                                        mode: "insert",
+                                        id: 7
+                                },
+                                success: function (data) {
+                                        stop_comment();
+                                },
+                                error: function (XMLHttpRequest, textStatus, errorThrown) { //接続が失敗
+                                        console.log("コメント登録エラー");
+                                        console.log("XMLHttpRequest::" + XMLHttpRequest);
+                                        console.log("textStatus::" + textStatus);
+                                        console.log("errorThrown::" + errorThrown);
+                                }
+                        });
+                }
+
+                function stop_comment() {
+                        comment_num = -1;
+                        document.getElementById("comment_input").style.display = "none";
+                        document.getElementById("comment_confirm").style.display = "none";
+                        $("#comment_confirm_text").empty();
+                        document.getElementById("comment_input_text").value = "";
                 }
         </script>
 </body>

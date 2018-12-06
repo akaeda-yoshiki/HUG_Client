@@ -358,7 +358,7 @@ function set_history_data(data, h) {
                         sentence += data.data1;
                         if (data.data3 != "") {
                                 var image = '"' + data.data3 + '"';
-                                if (h == "all" || h == "trace") {
+                                if (h == "all" || h == "trace" || h == "reflection") {
                                         if (image_view.indexOf(data.data3) == -1) {
                                                 sentence += "<br>" + "<a href='#!' onclick='exchange_history_image_not_view(" + image + ")' id='" + data.data3 + "_not_view' style='display: none;'class='square_btn'>画像を非表示</a>";
                                                 sentence += "<a href='#!' onclick='exchange_history_image_view(" + image + ")' id='" + data.data3 + "_view_all' class='square_btn'>画像を表示</a>";
@@ -394,7 +394,7 @@ function set_history_data(data, h) {
                         sentence += data.data1;
                         if (data.data3 != "") {
                                 var image = '"' + data.data3 + '"';
-                                if (h == "all" || h == "trace") {
+                                if (h == "all" || h == "trace" || h == "reflection") {
                                         if (image_view.indexOf(data.data3) == -1) {
                                                 sentence += "<br>" + "<a href='#!' onclick='exchange_history_image_not_view(" + image + ")' id='" + data.data3 + "_not_view' style='display: none;'class='square_btn'>画像を非表示</a>";
                                                 sentence += "<a href='#!' onclick='exchange_history_image_view(" + image + ")' id='" + data.data3 + "_view_all' >画像を表示</a>";
@@ -415,6 +415,7 @@ function set_history_data(data, h) {
         }
         if (h != "trace")
                 sentence += "<br><a href='#!' onclick='trace_history(" + data.num + ")' class='square_btn'>たどる</a>";
+
         return sentence;
 }
 
@@ -424,7 +425,6 @@ function exchange_history_image_view(image_id) {
         document.getElementById(image_id + "_not_view").style.display = "";
         document.getElementById(image_id).style.display = "";
         image_view.push(image_id);
-
 }
 
 //一部の履歴上にある画像の表示
@@ -613,7 +613,7 @@ function get_reuse() {
                                         add = "<div class='" + class_name + "' style='width:60%;left:7%;font-size: 13px;border:1px solid green;border-top:0px solid green;background: " + color + ";'>";
 
                                 var set = data[i].num + '_' + data[i].code + '"';
-                                add += set_history_data(data[i], "trace");
+                                add += set_history_data(data[i], "all");
                                 add += '<br><center><input type="button" value="再利用" onclick="reuse_select(' + i + ')"></center></div >';
                                 if (data[i].id == "2")
                                         $("#reuse_situation_select_add").append(add);
