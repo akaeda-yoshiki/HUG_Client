@@ -253,6 +253,7 @@
                 <div class="theme_box" id="situation_detail_box" style="position: -webkit-sticky;
                 position: sticky;width: 15%;height: auto;top: 15%;left: 82%;">
                         コメントを付けたり、見たりすることができます
+                        <a id="comment_view"></a>
                         <a id="comment_input" style="display: none;">
                                 <textarea id="comment_input_text" rows="3" style="width: 100%;position: relative;left: 0px;"></textarea>
                                 <input type="button" style="position: relative; left:7%;" value="次へ" onclick='next_comment()'>
@@ -588,12 +589,17 @@
                                         }
 
                                         break;
-                        }
-                        if (h != "trace")
-                                sentence += "<br><a href='#!' onclick='trace_history(" + data.num + ")' class='square_btn'>たどる</a>";
-                        if (h == "reflection")
-                                sentence += "<br><a href='#!' onclick='comment_start(" + data.num + ")' class='square_btn'>コメントをつける</a>";
+                                case "7":
+                                        sentence += "【コメント】<br>" + data.data1;
+                                        break;
 
+                        }
+                        if (h == "all" || h == "trace" || h == "reflection")
+                                sentence += "<br><a href='#!' onclick='trace_history(" + data.num + ")' class='square_btn'>たどる</a>";
+                        if (h == "reflection") {
+                                sentence += "<br><a href='#!' onclick='comment_start(" + data.num + ")' class='square_btn'>コメントをつける</a>";
+                                sentence += "<br><a href='#!' onclick='comment_view(" + data.num + ")' class='square_btn'>コメント見る</a>";
+                        }
                         return sentence;
                 }
 
@@ -917,11 +923,14 @@
                         comment_num = num;
                         document.getElementById("comment_input").style.display = "";
                         document.getElementById("comment_confirm").style.display = "none";
+                        document.getElementById("comment_view").style.display = "none";
+
                 }
 
                 function next_comment() {
                         document.getElementById("comment_input").style.display = "none";
                         document.getElementById("comment_confirm").style.display = "";
+                        document.getElementById("comment_view").style.display = "none";
 
                         $("#comment_confirm_text").empty();
                         $("#comment_confirm_text").append(document.getElementById("comment_input_text").value)
@@ -929,6 +938,7 @@
                 function decide_comment() {
                         document.getElementById("comment_input").style.display = "";
                         document.getElementById("comment_confirm").style.display = "none";
+                        document.getElementById("comment_view").style.display = "none";
 
                         $.ajax({ //振り返りコメント登録
                                 type: "POST",
@@ -958,6 +968,45 @@
                         document.getElementById("comment_confirm").style.display = "none";
                         $("#comment_confirm_text").empty();
                         document.getElementById("comment_input_text").value = "";
+                        document.getElementById("comment_view").style.display = "none";
+                }
+
+                function comment_view(num) {
+                        document.getElementById("comment_input").style.display = "none";
+                        document.getElementById("comment_confirm").style.display = "none";
+                        $.ajax({ //振り返りコメント登録
+                                type: "POST",
+                                url: "http://192.168.0.159/2018grade4/HUG/HUG_Server/eventcode.php",
+                                data: {
+                                        code: reflection_eventcode,
+                                        id: 7
+                                },
+                                success: function (data) {
+                                        $("#comment_view").empty();
+                                        // console.log(data);
+                                        var add = "", class_name, color;
+                                        class_name = "block1";
+                                        color = "#e0ffff";
+                                        //全ての履歴
+                                        for (var i = data.length - 1; i > -1; i--) {
+                                                if (data[i].data2 == num) {
+                                                        if (i != data.length - 1)
+                                                                add = "<div class='" + class_name + "' style='width:90%;left:4%;font-size: 13px;border:1px solid green;border-top:0px solid green;background: " + color + ";'>";
+                                                        else
+                                                                add = "<div class='" + class_name + "' style='width:90%;left:4%;font-size: 13px;border:1px solid green;background: " + color + ";'>";
+                                                        add += set_history_data(data[i], "comment");
+                                                        add += "</div> ";
+                                                        $("#comment_view").append(add);
+                                                }
+                                        }
+                                },
+                                error: function (XMLHttpRequest, textStatus, errorThrown) { //接続が失敗
+                                        console.log("コメント登録エラー");
+                                        console.log("XMLHttpRequest::" + XMLHttpRequest);
+                                        console.log("textStatus::" + textStatus);
+                                        console.log("errorThrown::" + errorThrown);
+                                }
+                        });
                 }
         </script>
 </body>
