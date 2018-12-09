@@ -125,13 +125,6 @@
                 </script>
 
                 <br>
-                <div class="block3" style="border-bottom: none;">
-                        並び順
-                        <input type="button" id="sort_day" style="position: relative; left:50px;border: solid 2px #203aff;"
-                                value="プレイ日" onclick='exchange_mode("day")'>
-                        <input type="button" id="sort_play" style="position: relative; left:80px;" value="プレイ回数"
-                                onclick='exchange_mode("play")'>
-                </div>
                 <div class="block3">
                         <form id="search">
                                 絞り込み
@@ -326,8 +319,8 @@
         </reflection>
         <br>
         <script>
-                var now_mode = "day";
                 var eventcode = "";
+                var now_mode = "not_all";
 
                 function start_reflection() {
                         $(window).scrollTop(0);
@@ -339,93 +332,46 @@
                 //表示するテーマの数を切り替え
                 function exchange_volume(word, h) {
 
-                        // if (word == "all") {//全件表示
-                        //         if (now_mode.indexOf("all") == -1) {
-                        //                 now_mode = "all_" + now_mode;
-                        //                 document.getElementById("get_theme_button").style.display = "none";
-                        //                 document.getElementById("back_button").style.display = "";
-                        //                 get_theme();
-                        //         }
-                        // } else if (word == "not_all") {//一部表示
-                        //         if (now_mode.indexOf("all") != -1) {
-                        //                 now_mode = now_mode.substr(4);
-                        //                 document.getElementById("get_theme_button").style.display = "";
-                        //                 document.getElementById("back_button").style.display = "none";
-                        //                 get_theme();
-                        //         }
-                        //         else if (document.getElementById("detail").style.display == "") {
-                        //                 document.getElementById("get_theme_button").style.display = "";
-                        //                 document.getElementById("back_button").style.display = "none";
-                        //                 get_theme();
-                        //         }
-                        // }
 
                         if (word == "all") {//全件表示
-                                if (now_mode.indexOf("all") == -1) {
-                                        if (h == 0) {
-                                                document.getElementById("everyone_table").style.display = "none";
-                                                document.getElementById("back_button").style.display = "";
-                                                document.getElementById("everyone_table_title").style.display = "none";
-                                        }
-                                        else {
-                                                document.getElementById("mytable").style.display = "none"; document.getElementById("back_button1").style.display = "";
-                                                document.getElementById("myevent_table_title").style.display = "none";
-                                        }
-                                        now_mode = "all_" + now_mode;
-                                        document.getElementById("get_theme_button").style.display = "none";
-                                        document.getElementById("get_theme_button1").style.display = "none";
-
-
-
-
-                                        get_theme();
+                                if (h == 0) {
+                                        document.getElementById("everyone_table").style.display = "none";
+                                        document.getElementById("back_button").style.display = "";
+                                        document.getElementById("everyone_table_title").style.display = "none";
                                 }
+                                else {
+                                        document.getElementById("mytable").style.display = "none"; document.getElementById("back_button1").style.display = "";
+                                        document.getElementById("myevent_table_title").style.display = "none";
+                                }
+                                now_mode = "all";
+                                document.getElementById("get_theme_button").style.display = "none";
+                                document.getElementById("get_theme_button1").style.display = "none";
+                                get_theme();
                         } else if (word == "not_all") {//一部表示
-                                if (now_mode.indexOf("all") != -1) {
-                                        now_mode = now_mode.substr(4);
-                                        document.getElementById("get_theme_button").style.display = "";
-                                        document.getElementById("get_theme_button1").style.display = "";
-                                        document.getElementById("back_button").style.display = "none";
-                                        document.getElementById("back_button1").style.display = "none";
-                                        document.getElementById("everyone_table").style.display = "";
-                                        document.getElementById("mytable").style.display = "";
-                                        document.getElementById("everyone_table_title").style.display = "";
-                                        document.getElementById("myevent_table_title").style.display = "";
-                                        get_theme();
-                                }
-                                else if (document.getElementById("detail").style.display == "") {
-                                        document.getElementById("get_theme_button").style.display = "";
-                                        document.getElementById("get_theme_button1").style.display = "";
-                                        document.getElementById("back_button").style.display = "none";
-                                        document.getElementById("back_button1").style.display = "none";
-                                        document.getElementById("everyone_table").style.display = "";
-                                        document.getElementById("mytable").style.display = "";
-                                        document.getElementById("everyone_table_title").style.display = "";
-                                        document.getElementById("myevent_table_title").style.display = "";
-                                        get_theme();
-                                }
-                        }
-                }
-
-                //ソートの切り替え
-                function exchange_mode(mode) {
-                        document.getElementById("sort_day").style.border = "";
-                        document.getElementById("sort_play").style.border = "";
-
-                        //選択中のボタンの縁を変更
-                        document.getElementById("sort_" + mode).style.border = "solid 2px";
-                        document.getElementById("sort_" + mode).style.borderColor = "#203aff";
-
-                        //並び替えの変更
-                        if (now_mode.indexOf("all") == -1) {//全件
-                                now_mode = mode;
+                                now_mode = "not_all";
+                                document.getElementById("get_theme_button").style.display = "";
+                                document.getElementById("get_theme_button1").style.display = "";
+                                document.getElementById("back_button").style.display = "none";
+                                document.getElementById("back_button1").style.display = "none";
+                                document.getElementById("everyone_table").style.display = "";
+                                document.getElementById("mytable").style.display = "";
+                                document.getElementById("everyone_table_title").style.display = "";
+                                document.getElementById("myevent_table_title").style.display = "";
                                 get_theme();
                         }
-                        else {//一部
-                                now_mode = "all_" + mode;
+                        else if (document.getElementById("detail").style.display == "") {
+                                document.getElementById("get_theme_button").style.display = "";
+                                document.getElementById("get_theme_button1").style.display = "";
+                                document.getElementById("back_button").style.display = "none";
+                                document.getElementById("back_button1").style.display = "none";
+                                document.getElementById("everyone_table").style.display = "";
+                                document.getElementById("mytable").style.display = "";
+                                document.getElementById("everyone_table_title").style.display = "";
+                                document.getElementById("myevent_table_title").style.display = "";
                                 get_theme();
                         }
                 }
+
 
 
 
@@ -626,7 +572,6 @@
                 //テーマを受信、引数  all：全公開可テーマ　not_all：最新５つの公開可テーマ
                 function get_theme() {
                         //イベントコードから「終了・公開可」かつ
-                        console.log(now_mode);
                         document.getElementById("table").style.display = "";
                         document.getElementById("detail").style.display = "none";
 
@@ -638,7 +583,7 @@
                                 type: "POST",
                                 url: "http://192.168.0.159/2018grade4/HUG/HUG_Server/reflection.php",
                                 data: {
-                                        mode: now_mode,
+                                        mode:now_mode,
                                         search_code: search.search_code.value,
                                         title: search.search_title.value,
                                         category: search_category.value,
@@ -681,7 +626,7 @@
                                 type: "POST",
                                 url: "http://192.168.0.159/2018grade4/HUG/HUG_Server/reflection.php",
                                 data: {
-                                        mode: now_mode,
+                                        mode:now_mode,
                                         search_code: search_code.value,
                                         title: search.search_title.value,
                                         category: search_category.value,
