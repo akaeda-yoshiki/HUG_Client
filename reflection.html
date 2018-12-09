@@ -326,6 +326,7 @@
                         $(window).scrollTop(0);
                         document.getElementById("prepare").style.display = "none";
                         document.getElementById("reflection").style.display = "";
+                        // setInterval(function(){get_history(reflection_eventcode)}, 500);
                         // get_history();
                 }
 
@@ -414,6 +415,24 @@
                         var add = "", class_name, color;
                         for (var i = data.length - 1; i > -1; i--) {
                                 if (data[i].id == "2" || data[i].id == "3" || data[i].id == "4") {
+                                        data[i].judg = "";
+                                        data[i].comment_count = 0;
+                                        for (var j = 0; j < data.length; j++) {
+                                                switch (data[i].id) {
+                                                        case "2":
+                                                        case "3":
+                                                                if (data[j].id == "4" && data[j].data2 == data[i].num)
+                                                                        data[i].judg = "trace";
+                                                        case "4":
+                                                                if (data[j].id == "7" && data[j].data2 == data[i].num) {
+                                                                        data[i].comment_count++;
+                                                                }
+                                                                break;
+
+
+                                                                break;
+                                                }
+                                        }
                                         if (data[i].id == "2") {
                                                 class_name = "block1";
                                                 color = "#f7fdc4";
@@ -494,11 +513,12 @@
                                         break;
 
                         }
-                        if (h == "all" || h == "trace" || h == "reflection")
+                        if ((h == "all" || h == "trace" || h == "reflection") && data.judg == "trace")
                                 sentence += "<br><a href='#!' onclick='trace_history(" + data.num + ")' class='square_btn'>たどる</a>";
                         if (h == "reflection") {
                                 sentence += "<br><a href='#!' onclick='comment_start(" + data.num + ")' class='square_btn'>コメントをつける</a>";
-                                sentence += "<br><a href='#!' onclick='comment_view(" + data.num + ")' class='square_btn'>コメント見る</a>";
+                                if (data.comment_count != 0)
+                                        sentence += "<br><a href='#!' onclick='comment_view(" + data.num + ")' class='square_btn'>コメント見る(" + data.comment_count + ")</a>";
                         }
                         return sentence;
                 }
@@ -583,7 +603,7 @@
                                 type: "POST",
                                 url: "http://192.168.0.159/2018grade4/HUG/HUG_Server/reflection.php",
                                 data: {
-                                        mode:now_mode,
+                                        mode: now_mode,
                                         search_code: search.search_code.value,
                                         title: search.search_title.value,
                                         category: search_category.value,
@@ -626,7 +646,7 @@
                                 type: "POST",
                                 url: "http://192.168.0.159/2018grade4/HUG/HUG_Server/reflection.php",
                                 data: {
-                                        mode:now_mode,
+                                        mode: now_mode,
                                         search_code: search_code.value,
                                         title: search.search_title.value,
                                         category: search_category.value,

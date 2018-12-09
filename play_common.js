@@ -283,58 +283,65 @@ function adjustment_history(data) {
 
         var add = "", class_name, color;
         for (var i = data.length - 1; i > -1; i--) {
-                if (data[i].id == "2") {
-                        class_name = "block1";
-                        color = "#f7fdc4";
+                if (data[i].id == "2" || data[i].id == "3" || data[i].id == "4") {
+                        data[i].judg = "";
+                        for (var j = 0; j < data.length; j++) {
+                                if (data[i].id == "2" || data[i].id == "3")
+                                        if (data[j].id == "4" && data[j].data2 == data[i].num)
+                                                data[i].judg = "trace";
+                        }
+                        if (data[i].id == "2") {
+                                class_name = "block1";
+                                color = "#f7fdc4";
+                        }
+                        else if (data[i].id == "3") {
+                                class_name = "block2";
+                                color = "#fff8ef";
+                        }
+                        else if (data[i].id == "4") {
+                                class_name = "block1";
+                                color = "#e0ffff";
+                        }
+
+                        //全ての履歴
+                        if (i != data.length - 1)
+                                add = "<div class='" + class_name + "' style='width:90%;left:4%;font-size: 13px;border:1px solid green;border-top:0px solid green;background: " + color + ";'>";
+                        else
+                                add = "<div class='" + class_name + "' style='width:90%;left:4%;font-size: 13px;border:1px solid green;background: " + color + ";'>";
+                        add += set_history_data(data[i], "all");
+                        add += "</div> ";
+                        $("#situation_detail_box_add").append(add);
+                        // //再利用
+                        // if (first_human_card_data == 1 && data[i].id == "3") {
+                        //         add = "<div class='" + class_name + "' style='width:60%;left:7%;font-size: 13px;border:1px solid green;background: " + color + ";'>";
+                        //         first_human_card_data = 0;
+                        // }
+                        // else if (first_situation_card_data == 1 && data[i].id == "2") {
+                        //         add = "<div class='" + class_name + "' style='width:60%;left:7%;font-size: 13px;border:1px solid green;background: " + color + ";'>";
+                        //         first_situation_card_data = 0;
+                        // }
+                        // else
+                        //         add = "<div class='" + class_name + "' style='width:60%;left:7%;font-size: 13px;border:1px solid green;border-top:0px solid green;background: " + color + ";'>";
+
+                        // add += set_history_data(data[i], "all");
+                        // add += '<br><center><input type="button" value="再利用" onclick="reuse_select(' + data[i].num + ')"></center></div >';
+                        // if (data[i].id == "2")
+                        //         $("#reuse_situation_select_add").append(add);
+                        // else if (data[i].id == "3")
+                        //         $("#reuse_human_select_add").append(add);
+
+
+                        //履歴の一部
+                        if (i == data.length - 1) {
+                                add = "<div class='" + class_name + "' style='width:100%;height:auto;left:-3.5%;font-size: 13px;border:1px solid green;background: " + color + ";'>";
+                                add += set_history_data(data[i], "part") + "</div > ";
+                                $("#situation_box_add").append(add);
+                        } else if (i > data.length - 6) {
+                                add = "<div class='" + class_name + "' style='width:100%;height:auto;left:-3.5%;font-size: 13px;border:1px solid green;border-top:0px solid green;background: " + color + ";'>";
+                                add += set_history_data(data[i], "part") + "</div > ";
+                                $("#situation_box_add").append(add);
+                        }
                 }
-                else if (data[i].id == "3") {
-                        class_name = "block2";
-                        color = "#fff8ef";
-                }
-                else if (data[i].id == "4") {
-                        class_name = "block1";
-                        color = "#e0ffff";
-                }
-
-                //全ての履歴
-                if (i != data.length - 1)
-                        add = "<div class='" + class_name + "' style='width:90%;left:4%;font-size: 13px;border:1px solid green;border-top:0px solid green;background: " + color + ";'>";
-                else
-                        add = "<div class='" + class_name + "' style='width:90%;left:4%;font-size: 13px;border:1px solid green;background: " + color + ";'>";
-                add += set_history_data(data[i], "all");
-                add += "</div> ";
-                $("#situation_detail_box_add").append(add);
-                // //再利用
-                // if (first_human_card_data == 1 && data[i].id == "3") {
-                //         add = "<div class='" + class_name + "' style='width:60%;left:7%;font-size: 13px;border:1px solid green;background: " + color + ";'>";
-                //         first_human_card_data = 0;
-                // }
-                // else if (first_situation_card_data == 1 && data[i].id == "2") {
-                //         add = "<div class='" + class_name + "' style='width:60%;left:7%;font-size: 13px;border:1px solid green;background: " + color + ";'>";
-                //         first_situation_card_data = 0;
-                // }
-                // else
-                //         add = "<div class='" + class_name + "' style='width:60%;left:7%;font-size: 13px;border:1px solid green;border-top:0px solid green;background: " + color + ";'>";
-
-                // add += set_history_data(data[i], "all");
-                // add += '<br><center><input type="button" value="再利用" onclick="reuse_select(' + data[i].num + ')"></center></div >';
-                // if (data[i].id == "2")
-                //         $("#reuse_situation_select_add").append(add);
-                // else if (data[i].id == "3")
-                //         $("#reuse_human_select_add").append(add);
-
-
-                //履歴の一部
-                if (i == data.length - 1) {
-                        add = "<div class='" + class_name + "' style='width:100%;height:auto;left:-3.5%;font-size: 13px;border:1px solid green;background: " + color + ";'>";
-                        add += set_history_data(data[i], "part") + "</div > ";
-                        $("#situation_box_add").append(add);
-                } else if (i > data.length - 6) {
-                        add = "<div class='" + class_name + "' style='width:100%;height:auto;left:-3.5%;font-size: 13px;border:1px solid green;border-top:0px solid green;background: " + color + ";'>";
-                        add += set_history_data(data[i], "part") + "</div > ";
-                        $("#situation_box_add").append(add);
-                }
-
         }
 }
 
@@ -413,7 +420,7 @@ function set_history_data(data, h) {
 
                         break;
         }
-        if (h != "trace")
+        if (h != "trace" && data.judg == "trace")
                 sentence += "<br><a href='#!' onclick='trace_history(" + data.num + ")' class='square_btn'>たどる</a>";
 
         return sentence;
