@@ -326,7 +326,7 @@
                         $(window).scrollTop(0);
                         document.getElementById("prepare").style.display = "none";
                         document.getElementById("reflection").style.display = "";
-                        // setInterval(function(){get_history(reflection_eventcode)}, 500);
+                        setInterval(function () { get_history(reflection_eventcode) }, 500);
                         // get_history();
                 }
 
@@ -904,6 +904,7 @@
                 function comment_view(num) {
                         document.getElementById("comment_input").style.display = "none";
                         document.getElementById("comment_confirm").style.display = "none";
+                        document.getElementById("comment_view").style.display = "";
                         $.ajax({ //振り返りコメント登録
                                 type: "POST",
                                 url: "http://192.168.0.159/2018grade4/HUG/HUG_Server/eventcode.php",
@@ -918,12 +919,16 @@
                                         class_name = "block1";
                                         color = "#e0ffff";
                                         //全ての履歴
+                                        var f = 1;
                                         for (var i = data.length - 1; i > -1; i--) {
                                                 if (data[i].data2 == num) {
-                                                        if (i != data.length - 1)
-                                                                add = "<div class='" + class_name + "' style='width:90%;left:4%;font-size: 13px;border:1px solid green;border-top:0px solid green;background: " + color + ";'>";
-                                                        else
+                                                        if (f == 1) {
                                                                 add = "<div class='" + class_name + "' style='width:90%;left:4%;font-size: 13px;border:1px solid green;background: " + color + ";'>";
+                                                                f = 0;
+                                                        }
+                                                        else
+                                                                add = "<div class='" + class_name + "' style='width:90%;left:4%;font-size: 13px;border:1px solid green;border-top:0px solid green;background: " + color + ";'>";
+
                                                         add += set_history_data(data[i], "comment");
                                                         add += "</div> ";
                                                         $("#comment_view").append(add);
