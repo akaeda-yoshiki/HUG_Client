@@ -128,7 +128,7 @@
                 <div class="block3" style="border-bottom: none;">
                         並び順
                         <input type="button" id="sort_day" style="position: relative; left:50px;border: solid 2px #203aff;"
-                                value="作成日" onclick='exchange_mode("day")'>
+                                value="プレイ日" onclick='exchange_mode("day")'>
                         <input type="button" id="sort_play" style="position: relative; left:80px;" value="プレイ回数"
                                 onclick='exchange_mode("play")'>
                 </div>
@@ -137,13 +137,13 @@
                                 絞り込み
                                 <!-- <br> -->
                                 <a style="position: relative; left:30px;">
-                                        タイトル
-                                        <input type="text" id="search_title" style="position: relative; left:128px;">
-                                </a>
-                                <br>
-
+                                        イベントコード
+                                        <input type="text" id="search_code" style="position: relative; left:68px;">
+                                </a><br>
                                 <a style="position: relative; left:115px;">
-                                        カテゴリー
+                                        テーマタイトル
+                                        <input type="text" id="search_title" style="position: relative; left:68px;">
+                                        <br>カテゴリー
                                         <select id="search_category" style="width: 172px;position: relative; left:110px;">
                                                 <option value=""></option>
                                         </select>
@@ -170,15 +170,26 @@
                         </form>
                 </div>
                 <br>
-                <input type="button" id="get_theme_button" style="position: relative; left:7%;" value="全てのテーマ" onclick='exchange_volume("all")'>
-                <input type="button" id="back_button" style="position: relative; left:7%;display: none;" value="戻る"
-                        onclick='exchange_volume("not_all")'>
 
                 <br>
                 <a id="table">
+                        <b style="position: relative; left:7%;" id="myevent_table_title">
+                                マイイベント</b>
+                        <input type="button" id="get_theme_button" style="position: relative; left:7%;" value="全てのテーマ"
+                                onclick='exchange_volume("all", 0)'>
+                        <input type="button" id="back_button" style="position: relative; left:7%;display: none;" value="戻る"
+                                onclick='exchange_volume("not_all", 0)'>
+
                         <table id='mytable'>
                         </table>
                         <br>
+                        <b style="position: relative; left:7%;" id="everyone_table_title">
+                                みんなのイベント</b>
+                        <input type="button" id="get_theme_button1" style="position: relative; left:7%;" value="全てのテーマ"
+                                onclick='exchange_volume("all", 1)'>
+                        <input type="button" id="back_button1" style="position: relative; left:7%;display: none;" value="戻る"
+                                onclick='exchange_volume("not_all", 1)'>
+
                         <table id='everyone_table'>
                         </table>
                 </a>
@@ -326,25 +337,71 @@
                 }
 
                 //表示するテーマの数を切り替え
-                function exchange_volume(word) {
+                function exchange_volume(word, h) {
+
+                        // if (word == "all") {//全件表示
+                        //         if (now_mode.indexOf("all") == -1) {
+                        //                 now_mode = "all_" + now_mode;
+                        //                 document.getElementById("get_theme_button").style.display = "none";
+                        //                 document.getElementById("back_button").style.display = "";
+                        //                 get_theme();
+                        //         }
+                        // } else if (word == "not_all") {//一部表示
+                        //         if (now_mode.indexOf("all") != -1) {
+                        //                 now_mode = now_mode.substr(4);
+                        //                 document.getElementById("get_theme_button").style.display = "";
+                        //                 document.getElementById("back_button").style.display = "none";
+                        //                 get_theme();
+                        //         }
+                        //         else if (document.getElementById("detail").style.display == "") {
+                        //                 document.getElementById("get_theme_button").style.display = "";
+                        //                 document.getElementById("back_button").style.display = "none";
+                        //                 get_theme();
+                        //         }
+                        // }
 
                         if (word == "all") {//全件表示
                                 if (now_mode.indexOf("all") == -1) {
+                                        if (h == 0) {
+                                                document.getElementById("everyone_table").style.display = "none";
+                                                document.getElementById("back_button").style.display = "";
+                                                document.getElementById("everyone_table_title").style.display = "none";
+                                        }
+                                        else {
+                                                document.getElementById("mytable").style.display = "none"; document.getElementById("back_button1").style.display = "";
+                                                document.getElementById("myevent_table_title").style.display = "none";
+                                        }
                                         now_mode = "all_" + now_mode;
                                         document.getElementById("get_theme_button").style.display = "none";
-                                        document.getElementById("back_button").style.display = "";
+                                        document.getElementById("get_theme_button1").style.display = "none";
+
+
+
+
                                         get_theme();
                                 }
                         } else if (word == "not_all") {//一部表示
                                 if (now_mode.indexOf("all") != -1) {
                                         now_mode = now_mode.substr(4);
                                         document.getElementById("get_theme_button").style.display = "";
+                                        document.getElementById("get_theme_button1").style.display = "";
                                         document.getElementById("back_button").style.display = "none";
+                                        document.getElementById("back_button1").style.display = "none";
+                                        document.getElementById("everyone_table").style.display = "";
+                                        document.getElementById("mytable").style.display = "";
+                                        document.getElementById("everyone_table_title").style.display = "";
+                                        document.getElementById("myevent_table_title").style.display = "";
                                         get_theme();
                                 }
                                 else if (document.getElementById("detail").style.display == "") {
                                         document.getElementById("get_theme_button").style.display = "";
+                                        document.getElementById("get_theme_button1").style.display = "";
                                         document.getElementById("back_button").style.display = "none";
+                                        document.getElementById("back_button1").style.display = "none";
+                                        document.getElementById("everyone_table").style.display = "";
+                                        document.getElementById("mytable").style.display = "";
+                                        document.getElementById("everyone_table_title").style.display = "";
+                                        document.getElementById("myevent_table_title").style.display = "";
                                         get_theme();
                                 }
                         }
@@ -393,131 +450,6 @@
                                 }
                         });
 
-                        // $.ajax({ //非同期通信
-                        //         type: "POST",
-                        //         url: "http://192.168.0.159/2018grade4/HUG/HUG_Server/eventcode.php",
-                        //         data: {
-                        //                 code: get,
-                        //                 id: "2"
-                        //         },
-                        //         success: function (data) {
-                        //                 $.ajax({ //非同期通信
-                        //                         type: "POST",
-                        //                         url: "http://192.168.0.159/2018grade4/HUG/HUG_Server/eventcode.php",
-                        //                         data: {
-                        //                                 code: get,
-                        //                                 id: "3"
-                        //                         },
-                        //                         success: function (data1) {
-                        //                                 data = data.concat(data1);
-
-                        //                                 $.ajax({ //非同期通信
-                        //                                         type: "POST",
-                        //                                         url: "http://192.168.0.159/2018grade4/HUG/HUG_Server/eventcode.php",
-                        //                                         data: {
-                        //                                                 code: get,
-                        //                                                 id: "4"
-                        //                                         },
-                        //                                         success: function (data2) {
-                        //                                                 data = data.concat(data2);
-                        //                                                 adjustment_history(data);
-                        //                                         },
-                        //                                         error: function (XMLHttpRequest, textStatus, errorThrown) { //接続が失敗
-                        //                                                 // console.log("ID4データ受信エラー");
-                        //                                                 // console.log("XMLHttpRequest::" + XMLHttpRequest);
-                        //                                                 // console.log("textStatus::" + textStatus);
-                        //                                                 // console.log("errorThrown::" + errorThrown);
-                        //                                                 adjustment_history(data);
-                        //                                         }
-                        //                                 });
-                        //                         },
-                        //                         error: function (XMLHttpRequest, textStatus, errorThrown) { //接続が失敗
-                        //                                 // console.log("ID3データ受信エラー");
-                        //                                 // console.log("XMLHttpRequest::" + XMLHttpRequest);
-                        //                                 // console.log("textStatus::" + textStatus);
-                        //                                 // console.log("errorThrown::" + errorThrown);
-                        //                                 $.ajax({ //非同期通信
-                        //                                         type: "POST",
-                        //                                         url: "http://192.168.0.159/2018grade4/HUG/HUG_Server/eventcode.php",
-                        //                                         data: {
-                        //                                                 code: get,
-                        //                                                 id: "4"
-                        //                                         },
-                        //                                         success: function (data2) {
-                        //                                                 data = data.concat(data2);
-                        //                                                 adjustment_history(data);
-                        //                                         },
-                        //                                         error: function (XMLHttpRequest, textStatus, errorThrown) { //接続が失敗
-                        //                                                 // console.log("ID4データ受信エラー");
-                        //                                                 // console.log("XMLHttpRequest::" + XMLHttpRequest);
-                        //                                                 // console.log("textStatus::" + textStatus);
-                        //                                                 // console.log("errorThrown::" + errorThrown);
-                        //                                                 adjustment_history(data);
-                        //                                         }
-                        //                                 });
-                        //                         }
-                        //                 });
-                        //         },
-                        //         error: function (XMLHttpRequest, textStatus, errorThrown) { //接続が失敗
-                        //                 // console.log("ID2データ受信エラー");
-                        //                 // console.log("XMLHttpRequest::" + XMLHttpRequest);
-                        //                 // console.log("textStatus::" + textStatus);
-                        //                 // console.log("errorThrown::" + errorThrown);
-                        //                 $.ajax({ //非同期通信
-                        //                         type: "POST",
-                        //                         url: "http://192.168.0.159/2018grade4/HUG/HUG_Server/eventcode.php",
-                        //                         data: {
-                        //                                 code: get,
-                        //                                 id: "3"
-                        //                         },
-                        //                         success: function (data1) {
-                        //                                 data = data1;
-                        //                                 $.ajax({ //非同期通信
-                        //                                         type: "POST",
-                        //                                         url: "http://192.168.0.159/2018grade4/HUG/HUG_Server/eventcode.php",
-                        //                                         data: {
-                        //                                                 code: get,
-                        //                                                 id: "4"
-                        //                                         },
-                        //                                         success: function (data2) {
-                        //                                                 data = data.concat(data2);
-                        //                                                 adjustment_history(data);
-                        //                                         },
-                        //                                         error: function (XMLHttpRequest, textStatus, errorThrown) { //接続が失敗
-                        //                                                 // console.log("ID4データ受信エラー");
-                        //                                                 // console.log("XMLHttpRequest::" + XMLHttpRequest);
-                        //                                                 // console.log("textStatus::" + textStatus);
-                        //                                                 // console.log("errorThrown::" + errorThrown);
-                        //                                                 adjustment_history(data);
-                        //                                         }
-                        //                                 });
-                        //                         },
-                        //                         error: function (XMLHttpRequest, textStatus, errorThrown) { //接続が失敗
-                        //                                 // console.log("ID3データ受信エラー");
-                        //                                 // console.log("XMLHttpRequest::" + XMLHttpRequest);
-                        //                                 // console.log("textStatus::" + textStatus);
-                        //                                 // console.log("errorThrown::" + errorThrown);
-                        //                                 $.ajax({ //非同期通信
-                        //                                         type: "POST",
-                        //                                         url: "http://192.168.0.159/2018grade4/HUG/HUG_Server/eventcode.php",
-                        //                                         data: {
-                        //                                                 code: get,
-                        //                                                 id: "4"
-                        //                                         },
-                        //                                         success: function (data2) {
-                        //                                                 adjustment_history(data2);
-                        //                                         },
-                        //                                         error: function (XMLHttpRequest, textStatus, errorThrown) { //接続が失敗
-                        //                                                 // console.log("ID4データ受信エラー");
-                        //                                                 // console.log("XMLHttpRequest::" + XMLHttpRequest);
-                        //                                                 // console.log("textStatus::" + textStatus);
-                        //                                                 // console.log("errorThrown::" + errorThrown);
-                        //                                         }
-                        //                                 });
-                        //                         }
-                        //                 });
-                        //         }
-                        // });
                 }
 
 
@@ -694,7 +626,7 @@
                 //テーマを受信、引数  all：全公開可テーマ　not_all：最新５つの公開可テーマ
                 function get_theme() {
                         //イベントコードから「終了・公開可」かつ
-                        // console.log(now_mode);
+                        console.log(now_mode);
                         document.getElementById("table").style.display = "";
                         document.getElementById("detail").style.display = "none";
 
@@ -707,6 +639,7 @@
                                 url: "http://192.168.0.159/2018grade4/HUG/HUG_Server/reflection.php",
                                 data: {
                                         mode: now_mode,
+                                        search_code: search.search_code.value,
                                         title: search.search_title.value,
                                         category: search_category.value,
                                         situation: search_situation.value,
@@ -720,19 +653,23 @@
                                 success: function (data) {
                                         var $content = $('#mytable');
                                         $content.empty();
-                                        $content.append("<tr><th>タイトル</th><th>作成日</th><th>カテゴリー</th><th>プレイ回数</th></tr>");
+                                        $content.append("<tr><th>テーマタイトル</th><th>イベントコード</th><th>プレイ日</th><th>カテゴリー</th><th>総コメント数</th></tr>");
 
                                         for (var i = 0; i < data.length; i++) {
                                                 var add = "";
                                                 add += "<tr><td><a href='#!' onclick='theme_detail(" + data[i].id + "|" + data[i].code + ")' class='square_btn'>" + data[i].title + "</a>";
                                                 add += "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
-                                                add += "<td>" + data[i].create_day + "</td>";
+                                                add += "<td>" + data[i].code + "</td>";
+                                                add += "<td>" + data[i].play_day + "</td>";
                                                 add += "<td>" + data[i].category + "</td>";
-                                                add += "<td>" + data[i].play_count + "</td></tr>";
+                                                add += "<td>" + data[i].comment_sum + "</td></tr>";
                                                 $content.append(add);
                                         }
                                 },
                                 error: function (XMLHttpRequest, textStatus, errorThrown) { //接続が失敗
+                                        $('#mytable').empty();
+                                        $('#mytable').append("データがありません");
+                                        document.getElementById("get_theme_button").style.display = "none";
                                         // alert('エラーです！'); //エラーを表示
                                 }
                         });
@@ -745,6 +682,7 @@
                                 url: "http://192.168.0.159/2018grade4/HUG/HUG_Server/reflection.php",
                                 data: {
                                         mode: now_mode,
+                                        search_code: search_code.value,
                                         title: search.search_title.value,
                                         category: search_category.value,
                                         situation: search_situation.value,
@@ -758,19 +696,24 @@
                                 success: function (data) {
                                         var $content1 = $('#everyone_table');
                                         $content1.empty();
-                                        $content1.append("<tr><th>タイトル</th><th>作成日</th><th>カテゴリー</th><th>プレイ回数</th></tr>");
+                                        $content1.append("<tr><th>テーマタイトル</th><th>イベントコード</th><th>プレイ日</th><th>カテゴリー</th><th>総コメント数</th></tr>");
 
                                         for (var i = 0; i < data.length; i++) {
                                                 var add = "";
                                                 add += "<tr><td><a href='#!' onclick='theme_detail(\"" + data[i].id + "|" + data[i].code + "\")' class='square_btn'>" + data[i].title + "</a>";
                                                 add += "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
-                                                add += "<td>" + data[i].create_day + "</td>";
+                                                add += "<td>" + data[i].code + "</td>";
+                                                add += "<td>" + data[i].play_day + "</td>";
                                                 add += "<td>" + data[i].category + "</td>";
-                                                add += "<td>" + data[i].play_count + "</td></tr>";
+                                                add += "<td>" + data[i].comment_sum + "</td></tr>";
                                                 $content1.append(add);
                                         }
                                 },
                                 error: function (XMLHttpRequest, textStatus, errorThrown) { //接続が失敗
+                                        $('#everyone_table').empty();
+                                        $('#everyone_table').append("データがありません");
+                                        document.getElementById("get_theme_button1").style.display = "none";
+
                                         // alert('エラーです！'); //エラーを表示
                                 }
                         });
