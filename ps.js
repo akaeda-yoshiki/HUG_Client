@@ -67,7 +67,7 @@ document.onmousedown = function (e) {
                                 myedit = i;
                                 var get = document.getElementById("select_figure");
                                 // get.figure.value = figure_info[i].type;
-                                get.style.display = "none";
+                                // get.style.display = "none";
                                 $("#create").prop("disabled", true);
                                 $("#edit").prop("disabled", false);
 
@@ -164,31 +164,50 @@ function recieve() {
 
 //図形情報の送信
 function send() {
-        $.ajax({ //ajaxによる非同期通信発生
-                type: "POST", //POST送信でデータを受け渡す
-                url: "http://192.168.0.159/2018grade4/HUG/HUG_Server/share_insert.php",
+        // $.ajax({ //ajaxによる非同期通信発生
+        //         type: "POST", //POST送信でデータを受け渡す
+        //         url: "http://192.168.0.159/2018grade4/HUG/HUG_Server/share_insert.php",
+        //         data: {
+        //                 //色々変える必要あり***********************************************************
+        //                 info_id: 1,
+        //                 number: sessionStorage.getItem('mynumber'),
+        //                 data1: figure[mynumber][0],
+        //                 data2: figure[mynumber][1],
+        //                 data3: figure[mynumber][2],
+        //                 data4: figure[mynumber][3]
+        //         },
+        //         success: function (hoge) { //接続が成功
+        //                 // alert(hoge);
+        //         },
+        //         error: function (XMLHttpRequest, textStatus, errorThrown) { //接続が失敗
+        //                 // alert(errorThrown); //エラーを表示
+        //         }
+        // });
+        $.ajax({ //非同期通信
+                type: "POST",
+                url: "http://192.168.0.159/2018grade4/HUG/HUG_Server/eventcode.php",
                 data: {
-                        //色々変える必要あり***********************************************************
-                        info_id: 1,
-                        number: sessionStorage.getItem('mynumber'),
-                        data1: figure[mynumber][0],
-                        data2: figure[mynumber][1],
-                        data3: figure[mynumber][2],
-                        data4: figure[mynumber][3]
+                        data: "" + now_situation_number,
+                        data1: "",
+                        code: window.sessionStorage.getItem(["eventcode"]),
+                        mode: "insert",
+                        id: 5
                 },
-                success: function (hoge) { //接続が成功
-                        // alert(hoge);
+                success: function (data) {
+                        // alert(data);
                 },
                 error: function (XMLHttpRequest, textStatus, errorThrown) { //接続が失敗
-                        // alert(errorThrown); //エラーを表示
+                        // alert('エラーです！' + textStatus); //エラーを表示
                 }
         });
-        return false;
+
 }
 
 function create_figure() {
         var get = document.getElementById("select_figure");
+        console.log(get.figure.value);
         // var get = document.forms.select_figure;
+        // switch (figure_info[myedit].type) {
         switch (get.figure.value) {
                 case TYPE.RECT:
                         create_rect();

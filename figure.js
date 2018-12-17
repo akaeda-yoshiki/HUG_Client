@@ -15,7 +15,6 @@ function figure(id, type, place, stats, color, label_color, label_text) {
 function figure_init() {
     create_triangle();
     draw_figure();//図形の描画
-
 }
 
 //四角形の新規作成、更新
@@ -80,6 +79,7 @@ function create_circle() {
         figure_info[myedit].color = color;
         figure_info[myedit].label_color = label_color;
         figure_info[myedit].label_text = get.label_text.value;
+console.log("円編集");
     }
     else//新規作成
         figure_info.push(new figure(0, TYPE.CIRCLE, place, FIGURE.NULL, color, label_color, get.label_text.value));
@@ -145,6 +145,8 @@ function figure_delete() {
 
 //図形の描画
 function draw_figure() {
+    // console.log(figure_info);
+    console.log(myedit);
     // console.log(cross_product(100, 500, 100, 300, imag_mousex, imag_mousey));
     for (var i = 0; i < figure_info.length; i++) {
         var place = figure_info[i].place;
