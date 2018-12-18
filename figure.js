@@ -108,6 +108,7 @@ function create_triangle() {
     var g = parseInt(get_color.substr(3, 2), 16).toString(10);
     var b = parseInt(get_color.substr(5, 2), 16).toString(10);
     var color = "rgb(" + r + "," + g + "," + b + ")";
+    
     //ラベルの色　　16進数から変換
     get_color = get.label_color.value;
     r = parseInt(get_color.substr(1, 2), 16).toString(10);

@@ -66,10 +66,11 @@ document.onmousedown = function (e) {
                         if (place_judge(i)) {
                                 myedit = i;
                                 var get = document.getElementById("select_figure");
-                                // get.figure.value = figure_info[i].type;
-                                // get.style.display = "none";
+                                get.figure.value = figure_info[i].type;
+                                get.style.display = "none";
                                 $("#create").prop("disabled", true);
                                 $("#edit").prop("disabled", false);
+                                
 
                                 get = document.getElementById("create_figure");
                                 var result = (figure_info[i].color).split(",");
@@ -220,4 +221,10 @@ function create_figure() {
                         create_triangle();
                         break;
         }
+}
+
+function edit_figure() {
+        document.getElementById('select_figure').figure.value = figure_info[myedit].type;
+
+        create_figure();
 }
