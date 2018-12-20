@@ -8,17 +8,18 @@ var TRIANGLE_POINT_RNGE = 8;
 var ASSESSENT_INPUT_TEXT_NUM = 4;
 
 var FIGURE = {//図形の状態
-    NULL: 0,
-    MOVE: 1,
-    CHANGE: 2,
+        NULL: 0,
+        MOVE: 1,
+        CHANGE: 2,
 };
 var TYPE = {//図形の型
-    RECT: "□",
-    CIRCLE: "〇",
-    TRIANGLE: "△"
+        RECT: "□",
+        CIRCLE: "〇",
+        TRIANGLE: "△",
+        DELETE: "×"
 };
 
 var COLOR16 = {
-    GREEN: "#00ff00",
-    RED: "#ff0000"
+        GREEN: "#00ff00",
+        RED: "#ff0000"
 };

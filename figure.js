@@ -1,12 +1,12 @@
 //四角形クラス
-function figure(id, type, place, stats, color, label_color, label_text) {
-    this.id = id;
+function figure(type, place, stats, color, label_color, label_text, num) {
     this.type = type;
     this.place = place
     this.stats = stats;
     this.color = color;
     this.label_color = label_color;
     this.label_text = label_text;
+    this.num = num;
 }
 
 
@@ -43,7 +43,7 @@ function create_rect() {
         figure_info[myedit].label_text = get.label_text.value;
     }
     else//新規作成
-        figure_info.push(new figure(0, TYPE.RECT, place, FIGURE.NULL, color, label_color, get.label_text.value));
+        figure_info.push(new figure(TYPE.RECT, place, FIGURE.NULL, color, label_color, get.label_text.value, "-1"));
 
     var get = document.getElementById("create_figure");
     get.figure_color.value = "#00ff00";
@@ -79,10 +79,10 @@ function create_circle() {
         figure_info[myedit].color = color;
         figure_info[myedit].label_color = label_color;
         figure_info[myedit].label_text = get.label_text.value;
-console.log("円編集");
+        console.log("円編集");
     }
     else//新規作成
-        figure_info.push(new figure(0, TYPE.CIRCLE, place, FIGURE.NULL, color, label_color, get.label_text.value));
+        figure_info.push(new figure(TYPE.CIRCLE, place, FIGURE.NULL, color, label_color, get.label_text.value, "-1"));
 
     var get = document.getElementById("create_figure");
     get.figure_color.value = "#00ff00";
@@ -108,7 +108,7 @@ function create_triangle() {
     var g = parseInt(get_color.substr(3, 2), 16).toString(10);
     var b = parseInt(get_color.substr(5, 2), 16).toString(10);
     var color = "rgb(" + r + "," + g + "," + b + ")";
-    
+
     //ラベルの色　　16進数から変換
     get_color = get.label_color.value;
     r = parseInt(get_color.substr(1, 2), 16).toString(10);
@@ -122,7 +122,7 @@ function create_triangle() {
         figure_info[myedit].label_text = get.label_text.value;
     }
     else//新規作成
-        figure_info.push(new figure(0, TYPE.TRIANGLE, place, FIGURE.NULL, color, label_color, get.label_text.value));
+        figure_info.push(new figure(TYPE.TRIANGLE, place, FIGURE.NULL, color, label_color, get.label_text.value, "-1"));
 
     var get = document.getElementById("create_figure");
     get.figure_color.value = "#00ff00";
@@ -137,7 +137,7 @@ function create_triangle() {
 //選択している図形の削除
 function figure_delete() {
     if (myedit != -1) {
-        figure_info.splice(myedit, 1);
+        figure_info[myedit].type = TYPE.DELETE;
         myedit = -1;
     }
 }
@@ -147,59 +147,61 @@ function figure_delete() {
 //図形の描画
 function draw_figure() {
     // console.log(figure_info);
-    console.log(myedit);
+    // console.log(myedit);
     // console.log(cross_product(100, 500, 100, 300, imag_mousex, imag_mousey));
     for (var i = 0; i < figure_info.length; i++) {
-        var place = figure_info[i].place;
-        var label_place = place.slice();
-        // console.log(label_place + "::" + place);
-        figure_ctx.fillStyle = figure_info[i].color;
+        if (figure_info[i].type != TYPE.DELETE) {
+            var place = figure_info[i].place;
+            var label_place = place.slice();
+            // console.log(label_place + "::" + place);
+            figure_ctx.fillStyle = figure_info[i].color;
 
-        switch (figure_info[i].type) {
-            case TYPE.RECT:
-                figure_ctx.fillRect(place[0], place[1], place[2], place[3]);
-                if (i == myedit) {//選択図形の輪郭を変化
-                    figure_ctx.strokeRect(place[0], place[1], place[2], place[3]);
-                }
+            switch (figure_info[i].type) {
+                case TYPE.RECT:
+                    figure_ctx.fillRect(place[0], place[1], place[2], place[3]);
+                    if (i == myedit) {//選択図形の輪郭を変化
+                        figure_ctx.strokeRect(place[0], place[1], place[2], place[3]);
+                    }
 
-                break;
+                    break;
 
-            case TYPE.CIRCLE:
-                figure_ctx.beginPath();
-                figure_ctx.arc(place[0], place[1], place[2], 0, Math.PI * 2, false);
-                figure_ctx.fill();
-                if (i == myedit) {//選択図形の輪郭を変化
-                    figure_ctx.stroke();
-                }
-                label_place.push(place[2] * 2);
-                label_place[0] = place[0] - place[2] * 0.8;
-                label_place[1] = place[1] - place[2] * 0.7;
+                case TYPE.CIRCLE:
+                    figure_ctx.beginPath();
+                    figure_ctx.arc(place[0], place[1], place[2], 0, Math.PI * 2, false);
+                    figure_ctx.fill();
+                    if (i == myedit) {//選択図形の輪郭を変化
+                        figure_ctx.stroke();
+                    }
+                    label_place.push(place[2] * 2);
+                    label_place[0] = place[0] - place[2] * 0.8;
+                    label_place[1] = place[1] - place[2] * 0.7;
 
-                break;
-            case TYPE.TRIANGLE:
-                figure_ctx.beginPath();
-                figure_ctx.moveTo(place[0], place[1]); //最初の点の場所
-                figure_ctx.lineTo(place[0] + place[2], place[1] + place[3]); //2番目の点の場所
-                figure_ctx.lineTo(place[0] + place[4], place[1] + place[5]); //3番目の点の場所
+                    break;
+                case TYPE.TRIANGLE:
+                    figure_ctx.beginPath();
+                    figure_ctx.moveTo(place[0], place[1]); //最初の点の場所
+                    figure_ctx.lineTo(place[0] + place[2], place[1] + place[3]); //2番目の点の場所
+                    figure_ctx.lineTo(place[0] + place[4], place[1] + place[5]); //3番目の点の場所
 
-                figure_ctx.closePath();	//三角形の最後の線 closeさせる
-                figure_ctx.fill();
-                if (i == myedit) {//選択図形の輪郭を変化
-                    figure_ctx.stroke();
-                }
-                label_place[0] = place[0] - 20;
-                label_place[1] = place[1] + 30;
-                label_place[2] = Math.abs(place[2] - place[0]);
+                    figure_ctx.closePath();	//三角形の最後の線 closeさせる
+                    figure_ctx.fill();
+                    if (i == myedit) {//選択図形の輪郭を変化
+                        figure_ctx.stroke();
+                    }
+                    label_place[0] = place[0] - 20;
+                    label_place[1] = place[1] + 30;
+                    label_place[2] = Math.abs(place[2] - place[0]);
 
 
 
-                break;
+                    break;
+            }
+            if (label_place[3] > LAVEL_SIZE_MAX_Y)//ラベルの縦幅の上限
+                label_place[3] = LAVEL_SIZE_MAX_Y;
+            if (label_place[2] > figure_info[i].label_text.length * 15)
+                label_place[2] = figure_info[i].label_text.length * 15 + 20;
+            label_draw(label_place, i);
         }
-        if (label_place[3] > LAVEL_SIZE_MAX_Y)//ラベルの縦幅の上限
-            label_place[3] = LAVEL_SIZE_MAX_Y;
-        if (label_place[2] > figure_info[i].label_text.length * 15)
-            label_place[2] = figure_info[i].label_text.length * 15 + 20;
-        label_draw(label_place, i);
     }
     //図形の拡大縮小可能時のマーカー
     figure_ctx.fillStyle = size_change_marker.color;

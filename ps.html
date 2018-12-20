@@ -396,7 +396,6 @@
 
 
                         var file_name = "";
-                        // console.log(draw_flag);
                         if (draw_flag == true)
                                 file_name = window.sessionStorage.getItem(["eventcode"]);
                         if (send_f == 1) {
@@ -414,7 +413,7 @@
                                                 id: 4
                                         },
                                         success: function (data) {
-                                                // alert(now_situation_number);
+
                                                 data = data.split("/");
                                                 $.ajax({ //非同期通信
                                                         type: "POST",
@@ -428,19 +427,21 @@
                                                         },
                                                         success: function (data) {
                                                                 // alert(data);
+
                                                         },
                                                         error: function (XMLHttpRequest, textStatus, errorThrown) { //接続が失敗
                                                                 // alert('エラーです！' + textStatus); //エラーを表示
                                                         }
                                                 });
-                                                console.log(data);
+                                                // console.log(figure_info);
                                                 // alert(data);
-
+                                                send(0);
                                                 if (file_name != "")
                                                         file(data[1]);
                                                 if (data[0] == "ok") {
-                                                        window.location.href = "ps.html";
-                                                        // exchange_mode("none");
+                                                        // window.location.href = "ps.html";
+                                                        exchange_mode("none");
+
                                                 }
                                                 else {
                                                         // alert("ok以外");
@@ -658,6 +659,7 @@
                         });
                         // area_operate_swcth("off");
                         overview("off");
+                        recieve();
                 }
 
                 //エリア操作のオンオフを変更
@@ -683,6 +685,7 @@
                 document.write(mynumber);
                 var ev;
                 var figure_info = [];//図形の情報
+                var figure_info_pre = [];//１つ前の図形の情報
                 var canvas = document.getElementById("canvas");
                 var figure_ctx = canvas.getContext("2d");
                 var size_change_marker = {//図形を拡大縮小可能時に表示されるマーカー
