@@ -65,7 +65,7 @@ document.onmousedown = function (e) {
                         if (figure_info[i].type != TYPE.DELETE)
                                 //図形の上にマウスがあるか判定
                                 if (place_judge(i)) {
-                                        console.log(i + "**" + figure_info[i].num);
+                                        // console.log(i + "**" + figure_info[i].num);
                                         myedit = i;
                                         var get = document.getElementById("select_figure");
                                         get.figure.value = figure_info[i].type;
@@ -159,8 +159,8 @@ function recieve() {
                                 var color = data[i].data4.split("_");
                                 figure_info.push(new figure(data[i].data1, place, FIGURE.NULL, color[0], color[1], data[i].data5, data[i].data2));
                         }
-                        console.log(figure_info_pre);
-                        console.log(figure_info);
+                        // console.log(figure_info_pre);
+                        // console.log(figure_info);
 
                 },
                 error: function (XMLHttpRequest, textStatus, errorThrown) { //接続が失敗
@@ -172,7 +172,7 @@ function recieve() {
         ctx.globalAlpha = 0.6;
         clear_figure();
         draw_figure();
-        
+
 }
 
 //図形情報の送信
@@ -200,32 +200,44 @@ function send(i) {
                                 // alert('エラーです！' + textStatus); //エラーを表示
                         }
                 });
+        } else {
+                // if (i != figure_info.length - 1)
+                //         send(i + 1);
+                // console.log(figure_info[i].type);
+                // var send = "";
+                // var send1 = "";
+                // var send2 = "";
+                // var send3 = "";
+                // if (figure_info[i].type == figure_info_pre[i].type)
+                //         send = figure_info[i].type;
+                // if (figure_info[i].place.join("_") != figure_info_pre[i].place.join("_"))
+                //         send1 = figure_info[i].type;
+                // if (figure_info[i].color + "_" + figure_info[i].label_color != figure_info_pre[i].color + "_" + figure_info_pre[i].label_color)
+                //         send2 = figure_info[i].color + "_" + figure_info[i].label_color;
+                // if (figure_info[i].label_text != figure_info_pre[i].label_text)
+                //         send3 = figure_info[i].label_text;
+                $.ajax({ //非同期通信
+                        type: "POST",
+                        url: "http://192.168.0.159/2018grade4/HUG/HUG_Server/eventcode.php",
+                        data: {
+                                num: figure_info[i].num,
+                                data: figure_info[i].type,
+                                data1: figure_info[i].place.join("_"),
+                                data2: figure_info[i].color + "_" + figure_info[i].label_color,
+                                data3: figure_info[i].label_text,
+                                code: window.sessionStorage.getItem(["eventcode"]),
+                                mode: "updata",
+                                id: 5
+                        },
+                        success: function () {
+                                if (i != figure_info.length - 1)
+                                        send(i + 1);
+                        },
+                        error: function (XMLHttpRequest, textStatus, errorThrown) { //接続が失敗
+                                // alert('エラーです！' + textStatus); //エラーを表示
+                        }
+                });
         }
-        else {
-                if (i != figure_info.length - 1)
-                        send(i + 1);
-        }
-        //         $.ajax({ //非同期通信
-        //                 type: "POST",
-        //                 url: "http://192.168.0.159/2018grade4/HUG/HUG_Server/eventcode.php",
-        //                 data: {
-        //                         data1: figure_info[i].type,
-        //                         data2: figure_info[i].num,
-        //                         data3: figure_info[i].place.join("_"),
-        //                         data4: figure_info[i].color + "_" + figure_info[i].label_color,
-        //                         data5: figure_info[i].label_text,
-        //                         code: window.sessionStorage.getItem(["eventcode"]),
-        //                         mode: "insert",
-        //                         id: 5
-        //                 },
-        //                 success: function (data) {
-        //                         if (i != figure_info.length - 1)
-        //                                 send(i + 1);
-        //                 },
-        //                 error: function (XMLHttpRequest, textStatus, errorThrown) { //接続が失敗
-        //                         // alert('エラーです！' + textStatus); //エラーを表示
-        //                 }
-        //         });
 }
 
 function create_figure() {
