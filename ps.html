@@ -269,7 +269,7 @@
 
                         <br>
                         <input type="button" id="create" value="新規作成" onclick="create_figure()">
-                        <input type="button" id="edit" value="変更" onclick="edit_figure()">
+                        <input type="button" id="edit" value="変更" onclick="create_figure()">
                         <input type="button" value="削除" onclick="figure_delete()">
 
                 </form>
@@ -440,8 +440,8 @@
                                                         file(data[1]);
                                                 if (data[0] == "ok") {
                                                         // window.location.href = "ps.html";
-                                                        exchange_mode("none");
-
+                                                        // exchange_mode("none");
+                                                        reset();
                                                 }
                                                 else {
                                                         // alert("ok以外");
@@ -525,7 +525,7 @@
                 }
 
 
-                //新規・再利用の切り替え
+                //切り替え
                 function exchange_mode(h) {
 
                         switch (h) {
@@ -676,6 +676,15 @@
                                 document.getElementById("area_operate").style.display = "none";
                         }
                 }
+
+                function reset(){
+                        document.forms.cope_human_input.cope.value = "";
+                        document.forms.cope_input.cope.value = "";
+                        area_operate_swcth("off");
+                        exchange_mode("none");
+                        error_reset();
+                }
+
                 var debug = false;//通信のオンオフ（１：オフ）
                 var draw_flag = false;
                 if (debug == true)

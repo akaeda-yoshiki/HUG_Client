@@ -242,16 +242,12 @@ function send(i) {
 
 function create_figure() {
         var get = document.getElementById("select_figure");
-        // console.log(get.figure.value);
-        // var get = document.forms.select_figure;
-        // switch (figure_info[myedit].type) {
         switch (get.figure.value) {
                 case TYPE.RECT:
                         create_rect();
                         break;
                 case TYPE.CIRCLE:
                         create_circle();
-
                         break;
                 case TYPE.TRIANGLE:
                         create_triangle();
