@@ -581,7 +581,10 @@
                                                 }
                                         },
                                         error: function (XMLHttpRequest, textStatus, errorThrown) { //接続が失敗
-                                                console.log("えらー:" + textStatus);
+                                                console.log("エラー");
+                                                console.log("XMLHttpRequest::" + XMLHttpRequest);
+                                                console.log("textStatus::" + textStatus);
+                                                console.log("errorThrown::" + errorThrown);
                                         }
                                 });
                         }
@@ -595,11 +598,14 @@
                                         mode: "new"
                                 },
                                 success: function (data) {
-                                                window.location.href = "pm.html";
-                                                // console.log(data);
+                                        // window.location.href = "pm.html";
+                                        console.log(data);
                                 },
                                 error: function (XMLHttpRequest, textStatus, errorThrown) { //接続が失敗
-                                        console.log("えらー:" + textStatus);
+                                        console.log("エラー");
+                                        console.log("XMLHttpRequest::" + XMLHttpRequest);
+                                        console.log("textStatus::" + textStatus);
+                                        console.log("errorThrown::" + errorThrown);
                                 }
                         });
                 }
