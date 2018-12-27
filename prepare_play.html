@@ -259,7 +259,6 @@
         <br>
 
         <wait id="wait" style="font-size: 30px;display: none;">
-                イベントコード：
                 <wait_eventcode></wait_eventcode>
         </wait>
         <script>
@@ -511,12 +510,14 @@
                                         open: open_f
                                 },
                                 success: function (data) {
+                                        $("#wait").empty();
+                                        $("#wait").append("生成したイベントコード：" + data);
                                 },
                                 error: function (XMLHttpRequest, textStatus, errorThrown) { //接続が失敗
                                         // alert('エラーです！'); //エラーを表示
                                 }
                         });
-                        eventcode("create");
+                        eventcode("input");
 
                         //***************************************イベントコード表示
                 }
@@ -543,7 +544,7 @@
                                 document.getElementById("mytable").style.display = "none";
                                 document.getElementById("search").style.display = "none";
                                 document.getElementById("eventcode").style.display = "";
-                                document.getElementById("wait").style.display = "none";
+                                document.getElementById("wait").style.display = "";
                         }
                         else if (text == "create") {
                                 get_theme();

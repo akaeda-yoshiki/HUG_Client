@@ -354,7 +354,6 @@
                         $content.append("<tr><th>タイトル</th><th>コード</th><th>作成日</th><th>カテゴリー</th><th>プレイ回数</th></tr>");
 
                         var get = document.forms.search;
-                        // console.log(search.search_title);
                         $.ajax({ //非同期通信
                                 type: "POST",
                                 url: "http://192.168.0.159/2018grade4/HUG/HUG_Server/theme.php",
@@ -372,6 +371,7 @@
                                 },
                                 success: function (data) {
                                         // alert(data);
+                                        // console.log(data);
                                         for (var i = 0; i < data.length; i++) {
                                                 var add = "";
                                                 add += "<tr><td><a href='#!' onclick='theme_detail(" + data[i].id + ")' class='square_btn'>" + data[i].title + "</a>";
@@ -384,7 +384,10 @@
                                         }
                                 },
                                 error: function (XMLHttpRequest, textStatus, errorThrown) { //接続が失敗
-                                        // alert('エラーです！'); //エラーを表示
+                                        console.log("エラー");
+                                        console.log("XMLHttpRequest::" + XMLHttpRequest);
+                                        console.log("textStatus::" + textStatus);
+                                        console.log("errorThrown::" + errorThrown);
                                 }
                         });
                 }

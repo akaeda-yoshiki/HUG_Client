@@ -347,6 +347,7 @@
                 var now_situation_number = "";
                 var assessment_send = [], category_send, time_send = "", image_send = "";//登録時に送信する用
                 var mode = "new";//新規作成か再利用の識別変数
+                var theme_image = 0;//0:あり　1:なし
                 //次へボタンが押された時
                 function next(h) {
                         var required_flag = true;//入力必須事項の確認用
@@ -360,7 +361,7 @@
                         $("#confirm_cope" + h + "_text").append(get1.cope.value);
 
                         $("#confirm" + h + "_area").empty();
-                        if (document.getElementById("area_operate_on_button").style.display == "none") {
+                        if (document.getElementById("area_operate_on_button").style.display == "none" && theme_image == 1) {
                                 var img = new Image("image/jpeg");
                                 img.src = document.getElementById('aaa').src;
                                 figure_ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
@@ -534,16 +535,16 @@
                                         document.getElementById("cope_human_input").style.display = "none";
                                         document.getElementById("confirm_cope").style.display = "none";
                                         document.getElementById("confirm_human_cope").style.display = "none";
-                                        if (document.getElementById("area_operate_on_button").style.display == "none")
-                                                document.getElementById("area_operate").style.display = "";
+                                        // if (document.getElementById("area_operate_on_button").style.display == "none")
+                                        //         document.getElementById("area_operate").style.display = "";
                                         break;
                                 case "input_human":
                                         document.getElementById("cope_input").style.display = "none";
                                         document.getElementById("cope_human_input").style.display = "";
                                         document.getElementById("confirm_cope").style.display = "none";
                                         document.getElementById("confirm_human_cope").style.display = "none";
-                                        if (document.getElementById("area_operate_on_button").style.display == "none")
-                                                document.getElementById("area_operate").style.display = "";
+                                        // if (document.getElementById("area_operate_on_button").style.display == "none")
+                                        //         document.getElementById("area_operate").style.display = "";
                                         break;
                                 case "confirm_situation":
                                         document.getElementById("cope_input").style.display = "none";
@@ -675,9 +676,14 @@
                                 document.getElementById("area_operate_off_button").style.display = "none";
                                 document.getElementById("area_operate").style.display = "none";
                         }
+                        if(theme_image == 0){
+                                document.getElementById("area_operate_on_button").style.display = "none";
+                                document.getElementById("area_operate_off_button").style.display = "none";
+                                document.getElementById("area_operate").style.display = "none";
+                        }
                 }
 
-                function reset(){
+                function reset() {
                         document.forms.cope_human_input.cope.value = "";
                         document.forms.cope_input.cope.value = "";
                         area_operate_swcth("off");

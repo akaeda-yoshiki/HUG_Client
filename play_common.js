@@ -61,6 +61,11 @@ function get_theme_detail() {
                                                         $("#theme_image_text").append('<img id="aaa" src="http://192.168.0.159/2018grade4/HUG/HUG_Server/image/' + data[0].image + '">');
                                                         $('canvas').css('background', 'url(http://192.168.0.159/2018grade4/HUG/HUG_Server/image/' + data[0].image + ')');
                                                         $('canvas').css('background-size', '100% 100%');
+                                                        theme_image = 1;
+                                                }
+                                                else{
+                                                        area_operate_swcth();
+                                                        theme_image = 0;
                                                 }
                                                 receive_flag = 0;
                                         },
