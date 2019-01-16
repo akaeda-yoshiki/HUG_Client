@@ -596,9 +596,9 @@
                                                                                 mode: "insert",
                                                                                 id: 1
                                                                         },
-                                                                        success: function (data) {
-                                                                                // alert(data);
-                                                                                if (data == "ok") {
+                                                                        success: function (data1) {
+                                                                                console.log(data1);
+                                                                                if (data1.indexOf("/") == -1) {
                                                                                         $("errer_text_eventcode").empty();
                                                                                         window.sessionStorage.setItem(["eventcode"], get.eventcode_text.value);
                                                                                         window.sessionStorage.setItem(["role"], document.getElementById("eventcode").role.value);

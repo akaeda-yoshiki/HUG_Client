@@ -129,6 +129,7 @@ function get_user_info() {
                 url: "http://192.168.0.159/2018grade4/HUG/HUG_Server/read_user.php",
                 dataType: "json",
         }).done(function (data, dataType) {
+
                 for (var i = 0; i < data.length; i++) {
                         $("user_info").append("name : " + data[i].name + "&nbsp;" + data[i].role + "<br>");
                 }
@@ -147,6 +148,8 @@ function recieve() {
                         id: 5
                 },
                 success: function (data) {
+                        // data = data.replace(/\r?\n/g, '');
+
                         // alert(data);
                         figure_info_pre = figure_info;
                         figure_info = [];
@@ -177,67 +180,67 @@ function recieve() {
 
 //図形情報の送信
 function send(i) {
-
-        if (figure_info[i].num == "-1") {
-                $.ajax({ //非同期通信
-                        type: "POST",
-                        url: "http://192.168.0.159/2018grade4/HUG/HUG_Server/eventcode.php",
-                        data: {
-                                data1: figure_info[i].type,
-                                data2: figure_info[i].num,
-                                data3: figure_info[i].place.join("_"),
-                                data4: figure_info[i].color + "_" + figure_info[i].label_color,
-                                data5: figure_info[i].label_text,
-                                code: window.sessionStorage.getItem(["eventcode"]),
-                                mode: "insert",
-                                id: 5
-                        },
-                        success: function (data) {
-                                if (i != figure_info.length - 1)
-                                        send(i + 1);
-                        },
-                        error: function (XMLHttpRequest, textStatus, errorThrown) { //接続が失敗
-                                // alert('エラーです！' + textStatus); //エラーを表示
-                        }
-                });
-        } else {
-                // if (i != figure_info.length - 1)
-                //         send(i + 1);
-                // console.log(figure_info[i].type);
-                // var send = "";
-                // var send1 = "";
-                // var send2 = "";
-                // var send3 = "";
-                // if (figure_info[i].type == figure_info_pre[i].type)
-                //         send = figure_info[i].type;
-                // if (figure_info[i].place.join("_") != figure_info_pre[i].place.join("_"))
-                //         send1 = figure_info[i].type;
-                // if (figure_info[i].color + "_" + figure_info[i].label_color != figure_info_pre[i].color + "_" + figure_info_pre[i].label_color)
-                //         send2 = figure_info[i].color + "_" + figure_info[i].label_color;
-                // if (figure_info[i].label_text != figure_info_pre[i].label_text)
-                //         send3 = figure_info[i].label_text;
-                $.ajax({ //非同期通信
-                        type: "POST",
-                        url: "http://192.168.0.159/2018grade4/HUG/HUG_Server/eventcode.php",
-                        data: {
-                                num: figure_info[i].num,
-                                data: figure_info[i].type,
-                                data1: figure_info[i].place.join("_"),
-                                data2: figure_info[i].color + "_" + figure_info[i].label_color,
-                                data3: figure_info[i].label_text,
-                                code: window.sessionStorage.getItem(["eventcode"]),
-                                mode: "updata",
-                                id: 5
-                        },
-                        success: function () {
-                                if (i != figure_info.length - 1)
-                                        send(i + 1);
-                        },
-                        error: function (XMLHttpRequest, textStatus, errorThrown) { //接続が失敗
-                                // alert('エラーです！' + textStatus); //エラーを表示
-                        }
-                });
-        }
+        if (figure_info.length != 0)
+                if (figure_info[i].num == "-1") {
+                        $.ajax({ //非同期通信
+                                type: "POST",
+                                url: "http://192.168.0.159/2018grade4/HUG/HUG_Server/eventcode.php",
+                                data: {
+                                        data1: figure_info[i].type,
+                                        data2: figure_info[i].num,
+                                        data3: figure_info[i].place.join("_"),
+                                        data4: figure_info[i].color + "_" + figure_info[i].label_color,
+                                        data5: figure_info[i].label_text,
+                                        code: window.sessionStorage.getItem(["eventcode"]),
+                                        mode: "insert",
+                                        id: 5
+                                },
+                                success: function (data) {
+                                        if (i != figure_info.length - 1)
+                                                send(i + 1);
+                                },
+                                error: function (XMLHttpRequest, textStatus, errorThrown) { //接続が失敗
+                                        // alert('エラーです！' + textStatus); //エラーを表示
+                                }
+                        });
+                } else {
+                        // if (i != figure_info.length - 1)
+                        //         send(i + 1);
+                        // console.log(figure_info[i].type);
+                        // var send = "";
+                        // var send1 = "";
+                        // var send2 = "";
+                        // var send3 = "";
+                        // if (figure_info[i].type == figure_info_pre[i].type)
+                        //         send = figure_info[i].type;
+                        // if (figure_info[i].place.join("_") != figure_info_pre[i].place.join("_"))
+                        //         send1 = figure_info[i].type;
+                        // if (figure_info[i].color + "_" + figure_info[i].label_color != figure_info_pre[i].color + "_" + figure_info_pre[i].label_color)
+                        //         send2 = figure_info[i].color + "_" + figure_info[i].label_color;
+                        // if (figure_info[i].label_text != figure_info_pre[i].label_text)
+                        //         send3 = figure_info[i].label_text;
+                        $.ajax({ //非同期通信
+                                type: "POST",
+                                url: "http://192.168.0.159/2018grade4/HUG/HUG_Server/eventcode.php",
+                                data: {
+                                        num: figure_info[i].num,
+                                        data: figure_info[i].type,
+                                        data1: figure_info[i].place.join("_"),
+                                        data2: figure_info[i].color + "_" + figure_info[i].label_color,
+                                        data3: figure_info[i].label_text,
+                                        code: window.sessionStorage.getItem(["eventcode"]),
+                                        mode: "updata",
+                                        id: 5
+                                },
+                                success: function () {
+                                        if (i != figure_info.length - 1)
+                                                send(i + 1);
+                                },
+                                error: function (XMLHttpRequest, textStatus, errorThrown) { //接続が失敗
+                                        // alert('エラーです！' + textStatus); //エラーを表示
+                                }
+                        });
+                }
 }
 
 function create_figure() {

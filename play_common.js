@@ -11,6 +11,8 @@ function get_theme_detail() {
                                 code: window.sessionStorage.getItem(["eventcode"])
                         },
                         success: function (data1) {
+                        data1 = data1.replace(/\r?\n/g, '');
+
                                 $.ajax({ //テーマの詳細を受信
                                         type: "POST",
                                         url: "http://192.168.0.159/2018grade4/HUG/HUG_Server/theme.php",

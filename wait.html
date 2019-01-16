@@ -55,6 +55,8 @@
                                         code: window.sessionStorage.getItem(["eventcode"])
                                 },
                                 success: function (data1) {
+                                        data1 = data1.replace(/\r?\n/g, '');
+
                                         // alert(data1);
                                         $.ajax({ //非同期通信
                                                 type: "POST",
@@ -63,6 +65,7 @@
                                                         id: data1
                                                 },
                                                 success: function (data) {
+
                                                         // タイトル
                                                         $("#title_text").empty();
                                                         $("#title_text").append(data[0].title);
@@ -157,6 +160,8 @@
                                                 code: window.sessionStorage.getItem(["eventcode"])
                                         },
                                         success: function (data) {
+                                                // data = data.replace(/\r?\n/g, '');
+
                                                 // alert(data);
                                                 $("#member").empty();
                                                 var add = "";
@@ -536,7 +541,9 @@
                                                 id: 2
                                         },
                                         success: function (data) {
-                                                console.log(data);
+                                                // console.log(data);
+                                                data = data.replace(/\r?\n/g, '');
+
                                                 // alert(data);
                                                 data = data.split("/");
                                                 if (data[1] != "")
@@ -572,12 +579,14 @@
                                                 id: 3
                                         },
                                         success: function (data) {
+                                                data = data.replace(/\r?\n/g, '');
+
                                                 if (data == "ok") {
                                                         // window.location.href = "pm.html";
                                                         start_time();
                                                 }
                                                 else {
-                                                        console.log("ok以外");
+                                                        console.log("data");
                                                 }
                                         },
                                         error: function (XMLHttpRequest, textStatus, errorThrown) { //接続が失敗
@@ -594,6 +603,7 @@
                                 type: "POST",
                                 url: "http://192.168.0.159/2018grade4/HUG/HUG_Server/time.php",
                                 data: {
+
                                         code: window.sessionStorage.getItem(["eventcode"]),
                                         mode: "new"
                                 },

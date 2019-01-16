@@ -11,7 +11,10 @@ function get_assessment() {
                         code: window.sessionStorage.getItem(["eventcode"])
                 },
                 success: function (data1) {
-                        // alert(data1);
+                        // console.log(data1);
+                        data1 = data1.replace(/\r?\n/g, '');
+                        // console.log(data1);
+
                         $.ajax({ //非同期通信
                                 type: "POST",
                                 url: "http://192.168.0.159/2018grade4/HUG/HUG_Server/theme.php",
@@ -19,6 +22,8 @@ function get_assessment() {
                                         id: data1
                                 },
                                 success: function (data) {
+                                        // data = data.replace(/\r?\n/g, '');
+
                                         var text1 = '<br><a style="position: relative;left: 140px;">';
                                         var text2 = '：</a><select id="assessment_list';
                                         var text3 = '" style="position: relative;width: 50px;left: 158px;">';

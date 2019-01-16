@@ -88,6 +88,8 @@
                                                 code: window.sessionStorage.getItem(["eventcode"])
                                         },
                                         success: function (data1) {
+                                                data1 = data1.replace(/\r?\n/g, '');
+
                                                 // alert(data1);
                                                 $.ajax({ //非同期通信
                                                         type: "POST",
@@ -96,6 +98,8 @@
                                                                 id: data1
                                                         },
                                                         success: function (data) {
+                                                                // data = data.replace(/\r?\n/g, '');
+
                                                                 var text1 = '<br><a style="position: relative;left: 140px;">';
                                                                 var text2 = '：</a><select id="assessment_list';
                                                                 var text3 = '" style="position: relative;width: 50px;left: 158px;">';
@@ -145,6 +149,8 @@
                                                 id: get_id
                                         },
                                         success: function (data) {
+                                                // data = data.replace(/\r?\n/g, '');
+
                                                 return data;
                                         },
                                         error: function (XMLHttpRequest, textStatus, errorThrown) { //接続が失敗
@@ -414,6 +420,7 @@
                                                 id: 4
                                         },
                                         success: function (data) {
+                                                data = data.replace(/\r?\n/g, '');
 
                                                 data = data.split("/");
                                                 $.ajax({ //非同期通信
@@ -594,6 +601,8 @@
                                         num: h
                                 },
                                 success: function (data) {
+                                        // data = data.replace(/\r?\n/g, '');
+
                                         now_situation_number = "" + data[0].num;
 
                                         if (data[0].id == 2) {
@@ -676,7 +685,7 @@
                                 document.getElementById("area_operate_off_button").style.display = "none";
                                 document.getElementById("area_operate").style.display = "none";
                         }
-                        if(theme_image == 0){
+                        if (theme_image == 0) {
                                 document.getElementById("area_operate_on_button").style.display = "none";
                                 document.getElementById("area_operate_off_button").style.display = "none";
                                 document.getElementById("area_operate").style.display = "none";
