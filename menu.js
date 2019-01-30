@@ -1,4 +1,4 @@
-var word = Array("ホーム", "テーマ作成", "プレイ", "振り返り", "プロフィール", "ログアウト");
+var word = Array("ホーム", "テーマ作成", "プレイ準備", "振り返り", "プロフィール", "ログアウト");
 var fail_name = Array("home.html", "create_theme.html", "prepare_play.html", "reflection.html", "profile.html", "index.html");
 // 各画面で共通部分
 function write_header(faze) {

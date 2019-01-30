@@ -340,11 +340,11 @@ function adjustment_history(data) {
 
                         //履歴の一部
                         if (i == data.length - 1) {
-                                add = "<div class='" + class_name + "' style='width:100%;height:auto;left:-3.5%;font-size: 13px;border:1px solid green;background: " + color + ";'>";
+                                add = "<div class='" + class_name + "' style='width:100%;height:auto;left:-1.5%;font-size: 13px;border:1px solid green;background: " + color + ";'>";
                                 add += set_history_data(data[i], "part") + "</div > ";
                                 $("#situation_box_add").append(add);
                         } else if (i > data.length - 6) {
-                                add = "<div class='" + class_name + "' style='width:100%;height:auto;left:-3.5%;font-size: 13px;border:1px solid green;border-top:0px solid green;background: " + color + ";'>";
+                                add = "<div class='" + class_name + "' style='width:100%;height:auto;left:-1.5%;font-size: 13px;border:1px solid green;border-top:0px solid green;background: " + color + ";'>";
                                 add += set_history_data(data[i], "part") + "</div > ";
                                 $("#situation_box_add").append(add);
                         }

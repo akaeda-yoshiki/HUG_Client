@@ -125,7 +125,7 @@
                         <input type="text" id="eventcode_text">
                         <input type="radio" name="role" value="PM">PM
                         <input type="radio" name="role" value="PS">PS
-                        <input type="radio" name="role" value="J">J
+                        <!-- <input type="radio" name="role" value="J">J -->
                         <br>
                         <input type="button" id="eventcode_decide" style="position: relative; left:40%;" value="決定"
                                 onclick='eventcode("decide")'>
@@ -184,7 +184,7 @@
         </form>
 
         <br>
-        <input type="button" id="get_theme_button" style="position: relative; left:7%;display: none;" value="全てのテーマ"
+        <input type="button" id="get_theme_button" style="position: relative; left:7%;display: none;" value="全てのマイテーマ"
                 onclick='exchange_volume("all", 0)'>
         <input type="button" id="back_button" style="position: relative; left:7%;display: none;" value="戻る" onclick='exchange_volume("not_all")'>
 
@@ -334,9 +334,7 @@
                         document.getElementById("table").style.display = "";
                         document.getElementById("detail").style.display = "none";
 
-                        var $content = $('#mytable');
-                        $content.empty();
-                        $content.append("<tr><th>タイトル</th><th>作成日</th><th>カテゴリー</th><th>プレイ回数</th></tr>");
+
 
                         var get = document.forms.search;
                         // console.log(search.search_title);
@@ -356,7 +354,10 @@
                                         mail: window.sessionStorage.getItem(["mail"])
                                 },
                                 success: function (data) {
-                                        // alert(data);
+                                        var $content = $('#mytable');
+                                        $content.empty();
+                                        $content.append("<tr><th>タイトル</th><th>作成日</th><th>カテゴリー</th><th>プレイ回数</th></tr>");
+                                        console.log(data);
                                         for (var i = 0; i < data.length; i++) {
                                                 var add = "";
                                                 add += "<tr><td><a href='#!' onclick='theme_detail(" + data[i].id + ")' class='square_btn'>" + data[i].title + "</a>";
@@ -366,15 +367,18 @@
                                                 add += "<td>" + data[i].play_count + "</td></tr>";
                                                 $content.append(add);
                                         }
+
+                                        if (data.length == 0) {
+                                                document.getElementById("get_theme_button").style.display = "none";
+                                        }
+                                        else
+                                                document.getElementById("get_theme_button").style.display = "";
                                 },
                                 error: function (XMLHttpRequest, textStatus, errorThrown) { //接続が失敗
                                         // alert('エラーです！'); //エラーを表示
                                 }
                         });
 
-                        var $content1 = $('#table1');
-                        $content1.empty();
-                        $content1.append("<tr><th>タイトル</th><th>作成日</th><th>カテゴリー</th><th>プレイ回数</th></tr>");
 
 
                         $.ajax({ //非同期通信
@@ -392,7 +396,11 @@
                                         assessment: search_assessment.value
                                 },
                                 success: function (data) {
-                                        // alert(data);
+                                        var $content1 = $('#table1');
+                                        $content1.empty();
+                                        $content1.append("<tr><th>タイトル</th><th>作成日</th><th>カテゴリー</th><th>プレイ回数</th></tr>");
+
+                                        console.log(data);
                                         for (var i = 0; i < data.length; i++) {
                                                 var add = "";
                                                 add += "<tr><td><a href='#!' onclick='theme_detail(" + data[i].id + ")' class='square_btn'>" + data[i].title + "</a>";
@@ -402,6 +410,12 @@
                                                 add += "<td>" + data[i].play_count + "</td></tr>";
                                                 $content1.append(add);
                                         }
+
+                                        if (data.length == 0) {
+                                                document.getElementById("get_theme_button1").style.display = "none";
+                                        }
+                                        else
+                                                document.getElementById("get_theme_button1").style.display = "";
                                 },
                                 error: function (XMLHttpRequest, textStatus, errorThrown) { //接続が失敗
                                         // alert('エラーです！'); //エラーを表示
